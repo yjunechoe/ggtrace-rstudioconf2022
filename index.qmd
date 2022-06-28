@@ -1,0 +1,53 @@
+---
+title: Stepping into `{ggplot2}` internals with `{ggtrace}`
+author: June Choe
+  # <p class="author" style="font-size: 1.1em; margin-top:60px">
+  #   June Choe
+  # </p>
+  # <p style="font-size:.9em">
+  #   University of Pennsylvania
+  # </p>
+  # <p style="font-size:.8em">
+  #   <a href='https://twitter.com/yjunechoe'>@yjunechoe</a>
+  # </p>
+format:
+  revealjs:
+    # include-in-header: "meta.html"
+    # include-after-body: "highlighting.html"
+    # logo: "img/userlogo.png"
+    # footer: "https://yjunechoe.github.io/ggtrace-user2022"
+    theme: [default, style.scss]
+    code-line-numbers: false
+    slide-number: true
+    execute:
+      echo: true
+    knitr:
+      opts_chunk: 
+        dev: "svglite"
+        dev.args:
+          scaling: 1.5
+---
+
+## Penguin species counts
+
+```{r setup}
+#| include: false
+library(ggtrace)        # v0.5.1
+library(ggplot2)        # v3.3.6
+library(dplyr)          # v1.0.9
+library(grid)           # v4.2.0
+library(palmerpenguins) # v0.1.0
+library(htmltools)      # v0.5.2
+```
+
+```{r bar_plot_code}
+bar_plot <- palmerpenguins::penguins %>% 
+  ggplot(aes(x = species)) +
+  geom_bar(aes(fill = species))
+```
+
+```{r bar_plot_print}
+#| echo: false
+#| fig-align: "center"
+bar_plot
+```

@@ -1,0 +1,23 @@
+/*-- scss:rules --*/
+
+#title-slide .title {
+  font-size: 70px;
+  text-align: left;
+  margin: auto auto 50px auto;
+}
+code {
+  font-size: 0.9em;
+}
+.centered-slide-text {
+  font-size: 2em;
+  font-weight: bold;
+  position: absolute;
+  width: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50%), calc(-50%));
+}
+.workflow-action {
+  font-weight: bold;
+  font-size: 1.15em;
+}
