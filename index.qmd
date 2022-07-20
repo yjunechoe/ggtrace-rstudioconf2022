@@ -1,19 +1,19 @@
 ---
-title: Stepping into `{ggplot2}` internals with `{ggtrace}`
-author: June Choe
-  # <p class="author" style="font-size: 1.1em; margin-top:60px">
-  #   June Choe
-  # </p>
-  # <p style="font-size:.9em">
-  #   University of Pennsylvania
-  # </p>
-  # <p style="font-size:.8em">
-  #   <a href='https://twitter.com/yjunechoe'>@yjunechoe</a>
-  # </p>
+title: Cracking open ggplot internals with `{ggtrace}`
+author: |
+  <p class="author" style="font-size: 1.1em; margin-top:60px">
+    June Choe
+  </p>
+  <p style="font-size:.9em">
+    University of Pennsylvania
+  </p>
+  <p style="font-size:.8em">
+    <a href='https://twitter.com/yjunechoe'>@yjunechoe</a>
+  </p>
 format:
   revealjs:
     # include-in-header: "meta.html"
-    # include-after-body: "highlighting.html"
+    include-after-body: "postprocessing.html"
     # logo: "img/userlogo.png"
     # footer: "https://yjunechoe.github.io/ggtrace-user2022"
     theme: [default, style.scss]
@@ -23,12 +23,16 @@ format:
       echo: true
     knitr:
       opts_chunk: 
+        R.options:
+          width: 70
+        class-source: "big-code-chunk"
+        class-output: "big-chunk-output"
         dev: "svglite"
         dev.args:
           scaling: 1.5
 ---
 
-## Penguin species counts
+## {visibility="hidden"}
 
 ```{r setup}
 #| include: false
@@ -38,16 +42,1911 @@ library(dplyr)          # v1.0.9
 library(grid)           # v4.2.0
 library(palmerpenguins) # v0.1.0
 library(htmltools)      # v0.5.2
+theme_set(theme_classic(base_size = 14))
+options("pillar.print_min" = 5)
 ```
 
-```{r bar_plot_code}
-bar_plot <- palmerpenguins::penguins %>% 
-  ggplot(aes(x = species)) +
-  geom_bar(aes(fill = species))
+```{r penguins-data}
+#| echo: false
+penguins_sm <- palmerpenguins::penguins %>% 
+  select(species, bill_length_mm) %>% 
+  filter(!is.na(bill_length_mm))
+
+penguins_sm
 ```
 
-```{r bar_plot_print}
+```{r inspect-snapshop-fns}
+#| echo: false
+inspect_before_stat <- function(plot, i = 1) {
+  ggtrace_inspect_args(
+    x = plot, method = ggplot2:::Layer$compute_statistic,
+    cond = i, error = TRUE
+  )$data
+}
+inspect_after_stat <- function(plot, i = 1) {
+  ggtrace_inspect_return(
+    x = plot, method = ggplot2:::Layer$compute_statistic,
+    cond = i, error = TRUE
+  )
+}
+inspect_before_geom <- function(plot, i = 1) {
+  ggtrace_inspect_args(
+    x = plot, method = ggplot2:::Layer$compute_geom_1,
+    cond = i, error = TRUE
+  )$data
+}
+inspect_after_scale <- function(plot, i = 1) {
+  ggtrace_inspect_return(
+    x = plot, method = ggplot2:::Layer$compute_geom_2,
+    cond = i, error = TRUE
+  )
+}
+```
+
+---
+
+:::{.vcenter}
+```{r my_boxplot}
+#| echo: false
+my_boxplot <- ggplot(penguins_sm, aes(fill = species)) +
+  geom_boxplot(aes(x = species, y = bill_length_mm))
+my_boxplot
+``` 
+:::
+
+---
+
+:::{.vcenter}
+```{r penguins-data}
+```
+:::
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){.absolute bottom=50 right=0 width=500}
+
+---
+
+```{r my_boxplot}
+```
+
+---
+
+```{r my_boxplot-arrow}
+#| echo: false
+my_boxplot + 
+  geom_segment(
+    aes(xend = after_stat(x + .4),
+        y = stage(bill_length_mm, ymin),
+        yend = after_stat(ymin)),
+    position = position_nudge(x = .05),
+    arrow = arrow(ends = "first", length = unit(.5, "cm")),
+    color = "#941414", size = 2,
+    stat = StatBoxplot,
+    data = ~ .x %>% filter(species == "Chinstrap")
+  )
+```
+
+```{r shorten-df}
+#| echo: false
+penguins_sm <- as.data.frame(penguins_sm)
+options("pillar.print_min" = 3)
+```
+
+---
+
+```{r my_boxplot-labelled}
+#| echo: false
+my_boxplot + 
+  geom_label(
+    aes(x = species,
+        y = stage(start = bill_length_mm, after_stat = ymin),
+        label = after_stat(ymin)),
+    stat = "boxplot", size = 5,
+    data = ~ .x %>% filter(species == "Chinstrap")
+  )
+```
+
+---
+
+```{r my_boxplot-labelled}
+#| fig-align: "center"
+```
+
+---
+
+:::{.vcenter}
+
+```{r layer1}
+#| eval: false
+geom_boxplot(aes(y = bill_length_mm, fill = species))
+```
+
+```{r layer2}
+#| eval: false
+geom_label(
+  aes(x = species,
+      y = stage(start = bill_length_mm, after_stat = ymin),
+      label = after_stat(ymin)),
+  stat = "boxplot", size = 5,
+  data = . %>% filter(species == "Chinstrap")
+)
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+```{r layer1}
+#| eval: false
+```
+
+<div style='opacity: .3;'>
+```{r layer2}
+#| eval: false
+```
+</div>
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[7.2,1,23.1]]"'
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[1.45,3.2,6.1],[2.9,3.2,17.2],[2.9,30.4,0.5]]"'
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[5.8,1,8.8]]"'
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[2.9,3.1,5.5],[2.9,21,10],[4.3,3.1,13]]"'
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[0,0,5.6]]"'
+```
+
+:::
+
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+```
+
+:::
+
+---
+
+```{r chess-1}
 #| echo: false
 #| fig-align: "center"
-bar_plot
+knitr::include_graphics("img/chess-1.png")
 ```
+
+<p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p>
+
+---
+
+```{r chess-2}
+#| echo: false
+#| fig-align: "center"
+knitr::include_graphics("img/chess-2.png")
+```
+
+<p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p>
+
+## {background-color="#81388C"}
+
+[ggplot internals]{.centered-slide-text}
+
+---
+
+:::{.vcenter}
+```{r resources-1}
+#| echo: false
+#| fig-align: "center"
+knitr::include_graphics("img/resources-1.png")
+```
+:::
+
+---
+
+:::{.vcenter}
+```{r resources-2}
+#| echo: false
+#| fig-align: "center"
+knitr::include_graphics("img/resources-2.png")
+```
+:::
+
+---
+
+:::{.vcenter}
+```{r ggproto-img-bg}
+#| echo: false
+#| fig-align: "center"
+#| out-width: "800px"
+knitr::include_graphics("img/ggproto.png")
+```
+:::
+
+---
+
+```{r ggproto-img}
+#| echo: false
+#| fig-align: "center"
+knitr::include_graphics("img/ggproto.png")
+```
+
+:::: {.r-stack}
+
+::: {.bordered}
+```{r ggproto-1}
+Person <- ggproto("Person", NULL,
+  name = "",
+  birthdate = NA,
+  age = function(self) {
+    days_old <- Sys.Date() - self$birthdate
+    floor(as.integer(days_old) / 365.25)
+  },
+  description = function(self) {
+    paste(self$name, "is", self$age(), "years old")
+  }
+)
+```
+:::
+
+::: {.fragment .bordered}
+```{r ggproto-2}
+Me <- ggproto(NULL, Person,
+  name = "June",
+  birthdate = as.Date("1997/10/10")
+)
+
+Me$description()
+```
+:::
+
+::::
+
+## {background-color="#81388C"}
+
+[ggplot internals _for users_]{.centered-slide-text}
+
+## ggplot internals as data wrangling
+
+<div class="divbr"></div>
+
+```{r}
+#| fig-align: "center"
+#| out-width: "500px"
+#| echo: false
+knitr::include_graphics("img/ggtrace_logo.png")
+```
+
+## ggplot internals for users
+
+1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
+
+## 1) Layers as dataframes
+
+```{r layer_data-boxplot}
+ggplot2::layer_data(plot = my_boxplot, i = 1L)
+```
+
+## Input
+
+```{r penguins-show}
+#| eval: false
+penguins_sm
+```
+
+```{r penguins-5row}
+#| echo: false
+penguins_sm %>% print(max = 10)
+```
+
+## Output
+
+```{r layer_data-boxplot}
+```
+
+---
+
+```{r barplot}
+my_barplot <- ggplot(penguins_sm) + 
+  geom_bar(aes(x = species, fill = species))
+my_barplot
+```
+
+---
+
+```{r penguins-show}
+#| eval: false
+```
+
+```{r penguins-3row}
+#| echo: false
+penguins_sm %>% print(max = 6)
+```
+
+. . .
+
+```{r layer_data-barplot}
+ggplot2::layer_data(plot = my_barplot, i = 1L)
+```
+
+## ggplot internals for users
+
+1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
+
+2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready"
+
+## 2) Internals as data wrangling
+
+```{r pipeline-data-wrangling}
+#| eval: false
+ggplot_internals <- function(data) {
+  data %>% 
+    fun1() %>% 
+    fun2() %>% 
+    fun3() %>% 
+    fun4() %>% 
+    fun5() %>% 
+    fun6() %>% 
+    ...
+}
+```
+
+---
+
+```{r barplot-show}
+#| echo: false
+#| out-width: "700px"
+#| fig-align: "center"
+my_barplot
+```
+
+```{r bar-snapshots-gif}
+#| fig-align: "center"
+#| out-width: "80%"
+#| echo: false
+knitr::include_graphics("img/bar-snapshots.gif")
+```
+
+## 👻 ggproto methods 👻
+
+:::{style="width:65%"}
+```{r pipeline-ggproto-methods}
+#| eval: false
+ggplot_internals <- function(data) {
+  data %>% 
+    ... %>% 
+    Layer$compute_statistic() %>% 
+    ... %>% 
+    Layer$compute_geom_1() %>% 
+    ... %>% 
+    Layer$compute_geom_2() %>% 
+    ...
+}
+```
+:::
+
+---
+
+:::::{.vcenter}
+
+:::: {.columns height="500px"}
+
+::: {.column width="40%"}
+```{r ggtrace-logo}
+#| echo: false
+knitr::include_graphics("img/ggtrace_logo.png")
+```
+:::
+
+::: {.column style="width:60%;height:100%;"}
+::: {.vcenter}
+```{r ggtrace-inspect-fns}
+#| echo: false
+#| out-width: "100%"
+knitr::include_graphics("img/ggtrace-inspect-fns.png")
+```
+:::
+:::
+
+::::
+
+:::::
+
+---
+
+:::{.vcenter}
+```{r ggtrace-inspect-return-after-stat}
+ggtrace_inspect_return(
+  x = my_barplot,
+  method = ggplot2:::Layer$compute_statistic,
+  cond = 1
+)
+```
+:::
+
+---
+
+::::{.vcenter}
+
+```{r bar-inspect-after-stat}
+inspect_after_stat(plot = my_barplot, i = 1)
+```
+
+:::{.fragment}
+```{r inspect-wrappers}
+#| eval: false
+inspect_before_stat(plot = , i = 1)
+
+inspect_after_stat(plot = , i = 1)
+
+inspect_before_geom(plot = , i = 1)
+
+inspect_after_scale(plot = , i = 1)
+```
+:::
+
+::::
+
+## ggplot internals for users
+
+1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
+
+2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready"
+
+3) Consulting the intermediate **states** of a layer's data can write more powerful ggplot code
+
+- _Before Stat_, _After Stat_, _Before Geom_, _After Scale_
+
+---
+
+```{r my_boxplot-labelled}
+#| fig-align: center
+```
+
+---
+
+```{r barplot}
+```
+
+---
+
+<div class="divbr"></div>
+
+```{r bar-implicit}
+#| eval: false
+geom_bar(aes(x = species, fill = species))
+```
+
+. . .
+
+<div class="divbr"></div>
+
+```{r bar-explicit-geom}
+#| eval: false
+geom_bar(
+  aes(x = species, fill = species,
+      y = after_stat(count)),
+  stat = "count"
+)
+```
+
+. . .
+
+<div class="divbr"></div>
+
+```{r bar-explicit-stat}
+#| eval: false
+stat_count(
+  aes(x = species, fill = species,
+      y = after_stat(count)),
+  geom = "bar"
+)
+```
+
+---
+
+## Before Stat
+
+```{r bar-before-stat}
+#| eval: false
+inspect_before_stat(my_barplot)
+```
+
+```{r bar-before-stat-3row}
+#| echo: false
+inspect_before_stat(my_barplot) %>% 
+  print(max = ncol(.) * 3)
+```
+
+## Before Stat
+
+```{r bar-before-stat-filtered}
+#| eval: false
+inspect_before_stat(
+  ggplot(penguins_sm) +
+    geom_bar(aes(x = species, fill = species),
+             data = ~ .x %>% filter(species != "Adelie"))
+)
+```
+
+```{r bar-before-stat-filtered-3row}
+#| echo: false
+inspect_before_stat(
+  ggplot(penguins_sm) +
+    geom_bar(
+      aes(x = species, fill = species),
+      data = ~ .x %>% filter(species != "Adelie")
+    )
+) %>% 
+  print(max = ncol(.) * 3)
+```
+
+## Before Stat
+
+```{r bar-before-stat}
+#| eval: false
+```
+
+```{r bar-before-stat-3row}
+#| echo: false
+```
+
+:::{.imgbox}
+![](img/stat_count-aes.png)
+<img class="pkg-logo-modal" src="img/ggplot2_logo.png"/>
+:::
+
+## Before Stat
+
+```{r bar-before-stat-overspec}
+#| eval: false
+inspect_before_stat(
+  ggplot(penguins_sm) +
+    geom_bar(aes(x = species, y = bill_length_mm))
+)
+```
+
+```{r bar-before-stat-overspec-3row}
+#| echo: false
+inspect_before_stat(
+  ggplot(penguins_sm) +
+    geom_bar(aes(x = species, y = bill_length_mm))
+) %>% 
+  print(max = ncol(.) * 3)
+```
+
+## Before Stat
+
+```{r bar-before-stat-underspec}
+#| eval: false
+inspect_before_stat(
+  ggplot(penguins_sm) +
+    geom_bar(aes(fill = species))
+)
+```
+
+```{r bar-before-stat-underspec-3row}
+#| echo: false
+inspect_before_stat(
+  ggplot(penguins_sm) +
+    geom_bar(aes(fill = species))
+) %>% 
+  print(max = ncol(.) * 3)
+```
+
+
+## After Stat
+
+```{r bar-after-stat}
+inspect_after_stat(my_barplot)
+```
+
+## After Stat
+
+```{r bar-explicit-geom}
+#| eval: false
+```
+
+. . .
+
+<div class="divbr"></div>
+
+```{r bar-after_stat-mutate}
+inspect_after_stat(my_barplot) %>% 
+  mutate(y = count, .before = 1L)
+```
+
+## After Stat
+
+```{r bar-aes-tidyeval}
+#| eval: false
+geom_bar(
+  aes(x = species, fill = species,
+      y = after_stat( count/sum(count) )),
+  stat = "count"
+)
+```
+
+<div class="divbr"></div>
+
+```{r bar-after_stat-tidyeval}
+inspect_after_stat(my_barplot) %>% 
+  mutate(y = count/sum(count), .before = 1L)
+```
+
+## After Stat
+
+```{r bar-props}
+#| fig-align: center
+ggplot(penguins_sm) +
+  geom_bar(aes(x = species, fill = species,
+               y = after_stat( count/sum(count) )),
+           stat = "count")
+```
+
+## Before Geom
+
+```{r bar-before-geom}
+inspect_before_geom(my_barplot)
+```
+
+. . .
+
+:::{.imgbox}
+![](img/geom_bar-aes.png)
+<img class="pkg-logo-modal" src="img/ggplot2_logo.png"/>
+:::
+
+## Before Geom
+
+```{r bar-no-y}
+inspect_before_geom(
+  ggplot(penguins_sm) +
+    geom_bar(aes(x = species, y = NULL))
+)
+```
+
+## Before Geom
+
+```{r point-count}
+#| fig-align: "center"
+ggplot(penguins_sm) +
+  geom_point(aes(x = species), stat = "count")
+```
+
+## Before Geom
+
+```{r label-count}
+inspect_before_geom(
+  ggplot(penguins_sm) +
+    geom_label(aes(x = species), stat = "count")
+)
+```
+
+## Before Geom
+
+```{r label-count-after_stat}
+#| fig-align: "center"
+ggplot(penguins_sm) +
+  geom_label(
+    aes(x = species, label = after_stat(count)),
+    stat = "count"
+  )
+```
+
+## After Scale
+
+```{r bar-after-scale}
+inspect_after_scale(my_barplot)
+```
+
+## After Scale
+
+```{r point-after-scale}
+inspect_after_scale(
+  ggplot(penguins_sm) +
+    geom_point(aes(x = species), stat = "count")
+)
+```
+
+## After Scale
+
+```{r bar-after-scale-fill}
+#| fig-align: "center"
+ggplot(penguins_sm) +
+  geom_bar(
+    aes(x = species, color = species,
+        fill = after_scale( alpha(color, .5)) )
+  )
+```
+
+## After Scale
+
+```{r bar-after-scale-size}
+#| fig-align: "center"
+ggplot(penguins_sm) +
+  geom_bar(
+    aes(x = species, color = species,
+        fill = after_scale( alpha(color, .5)),
+        size = after_scale( size * 3 ))
+  )
+```
+
+## Recap
+
+- **Before Stat** validates the layer's choice of _stat_
+
+- **After Stat** context for `after_stat()` mappings
+
+- **Before Geom** validates the layer's choice of _geom_
+
+- **After Scale** context for `after_scale()` mappings
+
+## Recap
+
+Input (user-supplied data)
+
+- **Before Stat** validates the layer's choice of _stat_
+
+- **After Stat** context for `after_stat()` mappings
+
+- **Before Geom** validates the layer's choice of _geom_
+
+- **After Scale** context for `after_scale()` mappings
+
+Output (drawing-ready data)
+
+## Moment of truth
+
+```{r my_boxplot-labelled}
+#| fig-align: "center"
+```
+
+<!-- ## 4 snapshots of layer data -->
+
+<!-- ```{r pipeline} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Before Stat -->
+
+<!-- ```{r pipeline-before-stat} -->
+<!-- #| code-line-numbers: "2-3" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## After Stat -->
+
+<!-- ```{r pipeline-after-stat} -->
+<!-- #| code-line-numbers: "2-4" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Before Geom -->
+
+<!-- ```{r pipeline-before-geom} -->
+<!-- #| code-line-numbers: "2-5" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## After Scale -->
+
+<!-- ```{r pipeline-after-scale} -->
+<!-- #| code-line-numbers: "2-8" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## `inspect_` wrapper functions -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- inspect_before_stat <- function(plot, i = 1) { -->
+<!--   ggtrace_inspect_args( -->
+<!--     x = plot, method = ggplot2:::Layer$compute_statistic, -->
+<!--     cond = i, error = TRUE -->
+<!--   )$data %>% as_tibble() -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- inspect_after_stat <- function(plot, i = 1) { -->
+<!--   ggtrace_inspect_return( -->
+<!--     x = plot, method = ggplot2:::Layer$compute_statistic, -->
+<!--     cond = i, error = TRUE -->
+<!--   ) %>% as_tibble() -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Data snapshots -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_scale(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ## Stat and Geom -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- geom_boxplot( ..., stat = "boxplot" ) -->
+<!-- ``` -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- stat_boxplot( ..., geom = "boxplot" ) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- ggplot2::layer( ..., stat = "boxplot", geom = "boxplot" ) -->
+<!-- ``` -->
+
+<!-- ## Stat and Geom -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- geom_bar( ..., stat = "count" ) -->
+<!-- ``` -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- stat_count( ..., geom = "bar" ) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- ggplot2::layer( ..., stat = "count", geom = "bar" ) -->
+<!-- ``` -->
+
+<!-- ## `stat = "boxplot"` before-stat -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_boxplot) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat( -->
+<!--   ggplot(penguins_sm) + geom_boxplot(aes(fill = species)) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- geom_boxplot( ..., stat = "boxplot" ) -->
+<!-- ``` -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- stat_boxplot( ..., geom = "boxplot" ) -->
+<!-- ``` -->
+
+<!-- ## `stat = "boxplot"` after-stat -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_boxplot) -->
+<!-- ``` -->
+
+<!-- ## `stat = "boxplot"` before-geom -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_boxplot) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom( -->
+<!--   ggplot(penguins_sm) + -->
+<!--     geom_boxplot( -->
+<!--       aes(x = species, y = bill_length_mm), -->
+<!--       stat = "summary" -->
+<!--     ) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## `stat = "boxplot"` before-geom -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_boxplot) -->
+<!-- ``` -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom( -->
+<!--   ggplot(penguins_sm) + -->
+<!--     geom_segment( -->
+<!--       aes(x = species, y = bill_length_mm), -->
+<!--       stat = "boxplot" -->
+<!--     ) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## `stat = "boxplot"` with `geom = "errorbar"` -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_boxplot) -->
+<!-- ``` -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom( -->
+<!--   ggplot(penguins_sm) + -->
+<!--     geom_errorbar( -->
+<!--       aes(x = species, y = bill_length_mm), -->
+<!--       stat = "boxplot" -->
+<!--     ) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins_sm) + -->
+<!--   geom_errorbar( -->
+<!--     aes(x = species, y = bill_length_mm), -->
+<!--     stat = "boxplot" -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- my_barplot -->
+<!-- ``` -->
+
+<!-- ## `stat = "count"` -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_barplot) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot) -->
+<!-- ``` -->
+
+<!-- ## `geom = "bar"` -->
+
+<!-- ```{r} -->
+<!-- my_barplot -->
+<!-- ``` -->
+
+<!-- ## `y = after_stat(count)` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_barplot) -->
+<!-- ``` -->
+
+<!-- ## `y = after_stat(count)` -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom( -->
+<!--   ggplot(penguins_sm, aes(x = species, fill = species)) + -->
+<!--     geom_bar(aes(y = after_stat(count))) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom( -->
+<!--   ggplot(penguins_sm, aes(x = species, fill = species)) + -->
+<!--     geom_bar(aes(y = NULL)) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot) %>%  -->
+<!--   mutate( y = count/sum(count), .before = 1L) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins_sm) +  -->
+<!--   geom_bar( -->
+<!--     aes(x = species, fill = species, -->
+<!--         y = after_stat(count/sum(count))) -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ## StatCount + GeomLabel example -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_barplot) -->
+<!-- ``` -->
+
+<!-- . . . -->
+
+<!-- <div class="divbr"></div> -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom( -->
+<!--   ggplot(penguins_sm) + -->
+<!--     stat_count( -->
+<!--       aes(x = species, fill = species), -->
+<!--       geom = "label" -->
+<!--     ) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## StatCount + GeomLabel example -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins_sm) + -->
+<!--   stat_count( -->
+<!--     aes(x = species, fill = species, -->
+<!--         label = after_stat(count)), -->
+<!--     geom = "label" -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ## StatCount + GeomLabel example -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins_sm, aes(x = species, fill = species)) + -->
+<!--   geom_bar() + -->
+<!--   stat_count( -->
+<!--     aes(label = after_stat(count)), -->
+<!--     geom = "label" -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ## StatCount + GeomLabel example -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins_sm, aes(x = species, fill = species)) + -->
+<!--   stat_count(geom = "bar") + -->
+<!--   stat_count( -->
+<!--     aes(label = after_stat(count)), -->
+<!--     geom = "label" -->
+<!--   ) -->
+<!-- ``` -->
+
+
+<!-- ## `stage()` example -->
+
+<!-- ```{r} -->
+<!-- my_boxplot +  -->
+<!--   geom_label( -->
+<!--     aes(y = stage(start = bill_length_mm, after_stat = ymin), -->
+<!--         label = after_stat(ymin)), -->
+<!--     stat = "boxplot", size = 6, -->
+<!--     data = . %>% filter(species == "Chinstrap") -->
+<!--   ) -->
+<!-- ``` -->
+
+
+<!-- ## Fin. -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## {auto-animate="true"} -->
+
+<!-- ```{r geom-bar-implicit} -->
+<!-- ggplot(penguins) +  -->
+<!--   geom_bar( -->
+<!--     aes(x = species, -->
+<!--         fill = species), -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ## {visibility="uncounted" auto-animate="true"} -->
+
+<!-- ```{r geom-bar-explicit} -->
+<!-- ggplot(penguins) +  -->
+<!--   geom_bar( -->
+<!--     aes(x = species, -->
+<!--         y = after_stat(count), -->
+<!--         fill = species), -->
+<!--     stat = StatCount -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ## {visibility="uncounted" auto-animate="true"} -->
+
+<!-- ```{r stat-count-explicit} -->
+<!-- ggplot(penguins) +  -->
+<!--   stat_count( -->
+<!--     aes(x = species, -->
+<!--         y = after_stat(count), -->
+<!--         fill = species), -->
+<!--     stat = GeomBar -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ## {background-color="#81388C"} -->
+
+<!-- .centered-slide-text[reframing ggplot internals] -->
+
+<!-- ## ggplot internals as data wrangling -->
+
+<!-- 1) Each layer in a ggplot has an underlying **dataframe representation** in the internals -->
+
+<!-- 2) Much of the internals is **data wrangling** to makes each layer's data "drawing-ready" -->
+
+<!-- 3) By consulting the **state of a layer's data** at certain steps in this process, we can write more powerful ggplot code -->
+
+<!-- ## 1) Layers as dataframes -->
+
+<!-- ```{r layer_data-boxplot} -->
+<!-- layer_data(plot = my_boxplot, i = 1L) -->
+<!-- ``` -->
+
+<!-- ## 2) Internals as data wrangling -->
+
+<!-- ```{r} -->
+<!-- penguins_sm -->
+<!-- ``` -->
+
+<!-- -- -->
+
+<!-- ```{r} -->
+<!-- layer_data(plot = my_boxplot, i = 1L) -->
+<!-- ``` -->
+
+
+
+<!-- ## 2) Internals as data wrangling -->
+
+<!-- ```{r} -->
+<!-- ggplot2:::ggplot_build.ggplot -->
+<!-- ``` -->
+
+<!-- ## 2) Internals as data wrangling -->
+
+<!-- ```{r} -->
+<!-- ggbody(ggplot2:::ggplot_build.ggplot) %>%  -->
+<!--   `[`(c(8:9, 11:13, 17:19, 21:22, 26, 29:31)) %>%  -->
+<!--   as.character() %>%  -->
+<!--   paste(collapse = "\n") -->
+<!-- ``` -->
+
+<!-- ## Input to internals -->
+
+<!-- ```{r} -->
+<!-- palmerpenguins::penguins -->
+<!-- ``` -->
+
+<!-- ## Output to internals -->
+
+<!-- ```{r} -->
+<!-- layer_data(plot = my_boxplot, i = 1L) -->
+<!-- ``` -->
+
+
+<!-- ## 3) Stat of layer data -->
+
+<!-- ```{r pipeline-data-wrangling} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     fun1() %>%  -->
+<!--     fun2() %>%  -->
+<!--     fun3() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## 3) Stat of layer data -->
+
+<!-- ```{r pipeline-ggproto-methods} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     Object$method() %>%  -->
+<!--     Object$method() %>%  -->
+<!--     Object$method() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## 4 snapshots of layer data -->
+
+<!-- ```{r pipeline} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Before Stat -->
+
+<!-- ```{r pipeline-before-stat} -->
+<!-- #| code-line-numbers: "2-3" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## After Stat -->
+
+<!-- ```{r pipeline-after-stat} -->
+<!-- #| code-line-numbers: "2-4" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Before Geom -->
+
+<!-- ```{r pipeline-before-geom} -->
+<!-- #| code-line-numbers: "2-5" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## After Scale -->
+
+<!-- ```{r pipeline-after-scale} -->
+<!-- #| code-line-numbers: "2-8" -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Data snapshots -->
+
+<!-- ```{r} -->
+<!-- palmerpenguins::penguins -->
+<!-- ``` -->
+
+<!-- ## Data snapshots -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_boxplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_boxplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_boxplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_scale(my_boxplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ## {} -->
+
+<!-- ```{r} -->
+<!-- my_barplot <- ggplot(penguins) +  -->
+<!--   geom_bar(aes(x = species, fill = species)) -->
+<!-- my_barplot -->
+<!-- ``` -->
+
+
+<!-- ## Data snapshots -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- inspect_after_scale(my_barplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ## Choice of `Stat*` or `stat_*()` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- geom_blah( -->
+<!--   stat = StatBlah -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- stat_blah(...) -->
+<!-- ``` -->
+
+<!-- ## Choice of `after_stat()` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- aes( after_stat(blah) ) -->
+<!-- ``` -->
+
+<!-- ## Choice of `Geom*` or `geom_*()` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- stat_blah( -->
+<!--   geom = GeomBlah -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- geom_blah(...) -->
+<!-- ``` -->
+
+<!-- ## Choice of `after_scale()` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- aes( after_scale(blah) ) -->
+<!-- ``` -->
+
+<!-- ## Output to internals -->
+
+<!-- ```{r} -->
+<!-- layer_data(plot = my_barplot, i = 1L) -->
+<!-- ``` -->
+
+<!-- ## Inspect functions -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- layer_data(plot = , i =) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- inspect_before_stat() -->
+<!-- inspect_after_stat() -->
+<!-- inspect_before_geom() -->
+<!-- inspect_after_scale() -->
+<!-- ``` -->
+
+<!-- ## . -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_boxplot + scale_y_log10()) -->
+<!-- ``` -->
+
+<!-- ## . -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat( -->
+<!--   ggplot(penguins) + geom_boxplot(aes(fill = species)) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## . -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat( -->
+<!--   ggplot(penguins, aes(x = species)) + -->
+<!--     geom_bar(aes(y = flipper_length_mm)) -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## . -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins, aes(x = species)) + -->
+<!--   geom_bar(aes(y = flipper_length_mm), -->
+<!--            stat = "bin2d", na.rm = TRUE) -->
+<!-- ``` -->
+
+
+<!-- ## Penguins -->
+
+<!-- ```{r penguins} -->
+<!-- penguins %>% head() -->
+<!-- ``` -->
+
+<!-- ## ggproto scary 1 -->
+
+
+<!-- ## ggproto scary 2 -->
+
+
+<!-- ## Inside ggplot object -->
+
+<!-- ```{r inside-ggplot-object} -->
+<!-- str(my_boxplot) -->
+<!-- ``` -->
+
+<!-- ## ggplot_build -->
+
+<!-- ```{r ggplot_build} -->
+<!-- ggplot2:::ggplot_build.ggplot -->
+<!-- ``` -->
+
+<!-- ## drawing-ready data -->
+
+<!-- ```{r layer_data} -->
+<!-- layer_data(plot = my_boxplot, i = 1) -->
+<!-- ``` -->
+
+<!-- ## input -->
+
+<!-- ```{r} -->
+<!-- penguins %>% head() -->
+<!-- ``` -->
+
+<!-- # data wrangling pipeline -->
+
+<!-- ```{r pipeline-data-wrangling} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     fun1() %>%  -->
+<!--     fun2() %>%  -->
+<!--     fun3() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- # data wrangling pipeline - ggproto -->
+
+<!-- ```{r pipeline-ggproto-methods} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     Object$method() %>%  -->
+<!--     Object$method() %>%  -->
+<!--     Object$method() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- # data wrangling pipeline - before-stat -->
+
+<!-- ```{r pipeline-before-stat} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+
+<!-- # data wrangling pipeline - after-stat -->
+
+<!-- ```{r pipeline-after-stat} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- # data wrangling pipeline - before-geom -->
+
+<!-- ```{r pipeline-before-geom} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- # data wrangling pipeline - after-geom -->
+
+<!-- ```{r pipeline-after-geom} -->
+<!-- #| eval: false -->
+<!-- internals_lite <- function(data) { -->
+<!--   data %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_statistic() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_1() %>%  -->
+<!--     ... %>%  -->
+<!--     Layer$compute_geom_2() %>%  -->
+<!--     ... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Inspect functions -->
+
+<!-- ```{r inspect-snapshop-fns-eager} -->
+<!-- #| eval: false -->
+<!-- inspect_before_stat <- function(p, i = 1) { -->
+<!--   ggtrace_inspect_args(x = p, method = ggplot2:::Layer$compute_statistic, -->
+<!--                        cond = i)$data -->
+<!-- } -->
+<!-- inspect_after_stat <- function(p, i = 1) { -->
+<!--   ggtrace_inspect_return(x = p, method = ggplot2:::Layer$compute_statistic, -->
+<!--                          cond = i) -->
+<!-- } -->
+<!-- inspect_before_geom <- function(p, i = 1) { -->
+<!--   ggtrace_inspect_args(x = p, method = ggplot2:::Layer$compute_geom_1, -->
+<!--                        cond = i)$data -->
+<!-- } -->
+<!-- inspect_after_scale <- function(p, i = 1) { -->
+<!--   ggtrace_inspect_return(x = p, method = ggplot2:::Layer$compute_geom_2, -->
+<!--                          cond = i) -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Inspect functions -->
+
+<!-- ```{r inspect-snapshop-fns} -->
+<!-- inspect_before_stat <- function(..., i = 1) { -->
+<!--   ggtrace_inspect_args( -->
+<!--     ..., method = ggplot2:::Layer$compute_statistic, -->
+<!--     cond = i, error = TRUE -->
+<!--   )$data %>% as_tibble() -->
+<!-- } -->
+<!-- inspect_after_stat <- function(..., i = 1) { -->
+<!--   ggtrace_inspect_return( -->
+<!--     ..., method = ggplot2:::Layer$compute_statistic, -->
+<!--     cond = i, error = TRUE -->
+<!--   ) %>% as_tibble() -->
+<!-- } -->
+<!-- inspect_before_geom <- function(..., i = 1) { -->
+<!--   ggtrace_inspect_args( -->
+<!--     ..., method = ggplot2:::Layer$compute_geom_1, -->
+<!--     cond = i, error = TRUE -->
+<!--   )$data %>% as_tibble() -->
+<!-- } -->
+<!-- inspect_after_scale <- function(..., i = 1) { -->
+<!--   ggtrace_inspect_return( -->
+<!--     ..., method = ggplot2:::Layer$compute_geom_2, -->
+<!--     cond = i, error = TRUE -->
+<!--   ) %>% as_tibble() -->
+<!-- } -->
+<!-- ``` -->
+
+
+<!-- ## before stat -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_boxplot) -->
+<!-- ``` -->
+
+<!-- ## after stat -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_boxplot) -->
+<!-- ``` -->
+
+<!-- ## before geom -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_boxplot) -->
+<!-- ``` -->
+
+<!-- ## after scale -->
+
+<!-- ```{r} -->
+<!-- inspect_after_scale(my_boxplot) -->
+<!-- ``` -->
+
+<!-- ## barplot -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins, aes(species)) + -->
+<!--   geom_bar() -->
+<!-- ``` -->
+
+<!-- ## barplot -->
+
+<!-- ```{r} -->
+<!-- ggplot(penguins, aes(species, y = after_stat(count))) + -->
+<!--   geom_bar(stat = StatCount) -->
+<!-- ``` -->
+
+<!-- ## barplot -->
+
+<!-- ```{r} -->
+<!-- my_barplot <- ggplot(penguins, aes(species, y = after_stat(count))) + -->
+<!--   geom_bar(stat = StatCount) -->
+<!-- ``` -->
+
+<!-- ## before stat -->
+
+<!-- ```{r} -->
+<!-- inspect_before_stat(my_barplot) -->
+<!-- ``` -->
+
+<!-- ## after stat -->
+
+<!-- ```{r} -->
+<!-- inspect_after_stat(my_barplot) -->
+<!-- ``` -->
+
+<!-- ## before geom -->
+
+<!-- ```{r} -->
+<!-- inspect_before_geom(my_barplot) -->
+<!-- ``` -->
+
+<!-- ## after scale -->
+
+<!-- ```{r} -->
+<!-- inspect_after_scale(my_barplot) -->
+<!-- ``` -->
+
+<!-- ## every layer has stat and geom -->
+
+<!-- ```{r} -->
+<!-- class(geom_boxplot()$stat)[1] -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- class(geom_boxplot()$geom)[1] -->
+<!-- ``` -->
+
+<!-- ## Stat/Geom validate -->
+
+<!-- ```{r} -->
+<!-- StatBoxplot$required_aes -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- GeomBoxplot$required_aes -->
+<!-- ``` -->
+

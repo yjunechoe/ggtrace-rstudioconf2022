@@ -1,23 +1,144 @@
 /*-- scss:rules --*/
 
+.reveal h2 {
+  margin-bottom: 0.5em;
+}
+
+.reveal .slide-background-content {
+  background-size: contain;
+}
+
+.reveal .slide ol li {
+  margin-top: 1em !important;
+}
+
+.quarto-figure.quarto-figure-center {
+  margin-bottom: 0em;
+}
+
 #title-slide .title {
   font-size: 70px;
   text-align: left;
   margin: auto auto 50px auto;
 }
-code {
+.reveal div.sourceCode pre.sourceCode {
+  background-color: inherit;
+}
+.reveal code {
+  font-family: monospace;
   font-size: 0.9em;
 }
+.reveal pre code {
+  max-height: 600px;
+}
 .centered-slide-text {
-  font-size: 2em;
+  font-size: 3em;
   font-weight: bold;
   position: absolute;
   width: 80%;
   top: 50%;
-  left: 50%;
+  left: 40%;
   transform: translate(calc(-50%), calc(-50%));
 }
+.text-block {
+  display: block;
+  position: absolute;
+  padding: 5px 10px;
+}
+
+.reveal div.sourceCode {
+  background-color: white;
+}
+pre > code.sourceCode > span {
+  color: #00769e
+}
+
+.big-code-chunk > .sourceCode {
+  font-size: 1.35em;
+  margin: 5px 15px;
+  line-height: 1.5;
+}
+.medium-code-chunk > .sourceCode {
+  font-size: 1.25em;
+  margin: 5px 10px;
+  line-height: 1.4;
+  max-height: 100% !important;
+}
+
+
 .workflow-action {
   font-weight: bold;
   font-size: 1.15em;
+}
+
+.big-code-hl {
+  background-color: greenyellow;
+  padding: 10px 20px;
+}
+
+#output-ggplot-class > code {
+  padding: 1em;
+  font-size: 2em;
+  line-height: 1.5;
+}
+
+.big-chunk-output > code {
+  padding: 0.5em 0em 1em 0.5em !important;
+  font-size: 1.2em;
+  line-height: 1.4;
+}
+
+.divbr {
+  height: 0.5em;
+}
+
+.reveal div.sourceCode[data-hl-loc] {
+  background-color: #d5d5d5;
+}
+.reveal pre.sourceCode code {
+  background-color: transparent;
+}
+.hl-block {
+  // width: 1 + 0.5 * nchar
+  // top: 1.45 * (nline - 1)
+  // left: 0.5 * nchar
+  height: 1em;
+  position: absolute;
+  background-color: #fff700;
+  font-size: 1.4em;
+  transform: translate(18px, 6px);
+  padding: 0.2em 0em;
+}
+
+.vcenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
+  margin-top: -0.5em;
+}
+
+.bordered {
+  border: 10px solid darkred;
+  border-radius: 10px;
+}
+
+.imgbox {
+  position: relative;
+  max-width: 80%;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 5px rgb(90 150 250 / 50%);
+}
+
+.imgbox img {
+  margin: 20px auto;
+  display: block;
+}
+
+.imgbox .pkg-logo-modal {
+  position: absolute;
+  width: 100px;
+  bottom: 0px;
+  right: 30px;
 }

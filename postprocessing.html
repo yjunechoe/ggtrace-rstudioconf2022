@@ -1,0 +1,24 @@
+<script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  crossorigin="anonymous"></script>
+
+<script>
+
+// highlight "ggplot" in output of class()
+$("#output-ggplot-class > code")
+  .html(function() {
+    this.innerHTML = this.textContent.replace(/\"ggplot\"/ig, "<i class='big-code-hl'>$&</i>")
+  })
+
+// incremental highlight for boxplot annotation layer
+$("[data-hl-loc]").each((i,v) => {
+    const hlSpecs = $(v).data("hl-loc")
+    console.log(hlSpecs)
+    hlSpecs.forEach(o => {
+        $(v).find("pre").prepend(
+            `<div class="hl-block" style="top:${o[0]}em; left:${o[1]}em; width:${o[2]}em"></div>`
+        )
+    })
+})
+</script>
