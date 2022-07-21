@@ -43,7 +43,7 @@
 <line x1='467.61' y1='160.27' x2='467.61' y2='202.33' style='stroke-width: 1.60; stroke: #333333; stroke-linecap: butt;' />
 <polygon points='409.32,119.65 409.32,160.27 525.90,160.27 525.90,119.65 409.32,119.65 ' style='stroke-width: 1.60; stroke: #333333; fill: #619CFF;' />
 <line x1='409.32' y1='141.16' x2='525.90' y2='141.16' style='stroke-width: 3.20; stroke: #333333; stroke-linecap: butt;' />
-<polygon points='289.26,215.36 335.08,215.36 334.95,215.36 335.47,215.34 335.98,215.23 336.47,215.05 336.92,214.79 337.32,214.46 337.67,214.07 337.95,213.63 338.15,213.15 338.28,212.64 338.32,212.12 338.32,212.12 338.32,192.53 338.32,192.53 338.28,192.01 338.15,191.50 337.95,191.02 337.67,190.58 337.32,190.19 336.92,189.86 336.47,189.60 335.98,189.42 335.47,189.31 335.08,189.29 289.26,189.29 289.65,189.31 289.13,189.29 288.61,189.36 288.11,189.50 287.64,189.72 287.21,190.02 286.83,190.38 286.52,190.80 286.28,191.26 286.11,191.75 286.03,192.27 286.02,192.53 286.02,212.12 286.03,211.86 286.03,212.38 286.11,212.90 286.28,213.39 286.52,213.85 286.83,214.27 287.21,214.63 287.64,214.93 288.11,215.15 288.61,215.30 289.13,215.36 ' style='stroke-width: 0.80; fill: #00BA38;' />
+<polygon points='289.26,215.36 335.08,215.36 334.95,215.36 335.47,215.34 335.98,215.23 336.47,215.05 336.92,214.79 337.32,214.46 337.67,214.07 337.95,213.63 338.15,213.15 338.28,212.64 338.32,212.12 338.32,212.12 338.32,192.53 338.32,192.53 338.28,192.01 338.15,191.50 337.95,191.02 337.67,190.58 337.32,190.19 336.92,189.86 336.47,189.60 335.98,189.42 335.47,189.31 335.08,189.29 289.26,189.29 289.65,189.31 289.13,189.29 288.61,189.36 288.11,189.50 287.64,189.72 287.21,190.02 286.83,190.38 286.52,190.80 286.28,191.26 286.11,191.75 286.03,192.27 286.02,192.53 286.02,212.12 286.03,211.86 286.03,212.38 286.11,212.90 286.28,213.39 286.52,213.85 286.83,214.27 287.21,214.63 287.64,214.93 288.11,215.15 288.61,215.30 289.13,215.36 ' style='stroke-width: 0.80; fill: #FFFFFF;' />
 <text x='312.17' y='209.96' text-anchor='middle' style='font-size: 21.34px; font-family: "Arial";' textLength='41.50px' lengthAdjust='spacingAndGlyphs'>40.9</text>
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHwzNjAuMDA=)'>
@@ -69,20 +69,14 @@
 <polyline points='605.22,137.70 605.22,133.81 ' style='stroke-width: 1.60; stroke: #333333;' />
 <rect x='595.50' y='137.70' width='19.44' height='12.96' style='stroke-width: 1.60; stroke: #333333; fill: #F8766D;' />
 <polyline points='595.50,144.18 614.94,144.18 ' style='stroke-width: 1.60; stroke: #333333;' />
-<rect x='592.26' y='131.22' width='25.92' height='25.92' style='stroke-width: 1.12; stroke: none; fill: #F8766D;' />
-<text x='605.22' y='151.81' text-anchor='middle' style='font-size: 21.34px; font-family: "Arial";' textLength='11.86px' lengthAdjust='spacingAndGlyphs'>a</text>
 <polyline points='605.22,180.46 605.22,176.58 ' style='stroke-width: 1.60; stroke: #333333;' />
 <polyline points='605.22,163.62 605.22,159.73 ' style='stroke-width: 1.60; stroke: #333333;' />
 <rect x='595.50' y='163.62' width='19.44' height='12.96' style='stroke-width: 1.60; stroke: #333333; fill: #00BA38;' />
 <polyline points='595.50,170.10 614.94,170.10 ' style='stroke-width: 1.60; stroke: #333333;' />
-<rect x='592.26' y='157.14' width='25.92' height='25.92' style='stroke-width: 1.12; stroke: none; fill: #00BA38;' />
-<text x='605.22' y='177.73' text-anchor='middle' style='font-size: 21.34px; font-family: "Arial";' textLength='11.86px' lengthAdjust='spacingAndGlyphs'>a</text>
 <polyline points='605.22,206.38 605.22,202.50 ' style='stroke-width: 1.60; stroke: #333333;' />
 <polyline points='605.22,189.54 605.22,185.65 ' style='stroke-width: 1.60; stroke: #333333;' />
 <rect x='595.50' y='189.54' width='19.44' height='12.96' style='stroke-width: 1.60; stroke: #333333; fill: #619CFF;' />
 <polyline points='595.50,196.02 614.94,196.02 ' style='stroke-width: 1.60; stroke: #333333;' />
-<rect x='592.26' y='183.06' width='25.92' height='25.92' style='stroke-width: 1.12; stroke: none; fill: #619CFF;' />
-<text x='605.22' y='203.65' text-anchor='middle' style='font-size: 21.34px; font-family: "Arial";' textLength='11.86px' lengthAdjust='spacingAndGlyphs'>a</text>
 <text x='628.64' y='150.19' style='font-size: 16.80px; font-family: "Arial";' textLength='46.70px' lengthAdjust='spacingAndGlyphs'>Adelie</text>
 <text x='628.64' y='176.11' style='font-size: 16.80px; font-family: "Arial";' textLength='71.91px' lengthAdjust='spacingAndGlyphs'>Chinstrap</text>
 <text x='628.64' y='202.03' style='font-size: 16.80px; font-family: "Arial";' textLength='55.12px' lengthAdjust='spacingAndGlyphs'>Gentoo</text>

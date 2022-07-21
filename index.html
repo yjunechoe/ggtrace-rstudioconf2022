@@ -432,9 +432,11 @@ University of Pennsylvania
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_boxplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins_sm, <span class="fu">aes</span>(<span class="at">fill =</span> species)) <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> bill_length_mm))</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>my_boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_boxplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> bill_length_mm, <span class="at">fill =</span> species),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>my_boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/my_boxplot-1.svg" width="960" class="r-stretch"></section>
@@ -1329,21 +1331,12 @@ White to move, checkmate in 3
 <img data-src="index_files/figure-revealjs/bar-after-scale-size-1.svg" width="960" class="r-stretch quarto-figure-center"></section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
-<ul>
-<li><p><strong>Before Stat</strong> validates the layer’s choice of <em>stat</em></p></li>
-<li><p><strong>After Stat</strong> context for <code>after_stat()</code> mappings</p></li>
-<li><p><strong>Before Geom</strong> validates the layer’s choice of <em>geom</em></p></li>
-<li><p><strong>After Scale</strong> context for <code>after_scale()</code> mappings</p></li>
-</ul>
-</section>
-<section id="recap-1" class="slide level2">
-<h2>Recap</h2>
 <p>Input (user-supplied data)</p>
 <ul>
-<li><p><strong>Before Stat</strong> validates the layer’s choice of <em>stat</em></p></li>
-<li><p><strong>After Stat</strong> context for <code>after_stat()</code> mappings</p></li>
-<li><p><strong>Before Geom</strong> validates the layer’s choice of <em>geom</em></p></li>
-<li><p><strong>After Scale</strong> context for <code>after_scale()</code> mappings</p></li>
+<li><p><span class="fragment"><strong>Before Stat</strong> validates the layer’s choice of <em>stat</em></span></p></li>
+<li><p><span class="fragment"><strong>After Stat</strong> context for <code>after_stat()</code> mappings</span></p></li>
+<li><p><span class="fragment"><strong>Before Geom</strong> validates the layer’s choice of <em>geom</em></span></p></li>
+<li><p><span class="fragment"><strong>After Scale</strong> context for <code>after_scale()</code> mappings</span></p></li>
 </ul>
 <p>Output (drawing-ready data)</p>
 </section>

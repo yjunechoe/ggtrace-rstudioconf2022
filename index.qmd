@@ -88,8 +88,10 @@ inspect_after_scale <- function(plot, i = 1) {
 :::{.vcenter}
 ```{r my_boxplot}
 #| echo: false
-my_boxplot <- ggplot(penguins_sm, aes(fill = species)) +
-  geom_boxplot(aes(x = species, y = bill_length_mm))
+my_boxplot <- ggplot(penguins_sm) +
+  geom_boxplot(
+    aes(x = species, y = bill_length_mm, fill = species),
+  )
 my_boxplot
 ``` 
 :::
@@ -114,7 +116,8 @@ my_boxplot
 #| echo: false
 my_boxplot + 
   geom_segment(
-    aes(xend = after_stat(x + .4),
+    aes(x = species,
+        xend = after_stat(x + .4),
         y = stage(bill_length_mm, ymin),
         yend = after_stat(ymin)),
     position = position_nudge(x = .05),
@@ -872,25 +875,15 @@ ggplot(penguins_sm) +
 
 ## Recap
 
-- **Before Stat** validates the layer's choice of _stat_
-
-- **After Stat** context for `after_stat()` mappings
-
-- **Before Geom** validates the layer's choice of _geom_
-
-- **After Scale** context for `after_scale()` mappings
-
-## Recap
-
 Input (user-supplied data)
 
-- **Before Stat** validates the layer's choice of _stat_
+- [**Before Stat** validates the layer's choice of _stat_]{.fragment}
 
-- **After Stat** context for `after_stat()` mappings
+- [**After Stat** context for `after_stat()` mappings]{.fragment}
 
-- **Before Geom** validates the layer's choice of _geom_
+- [**Before Geom** validates the layer's choice of _geom_]{.fragment}
 
-- **After Scale** context for `after_scale()` mappings
+- [**After Scale** context for `after_scale()` mappings]{.fragment}
 
 Output (drawing-ready data)
 
