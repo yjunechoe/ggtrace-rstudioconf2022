@@ -107,7 +107,6 @@ pre > code.sourceCode > span {
   // left: 0.5 * nchar
   height: 1em;
   position: absolute;
-  background-color: #fff700;
   font-size: 1.4em;
   transform: translate(18px, 6px);
   padding: 0.2em 0em;
@@ -144,4 +143,37 @@ pre > code.sourceCode > span {
   width: 100px;
   bottom: 0px;
   right: 30px;
+}
+
+.my-hl-1 {
+  font-weight: bold;
+  color: #E16A86
+}
+.my-hl-2 {
+  font-weight: bold;
+  color: #AA9000
+}
+.my-hl-3 {
+  font-weight: bold;
+  color: #00AA5A
+}
+.my-hl-4 {
+  font-weight: bold;
+  color: #B675E0
+}
+
+.internal-steps-container {
+  display: flex;
+  flex-direction: column;
+  height: 470px;
+  justify-content: space-between;
+  align-items: center;
+}
+.internal-step {
+  width: 80%;
+  height: 100px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 100px;
 }

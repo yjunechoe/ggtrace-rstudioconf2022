@@ -90,7 +90,7 @@ inspect_after_scale <- function(plot, i = 1) {
 #| echo: false
 my_boxplot <- ggplot(penguins_sm) +
   geom_boxplot(
-    aes(x = species, y = bill_length_mm, fill = species),
+    aes(x = species, y = bill_length_mm, fill = species)
   )
 my_boxplot
 ``` 
@@ -160,7 +160,9 @@ my_boxplot +
 
 ```{r layer1}
 #| eval: false
-geom_boxplot(aes(y = bill_length_mm, fill = species))
+geom_boxplot(
+  aes(x = species, y = bill_length_mm, fill = species)
+)
 ```
 
 ```{r layer2}
@@ -309,107 +311,110 @@ geom_label(
 
 :::
 
----
-
-```{r chess-1}
-#| echo: false
-#| fig-align: "center"
-knitr::include_graphics("img/chess-1.png")
-```
-
-<p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p>
-
----
-
-```{r chess-2}
-#| echo: false
-#| fig-align: "center"
-knitr::include_graphics("img/chess-2.png")
-```
-
-<p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p>
-
-## {background-color="#81388C"}
-
-[ggplot internals]{.centered-slide-text}
-
----
-
-:::{.vcenter}
-```{r resources-1}
-#| echo: false
-#| fig-align: "center"
-knitr::include_graphics("img/resources-1.png")
-```
-:::
-
----
-
-:::{.vcenter}
-```{r resources-2}
-#| echo: false
-#| fig-align: "center"
-knitr::include_graphics("img/resources-2.png")
-```
-:::
-
----
-
-:::{.vcenter}
-```{r ggproto-img-bg}
-#| echo: false
-#| fig-align: "center"
-#| out-width: "800px"
-knitr::include_graphics("img/ggproto.png")
-```
-:::
-
----
-
-```{r ggproto-img}
-#| echo: false
-#| fig-align: "center"
-knitr::include_graphics("img/ggproto.png")
-```
-
-:::: {.r-stack}
-
-::: {.bordered}
-```{r ggproto-1}
-Person <- ggproto("Person", NULL,
-  name = "",
-  birthdate = NA,
-  age = function(self) {
-    days_old <- Sys.Date() - self$birthdate
-    floor(as.integer(days_old) / 365.25)
-  },
-  description = function(self) {
-    paste(self$name, "is", self$age(), "years old")
-  }
-)
-```
-:::
-
-::: {.fragment .bordered}
-```{r ggproto-2}
-Me <- ggproto(NULL, Person,
-  name = "June",
-  birthdate = as.Date("1997/10/10")
-)
-
-Me$description()
-```
-:::
-
-::::
-
 ## {background-color="#81388C"}
 
 [ggplot internals _for users_]{.centered-slide-text}
 
+<!-- --- -->
+
+<!-- ```{r chess-1} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: "center" -->
+<!-- knitr::include_graphics("img/chess-1.png") -->
+<!-- ``` -->
+
+<!-- <p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p> -->
+
+<!-- --- -->
+
+<!-- ```{r chess-2} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: "center" -->
+<!-- knitr::include_graphics("img/chess-2.png") -->
+<!-- ``` -->
+
+<!-- <p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p> -->
+
+<!-- ## {background-color="#81388C"} -->
+
+<!-- [ggplot internals]{.centered-slide-text} -->
+
+<!-- --- -->
+
+<!-- :::{.vcenter} -->
+<!-- ```{r resources-1} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: "center" -->
+<!-- knitr::include_graphics("img/resources-1.png") -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- --- -->
+
+<!-- :::{.vcenter} -->
+<!-- ```{r resources-2} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: "center" -->
+<!-- knitr::include_graphics("img/resources-2.png") -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- --- -->
+
+<!-- :::{.vcenter} -->
+<!-- ```{r ggproto-img-bg} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: "center" -->
+<!-- #| out-width: "800px" -->
+<!-- knitr::include_graphics("img/ggproto.png") -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- --- -->
+
+<!-- ```{r ggproto-img} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: "center" -->
+<!-- knitr::include_graphics("img/ggproto.png") -->
+<!-- ``` -->
+
+<!-- :::: {.r-stack} -->
+
+<!-- ::: {.bordered} -->
+<!-- ```{r ggproto-1} -->
+<!-- Person <- ggproto("Person", NULL, -->
+<!--   name = "", -->
+<!--   birthdate = NA, -->
+<!--   age = function(self) { -->
+<!--     days_old <- Sys.Date() - self$birthdate -->
+<!--     floor(as.integer(days_old) / 365.25) -->
+<!--   }, -->
+<!--   description = function(self) { -->
+<!--     paste(self$name, "is", self$age(), "years old") -->
+<!--   } -->
+<!-- ) -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- ::: {.fragment .bordered} -->
+<!-- ```{r ggproto-2} -->
+<!-- Me <- ggproto(NULL, Person, -->
+<!--   name = "June", -->
+<!--   birthdate = as.Date("1997/10/10") -->
+<!-- ) -->
+
+<!-- Me$description() -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- :::: -->
+
+
 ## ggplot internals as data wrangling
 
 <div class="divbr"></div>
+
+. . .
 
 ```{r}
 #| fig-align: "center"
@@ -418,11 +423,9 @@ Me$description()
 knitr::include_graphics("img/ggtrace_logo.png")
 ```
 
-## ggplot internals for users
-
-1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
-
 ## 1) Layers as dataframes
+
+. . .
 
 ```{r layer_data-boxplot}
 ggplot2::layer_data(plot = my_boxplot, i = 1L)
@@ -445,37 +448,6 @@ penguins_sm %>% print(max = 10)
 ```{r layer_data-boxplot}
 ```
 
----
-
-```{r barplot}
-my_barplot <- ggplot(penguins_sm) + 
-  geom_bar(aes(x = species, fill = species))
-my_barplot
-```
-
----
-
-```{r penguins-show}
-#| eval: false
-```
-
-```{r penguins-3row}
-#| echo: false
-penguins_sm %>% print(max = 6)
-```
-
-. . .
-
-```{r layer_data-barplot}
-ggplot2::layer_data(plot = my_barplot, i = 1L)
-```
-
-## ggplot internals for users
-
-1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
-
-2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready"
-
 ## 2) Internals as data wrangling
 
 ```{r pipeline-data-wrangling}
@@ -492,27 +464,67 @@ ggplot_internals <- function(data) {
 }
 ```
 
+## Snapshots of layer data
+
+**Input** (user-supplied data)
+
+- [[Before Stat]{.my-hl-1} validates the layer's choice of `stat`]{.fragment}
+
+- [[After Stat]{.my-hl-2} context for `after_stat()` mappings]{.fragment}
+
+- [[Before Geom]{.my-hl-3} validates the layer's choice of `geom`]{.fragment}
+
+- [[After Scale]{.my-hl-4} context for `after_scale()` mappings]{.fragment}
+
+**Output** (drawing-ready data)
+
 ---
 
-```{r barplot-show}
-#| echo: false
-#| out-width: "700px"
-#| fig-align: "center"
-my_barplot
+:::{.vcenter}
+<div>
+<div style="display: flex; flex-direction: row; justify-content: space-around;"><span class="my-hl-1">Before Stat</span><span class="my-hl-2">After Stat</span><span class="my-hl-3">Before Geom</span><span class="my-hl-4">After Scale</span></div>
+<div class="divbr"></div>
+```{r layer2}
+#| eval: false
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,1,8.8,\"#FFB1C0\"],[7.2,1,23.1,\"#FFB1C0\"],[1.45,5.3,4,\"#FFB1C0\"],[2.9,8.6,11.9,\"#FFB1C0\"],[2.9,21,9.5,\"#E1C563\"],[4.3,7.5,8.6,\"#E1C563\"],[0,0,5.6,\"#64DF91\"]]"'
 ```
+</div>
+:::
 
-```{r bar-snapshots-gif}
-#| fig-align: "center"
-#| out-width: "80%"
-#| echo: false
-knitr::include_graphics("img/bar-snapshots.gif")
+
+## Snapshots in the pipeline
+
+:::: {.columns}
+
+::: {.column width="65%"}
+```{r pipeline-data-wrangling}
+#| eval: false
+#| attr-source: "style='height:470px'"
 ```
+:::
+
+::: {.column width="35%"}
+```{r snapshot-blocks}
+#| echo: false
+#| results: "asis"
+div(class = "internal-steps-container", lapply(1:4, function(i) {
+  div(class = "internal-step",
+      style = paste0("background-color:#", c("FFB1C0", "E4CB73", "64DF91", "E0B6FF")[i]),
+      c("Before Stat", "After Stat", "Before Geom", "After Scale")[i])
+}))
+```
+:::
+
+::::
 
 ## 👻 ggproto methods 👻
 
-:::{style="width:65%"}
+:::: {.columns}
+
+::: {.column width="65%"}
 ```{r pipeline-ggproto-methods}
 #| eval: false
+#| attr-source: "style='height:470px'"
 ggplot_internals <- function(data) {
   data %>% 
     ... %>% 
@@ -525,6 +537,15 @@ ggplot_internals <- function(data) {
 }
 ```
 :::
+
+::: {.column width="35%"}
+```{r snapshot-blocks}
+#| echo: false
+#| results: "asis"
+```
+:::
+
+::::
 
 ---
 
@@ -556,13 +577,21 @@ knitr::include_graphics("img/ggtrace-inspect-fns.png")
 ---
 
 :::{.vcenter}
+
+<div style="position: relative;">
+
 ```{r ggtrace-inspect-return-after-stat}
 ggtrace_inspect_return(
-  x = my_barplot,
+  x = my_boxplot,
   method = ggplot2:::Layer$compute_statistic,
   cond = 1
 )
 ```
+
+<div class="absolute internal-step" style="background-color:#E4CB73; width:200px; right: 0px; top:0px;">After Stat</div>
+
+</div>
+
 :::
 
 ---
@@ -570,15 +599,13 @@ ggtrace_inspect_return(
 ::::{.vcenter}
 
 ```{r bar-inspect-after-stat}
-inspect_after_stat(plot = my_barplot, i = 1)
+inspect_after_stat(plot = my_boxplot, i = 1)
 ```
 
 :::{.fragment}
 ```{r inspect-wrappers}
 #| eval: false
 inspect_before_stat(plot = , i = 1)
-
-inspect_after_stat(plot = , i = 1)
 
 inspect_before_geom(plot = , i = 1)
 
@@ -588,25 +615,29 @@ inspect_after_scale(plot = , i = 1)
 
 ::::
 
-## ggplot internals for users
-
-1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
-
-2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready"
-
-3) Consulting the intermediate **states** of a layer's data can write more powerful ggplot code
-
-- _Before Stat_, _After Stat_, _Before Geom_, _After Scale_
-
 ---
 
-```{r my_boxplot-labelled}
-#| fig-align: center
+```{r barplot}
+my_barplot <- ggplot(penguins_sm) + 
+  geom_bar(aes(x = species, fill = species))
+my_barplot
 ```
 
 ---
 
-```{r barplot}
+```{r penguins-show}
+#| eval: false
+```
+
+```{r penguins-3row}
+#| echo: false
+penguins_sm %>% print(max = 6)
+```
+
+. . .
+
+```{r layer_data-barplot}
+ggplot2::layer_data(plot = my_barplot, i = 1L)
 ```
 
 ---
@@ -831,7 +862,7 @@ inspect_before_geom(
 ggplot(penguins_sm) +
   geom_label(
     aes(x = species, label = after_stat(count)),
-    stat = "count"
+    stat = "count", size = 5
   )
 ```
 
@@ -852,46 +883,234 @@ inspect_after_scale(
 
 ## After Scale
 
-```{r bar-after-scale-fill}
+```{r bar-after-scale-size-fill}
 #| fig-align: "center"
+#| out.width: "550px"
+library(colorspace)
 ggplot(penguins_sm) +
-  geom_bar(
-    aes(x = species, color = species,
-        fill = after_scale( alpha(color, .5)) )
-  )
+  geom_bar(aes(x = species, fill = species,
+               color = after_scale(darken(fill, .5))),
+           size = 3)
 ```
 
-## After Scale
+::: aside
+In `{ggplot2}` _v3.4.0_, `size` for lines will be renamed to `linewidth`
+:::
 
-```{r bar-after-scale-size}
+---
+
+```{r barplot-show}
+#| echo: false
+#| out-width: "700px"
 #| fig-align: "center"
-ggplot(penguins_sm) +
-  geom_bar(
-    aes(x = species, color = species,
-        fill = after_scale( alpha(color, .5)),
-        size = after_scale( size * 3 ))
-  )
+my_barplot
 ```
 
-## Recap
+```{r bar-snapshots-gif}
+#| fig-align: "center"
+#| out-width: "80%"
+#| out-extra: "style='box-shadow: 0px 0px 10px 5px grey'"
+#| echo: false
+knitr::include_graphics("img/bar-snapshots.gif")
+```
 
-Input (user-supplied data)
+## Snapshots of `my_barplot`'s bar layer
 
-- [**Before Stat** validates the layer's choice of _stat_]{.fragment}
+**Input** (user-supplied data)
 
-- [**After Stat** context for `after_stat()` mappings]{.fragment}
+- [Before Stat]{.my-hl-1} [has `x`, validates `"count"` stat]{.fragment}
 
-- [**Before Geom** validates the layer's choice of _geom_]{.fragment}
+- [After Stat]{.my-hl-2} [has `count`, available in `after_stat()`]{.fragment}
 
-- [**After Scale** context for `after_scale()` mappings]{.fragment}
+- [Before Geom]{.my-hl-3} [has `x` and `y`, validates `"bar"` geom]{.fragment}
 
-Output (drawing-ready data)
+- [After Scale]{.my-hl-4} [makes variables available in `after_scale()` (unused)]{.fragment}
+
+**Output** (drawing-ready data)
 
 ## Moment of truth
+
+```{r boxplot-annotation-skeleton}
+my_boxplot +
+  ?
+```
 
 ```{r my_boxplot-labelled}
 #| fig-align: "center"
 ```
+
+## Step-by-step
+
+1) Use a `label` to draw a `boxplot` varible
+
+```{r skeleton-geom-stat}
+#| eval: false
+#| code-line-numbers: true
+geom_label(
+  stat = "boxplot"
+)
+```
+
+. . .
+
+<div class="divbr"></div>
+
+```{r skeleton-stat-geom}
+#| eval: false
+#| code-line-numbers: true
+stat_boxplot(
+  geom = "label"
+)
+```
+
+## Step-by-step
+
+2) Plot the data of just `Chinstrap` species
+
+```{r skeleton-data}
+#| eval: false
+#| code-line-numbers: "3"
+geom_label(
+  stat = "boxplot",
+  data = ~ .x %>% filter(species == "Chinstrap")
+)
+```
+
+## Step-by-step
+
+3) Give the `stat` what it needs to start
+
+```{r skeleton-start}
+#| eval: false
+#| code-line-numbers: "2-5"
+geom_label(
+  aes(
+    x = species,
+    y = bill_length_mm
+  ),
+  stat = "boxplot",
+  data = ~ .x %>% filter(species == "Chinstrap")
+)
+```
+
+## Step-by-step
+
+3) Make sure the `geom` gets what it needs later
+
+```{r skeleton-after-stat}
+#| eval: false
+#| code-line-numbers: "5"
+geom_label(
+  aes(
+    x = species,
+    y = bill_length_mm,
+    label = after_stat(ymin)
+  ),
+  stat = "boxplot",
+  data = ~ .x %>% filter(species == "Chinstrap")
+)
+```
+
+---
+
+```{r no-stage}
+my_boxplot_annotated <- my_boxplot +
+  geom_label(
+    aes(
+      x = species,
+      y = bill_length_mm,
+      label = after_stat(ymin)
+    ),
+    stat = "boxplot",
+    data = ~ .x %>% filter(species == "Chinstrap")
+  )
+```
+
+<div class="divbr"></div>
+
+```{r no-stage-print}
+#| error: true
+#| class-error: "big-chunk-output"
+my_boxplot_annotated
+```
+
+---
+
+:::{.vcenter}
+
+```{r annotation-before-geom}
+inspect_before_geom(my_boxplot_annotated, i = 2)
+```
+
+:::
+
+## Multiple mappings with `stage()`
+
+```{r error = TRUE}
+my_boxplot_annotated <- my_boxplot +
+  geom_label(
+    aes(
+      x = species,
+      y = stage(start = bill_length_mm, after_stat = ymin),
+      label = after_stat(ymin)
+    ),
+    stat = "boxplot",
+    data = ~ .x %>% filter(species == "Chinstrap")
+  )
+```
+
+---
+
+```{r my-boxplot-annotated-plot}
+#| fig-align: "center"
+my_boxplot_annotated
+```
+
+```{r annotation-before-geom}
+```
+
+## It all `stage()`
+
+:::{.vcenter}
+
+```{r all-stage}
+#| eval: false
+geom_label(
+  aes(
+    x = stage(start = species),
+    y = stage(start = bill_length_mm, after_stat = ymin),
+    label = stage(start = NULL, after_stat = ymin)
+  ),
+  stat = "boxplot",
+  data = ~ .x %>% filter(species == "Chinstrap")
+)
+```
+
+:::
+
+## Conclusion (pt.1)
+
+1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
+
+2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready"
+
+3) Consulting the intermediate **states** of a layer's data can write more powerful ggplot code
+
+- _Before Stat_, _After Stat_, _Before Geom_, _After Scale_
+
+## Conclusion (pt.1)
+
+By aggressively capitalizing on this fact that layers have dataframe representations, we learn that...
+
+Every aesthetic mapping is a `mutate()` scheduled (`stage()`-ed) at different points of the data wrangling pipeline.
+
+Every layer has a `Stat` and a `Geom`, which transforms the data with their own combo of `group_by()`, `summrize()`, and `mutate()`.
+
+## Reframing **extending** ggplot
+
+Natural next step - leads u to extensions, if ur further interested.
+
+What do I want the drawing-ready data to look like?
 
 <!-- ## 4 snapshots of layer data -->
 

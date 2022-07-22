@@ -17,7 +17,8 @@ $("[data-hl-loc]").each((i,v) => {
     console.log(hlSpecs)
     hlSpecs.forEach(o => {
         $(v).find("pre").prepend(
-            `<div class="hl-block" style="top:${o[0]}em; left:${o[1]}em; width:${o[2]}em"></div>`
+            `<div class="hl-block" style="top:${o[0]}em; left:${o[1]}em; width:${o[2]}em;
+            background-color:${o[3] === undefined ? '#fff700' : o[3]}"></div>`
         )
     })
 })
