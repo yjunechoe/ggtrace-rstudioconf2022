@@ -55,34 +55,6 @@ penguins_sm <- palmerpenguins::penguins %>%
 penguins_sm
 ```
 
-```{r inspect-snapshop-fns}
-#| echo: false
-inspect_before_stat <- function(plot, i = 1) {
-  ggtrace_inspect_args(
-    x = plot, method = ggplot2:::Layer$compute_statistic,
-    cond = i, error = TRUE
-  )$data
-}
-inspect_after_stat <- function(plot, i = 1) {
-  ggtrace_inspect_return(
-    x = plot, method = ggplot2:::Layer$compute_statistic,
-    cond = i, error = TRUE
-  )
-}
-inspect_before_geom <- function(plot, i = 1) {
-  ggtrace_inspect_args(
-    x = plot, method = ggplot2:::Layer$compute_geom_1,
-    cond = i, error = TRUE
-  )$data
-}
-inspect_after_scale <- function(plot, i = 1) {
-  ggtrace_inspect_return(
-    x = plot, method = ggplot2:::Layer$compute_geom_2,
-    cond = i, error = TRUE
-  )
-}
-```
-
 ---
 
 :::{.vcenter}
@@ -704,7 +676,7 @@ Workflow functions `ggtrace_{action}_{value}()`:
 
 ```{r ggtrace-inspect-fns}
 #| echo: false
-#| out-width: "80%"
+#| out-width: "78.5%"
 knitr::include_graphics("img/ggtrace-inspect-fns.png")
 ```
 
@@ -1270,6 +1242,7 @@ knitr::include_graphics("img/bar-snapshots.gif")
 
 :::{.vcenter}
 ```{r my_boxplot-lone}
+#| fig-align: "center"
 my_boxplot
 ```
 :::
@@ -1304,18 +1277,6 @@ geom_label(
 )
 ```
 
-. . .
-
-<div class="divbr"></div>
-
-```{r skeleton-stat-geom}
-#| eval: false
-#| code-line-numbers: true
-stat_boxplot(
-  geom = "label"
-)
-```
-
 ## Step-by-step
 
 1) Use a `label` to draw a `boxplot` varible
@@ -1323,9 +1284,6 @@ stat_boxplot(
 ```{r skeleton-geom-stat}
 #| eval: false
 #| code-line-numbers: true
-geom_label(
-  stat = "boxplot"
-)
 ```
 
 <div class="divbr"></div>
@@ -1451,6 +1409,8 @@ my_boxplot_annotated <- my_boxplot +
 
 ---
 
+::: {style="position:relative"}
+
 ```{r annotation-before-stat-success}
 #| eval: false
 ggtrace_inspect_args(
@@ -1466,11 +1426,23 @@ ggtrace_inspect_args(
   print(max = ncol(.) * 3)
 ```
 
+<div class="absolute internal-step" style="background-color:#FFB1C0; width:300px; right: 0px; top:0px; height:70px; line-height:70px;">Before Stat</div>
+
+:::
+
+. . .
+
+::: {style="position:relative"}
+
 ```{r annotation-before-geom-success}
 ggtrace_inspect_args(
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
 ```
+
+<div class="absolute internal-step" style="background-color:#64DF91; width:300px; right: 0px; top:0px; height:70px; line-height:70px;">Before Geom</div>
+
+:::
 
 ---
 
