@@ -95,9 +95,6 @@ pre > code.sourceCode > span {
   height: 0.5em;
 }
 
-.reveal div.sourceCode[data-hl-loc] {
-  background-color: #d5d5d5;
-}
 .reveal pre.sourceCode code {
   background-color: transparent;
 }
@@ -105,7 +102,6 @@ pre > code.sourceCode > span {
   // width: 1 + 0.5 * nchar
   // top: 1.45 * (nline - 1)
   // left: 0.5 * nchar
-  height: 1em;
   position: absolute;
   font-size: 1.4em;
   transform: translate(18px, 6px);
@@ -127,22 +123,27 @@ pre > code.sourceCode > span {
 
 .imgbox {
   position: relative;
-  max-width: 80%;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
   margin: auto;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px 5px rgb(90 150 250 / 50%);
+  box-shadow: 0px 0px 20px 15px rgb(90 150 250 / 50%);
+  background-color: white;
 }
 
 .imgbox img {
-  margin: 20px auto;
+  padding: 20px;
   display: block;
 }
 
 .imgbox .pkg-logo-modal {
   position: absolute;
   width: 100px;
-  bottom: 0px;
+  bottom: 20px;
   right: 30px;
+  background-color: transparent;
 }
 
 .my-hl-1 {
