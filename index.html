@@ -688,79 +688,6 @@ University of Pennsylvania
 <section id="section-1" class="slide level2" data-background-color="#81388C">
 <h2></h2>
 <p><span class="centered-slide-text">ggplot internals <em>for users</em></span></p>
-<!-- --- -->
-<!-- ```{r chess-1} -->
-<!-- #| echo: false -->
-<!-- #| fig-align: "center" -->
-<!-- knitr::include_graphics("img/chess-1.png") -->
-<!-- ``` -->
-<!-- <p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p> -->
-<!-- --- -->
-<!-- ```{r chess-2} -->
-<!-- #| echo: false -->
-<!-- #| fig-align: "center" -->
-<!-- knitr::include_graphics("img/chess-2.png") -->
-<!-- ``` -->
-<!-- <p style="text-align: center; font-weight: bold;">White to move, checkmate in 3</p> -->
-<!-- ## {background-color="#81388C"} -->
-<!-- [ggplot internals]{.centered-slide-text} -->
-<!-- --- -->
-<!-- :::{.vcenter} -->
-<!-- ```{r resources-1} -->
-<!-- #| echo: false -->
-<!-- #| fig-align: "center" -->
-<!-- knitr::include_graphics("img/resources-1.png") -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- --- -->
-<!-- :::{.vcenter} -->
-<!-- ```{r resources-2} -->
-<!-- #| echo: false -->
-<!-- #| fig-align: "center" -->
-<!-- knitr::include_graphics("img/resources-2.png") -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- --- -->
-<!-- :::{.vcenter} -->
-<!-- ```{r ggproto-img-bg} -->
-<!-- #| echo: false -->
-<!-- #| fig-align: "center" -->
-<!-- #| out-width: "800px" -->
-<!-- knitr::include_graphics("img/ggproto.png") -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- --- -->
-<!-- ```{r ggproto-img} -->
-<!-- #| echo: false -->
-<!-- #| fig-align: "center" -->
-<!-- knitr::include_graphics("img/ggproto.png") -->
-<!-- ``` -->
-<!-- :::: {.r-stack} -->
-<!-- ::: {.bordered} -->
-<!-- ```{r ggproto-1} -->
-<!-- Person <- ggproto("Person", NULL, -->
-<!--   name = "", -->
-<!--   birthdate = NA, -->
-<!--   age = function(self) { -->
-<!--     days_old <- Sys.Date() - self$birthdate -->
-<!--     floor(as.integer(days_old) / 365.25) -->
-<!--   }, -->
-<!--   description = function(self) { -->
-<!--     paste(self$name, "is", self$age(), "years old") -->
-<!--   } -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- ::: {.fragment .bordered} -->
-<!-- ```{r ggproto-2} -->
-<!-- Me <- ggproto(NULL, Person, -->
-<!--   name = "June", -->
-<!--   birthdate = as.Date("1997/10/10") -->
-<!-- ) -->
-<!-- Me$description() -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- :::: -->
 </section>
 <section id="ggplot-internals-as-data-wrangling" class="slide level2">
 <h2>ggplot internals as data wrangling</h2>
@@ -1207,6 +1134,7 @@ After Stat
 </section>
 <section class="slide level2">
 
+<div style="position:relative;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>penguins_sm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1219,10 +1147,12 @@ After Stat
  [ reached 'max' / getOption("max.print") -- omitted 339 rows ]</code></pre>
 </div>
 </div>
-<div class="absolute internal-step" style="background-color:#BFBFBF; width:250px; right: 0px; top:0px;">
+<div class="absolute internal-step" style="background-color:#BFBFBF; width:200px; right: 0px; top:0px; height:66px; line-height:66px">
 Input
 </div>
+</div>
 <div class="fragment">
+<div style="position:relative;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">layer_data</span>(<span class="at">plot =</span> my_barplot, <span class="at">i =</span> 1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1236,19 +1166,10 @@ Input
 3 3.45     NA  0.5        1    NA</code></pre>
 </div>
 </div>
-<div class="absolute internal-step" style="background-color:#BFBFBF; width:250px; right: 0px; top:0px;">
+<div class="absolute internal-step" style="background-color:#BFBFBF; width:200px; right: 0px; top:0px; height:66px; line-height:66px">
 Output
 </div>
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r bar-explicit-stat} -->
-<!-- #| eval: false -->
-<!-- stat_count( -->
-<!--   aes(x = species, fill = species, -->
-<!--       y = after_stat(count)), -->
-<!--   geom = "bar" -->
-<!-- ) -->
-<!-- ``` -->
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -1282,11 +1203,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1313,11 +1234,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1340,11 +1261,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1371,11 +1292,11 @@ Output
 
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1395,11 +1316,11 @@ Output
 </div>
 <img data-src="index_files/figure-revealjs/bar-before-stat-overspec-error-1.svg" width="960" class="r-stretch"><div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1426,31 +1347,14 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
-<!-- ## Before Stat -->
-<!-- ```{r bar-before-stat-underspec} -->
-<!-- #| eval: false -->
-<!-- #| attr-source: 'data-hl-loc="[[2.9,11.2,8.1]]"' -->
-<!-- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_bar(aes(fill = species)), -->
-<!--   method = ggplot2:::Layer$compute_statistic)$data -->
-<!-- ``` -->
-<!-- ```{r bar-before-stat-underspec-3row} -->
-<!-- #| echo: false -->
-<!-- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_bar(aes(fill = species)), -->
-<!--   method = ggplot2:::Layer$compute_statistic)$data %>%  -->
-<!--   print(max = ncol(.) * 3) -->
-<!-- ``` -->
 </section>
 <section id="after-stat" class="slide level2">
 <h2>After Stat</h2>
@@ -1467,11 +1371,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1485,11 +1389,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1518,11 +1422,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1551,11 +1455,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1571,11 +1475,11 @@ Output
 </div>
 <img data-src="index_files/figure-revealjs/bar-props-1.svg" width="960" class="r-stretch quarto-figure-center"><div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1595,11 +1499,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1623,11 +1527,11 @@ Output
 
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1654,11 +1558,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1672,11 +1576,11 @@ Output
 </div>
 <img data-src="index_files/figure-revealjs/point-count-1.svg" width="960" class="r-stretch quarto-figure-center"><div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1701,11 +1605,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1722,11 +1626,11 @@ Output
 </div>
 <img data-src="index_files/figure-revealjs/label-count-after_stat-1.svg" width="960" class="r-stretch quarto-figure-center"><div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#BFBFBF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1750,11 +1654,11 @@ Output
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#E0B6FF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#E0B6FF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1778,11 +1682,11 @@ Output
 
 <div class="cell">
 <div class="cell-output-display">
-<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:50px;bottom:-45px;">
-<div class="internal-step" style="background-color:#FFB1C0;line-height:50px;width:200px;height:50px;">Before Stat</div>
-<div class="internal-step" style="background-color:#E4CB73;line-height:50px;width:200px;height:50px;">After Stat</div>
-<div class="internal-step" style="background-color:#64DF91;line-height:50px;width:200px;height:50px;">Before Geom</div>
-<div class="internal-step" style="background-color:#E0B6FF;line-height:50px;width:200px;height:50px;">After Scale</div>
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.6em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#64DF91;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#E0B6FF;line-height:30px;width:200px;height:30px;">After Scale</div>
 </div>
 </div>
 </div>
@@ -1839,8 +1743,15 @@ Output
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>my_boxplot <span class="sc">+</span></span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  ?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>my_boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/my_boxplot-lone-1.svg" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>my_boxplot <span class="sc">+</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  ?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 <img data-src="index_files/figure-revealjs/my_boxplot-labelled-1.svg" width="960" class="r-stretch quarto-figure-center"></section>
@@ -1849,19 +1760,21 @@ Output
 <ol type="1">
 <li>Use a <code>label</code> to draw a <code>boxplot</code> varible</li>
 </ol>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb87" data-code-line-numbers="true"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb87-2"><a href="#cb87-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span></span>
-<span id="cb87-3"><a href="#cb87-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88" data-code-line-numbers="true"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb88-2"><a href="#cb88-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span></span>
+<span id="cb88-3"><a href="#cb88-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 <div class="fragment">
 <div class="divbr">
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb88" data-code-line-numbers="true"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="fu">stat_boxplot</span>(</span>
-<span id="cb88-2"><a href="#cb88-2"></a>  <span class="at">geom =</span> <span class="st">"label"</span></span>
-<span id="cb88-3"><a href="#cb88-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89" data-code-line-numbers="true"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="fu">stat_boxplot</span>(</span>
+<span id="cb89-2"><a href="#cb89-2"></a>  <span class="at">geom =</span> <span class="st">"label"</span></span>
+<span id="cb89-3"><a href="#cb89-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -1871,10 +1784,10 @@ Output
 <li>Plot the data of just <code>Chinstrap</code> species</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb89" data-code-line-numbers="3"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb89-2"><a href="#cb89-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb89-3"><a href="#cb89-3"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
-<span id="cb89-4"><a href="#cb89-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90" data-code-line-numbers="3"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb90-2"><a href="#cb90-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb90-3"><a href="#cb90-3"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
+<span id="cb90-4"><a href="#cb90-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="step-by-step-2" class="slide level2">
@@ -1883,14 +1796,14 @@ Output
 <li>Give the <code>stat</code> the aesthetics it needs to start</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb90" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb90-2"><a href="#cb90-2"></a>  <span class="fu">aes</span>(</span>
-<span id="cb90-3"><a href="#cb90-3"></a>    <span class="at">x =</span> species,</span>
-<span id="cb90-4"><a href="#cb90-4"></a>    <span class="at">y =</span> bill_length_mm</span>
-<span id="cb90-5"><a href="#cb90-5"></a>  ),</span>
-<span id="cb90-6"><a href="#cb90-6"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb90-7"><a href="#cb90-7"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
-<span id="cb90-8"><a href="#cb90-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb91-2"><a href="#cb91-2"></a>  <span class="fu">aes</span>(</span>
+<span id="cb91-3"><a href="#cb91-3"></a>    <span class="at">x =</span> species,</span>
+<span id="cb91-4"><a href="#cb91-4"></a>    <span class="at">y =</span> bill_length_mm</span>
+<span id="cb91-5"><a href="#cb91-5"></a>  ),</span>
+<span id="cb91-6"><a href="#cb91-6"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb91-7"><a href="#cb91-7"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
+<span id="cb91-8"><a href="#cb91-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="step-by-step-3" class="slide level2">
@@ -1899,37 +1812,37 @@ Output
 <li>Make sure the <code>geom</code> gets the aesthetics it needs later</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb91" data-code-line-numbers="5"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb91-2"><a href="#cb91-2"></a>  <span class="fu">aes</span>(</span>
-<span id="cb91-3"><a href="#cb91-3"></a>    <span class="at">x =</span> species,</span>
-<span id="cb91-4"><a href="#cb91-4"></a>    <span class="at">y =</span> bill_length_mm,</span>
-<span id="cb91-5"><a href="#cb91-5"></a>    <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
-<span id="cb91-6"><a href="#cb91-6"></a>  ),</span>
-<span id="cb91-7"><a href="#cb91-7"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb91-8"><a href="#cb91-8"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
-<span id="cb91-9"><a href="#cb91-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92" data-code-line-numbers="5"><pre class="sourceCode numberSource r big-code-chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb92-2"><a href="#cb92-2"></a>  <span class="fu">aes</span>(</span>
+<span id="cb92-3"><a href="#cb92-3"></a>    <span class="at">x =</span> species,</span>
+<span id="cb92-4"><a href="#cb92-4"></a>    <span class="at">y =</span> bill_length_mm,</span>
+<span id="cb92-5"><a href="#cb92-5"></a>    <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
+<span id="cb92-6"><a href="#cb92-6"></a>  ),</span>
+<span id="cb92-7"><a href="#cb92-7"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb92-8"><a href="#cb92-8"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
+<span id="cb92-9"><a href="#cb92-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
-<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> species,</span>
-<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> bill_length_mm,</span>
-<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
-<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
-<span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> species,</span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> bill_length_mm,</span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="divbr">
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_build</span>(my_boxplot_annotated)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_build</span>(my_boxplot_annotated)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-error">
@@ -1943,9 +1856,9 @@ Output
 
 <div class="vcenter">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="big-chunk-output"><code>Error in `check_required_aesthetics()`:
 ! geom_label requires the following missing aesthetics: y</code></pre>
@@ -1962,24 +1875,24 @@ Output
 <section id="multiple-mappings-with-stage" class="slide level2">
 <h2>Multiple mappings with <code>stage()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb98" data-hl-loc="[[5.8,3,28]]"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
-<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
-<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> species,</span>
-<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
-<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
-<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99" data-hl-loc="[[5.8,3,28]]"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> species,</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Chinstrap"</span>)</span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
-<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -1991,9 +1904,9 @@ Output
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
-<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="big-chunk-output"><code>     y label ymin lower middle  upper ymax outliers notchupper
 1 40.9  40.9 40.9 46.35  49.55 51.075   58            50.45532
@@ -2005,75 +1918,10 @@ Output
 <section class="slide level2">
 
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/my-boxplot-annotated-plot-1.svg" width="960" class="r-stretch quarto-figure-center"></section>
-<section id="were-always-stage-ing" class="slide level2">
-<h2>We’re always <code>stage()</code>-ing</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aes</span>(</span>
-<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> species,</span>
-<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
-<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="divbr">
-
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aes</span>(</span>
-<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">stage</span>(<span class="at">start =</span> species),</span>
-<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">stage</span>(<span class="at">start =</span> <span class="cn">NULL</span>, <span class="at">after_stat =</span> ymin)</span>
-<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="were-always-stage-ing-1" class="slide level2">
-<h2>We’re always <code>stage()</code>-ing</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb106" data-hl-loc="[[1.45,1,6.2]]"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aes</span>(</span>
-<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> species,</span>
-<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
-<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="divbr">
-
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb107" data-hl-loc="[[1.45,1,14.1]]"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aes</span>(</span>
-<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">stage</span>(<span class="at">start =</span> species),</span>
-<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">stage</span>(<span class="at">start =</span> <span class="cn">NULL</span>, <span class="at">after_stat =</span> ymin)</span>
-<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="were-always-stage-ing-2" class="slide level2">
-<h2>We’re always <code>stage()</code>-ing</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb108" data-hl-loc="[[4.4,1,13.1]]"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aes</span>(</span>
-<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> species,</span>
-<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">after_stat</span>(ymin)</span>
-<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="divbr">
-
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb109" data-hl-loc="[[4.4,1,24.7]]"><pre class="sourceCode r big-code-chunk code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aes</span>(</span>
-<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">stage</span>(<span class="at">start =</span> species),</span>
-<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> bill_length_mm, <span class="at">after_stat =</span> ymin),</span>
-<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">stage</span>(<span class="at">start =</span> <span class="cn">NULL</span>, <span class="at">after_stat =</span> ymin)</span>
-<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<!-- ## ggplot internals for users -->
-<!-- 1) Each layer in a ggplot has an underlying **dataframe representation** in the internals -->
-<!-- 2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready" -->
-<!-- 3) Consulting the intermediate **states** of a layer's data can write more powerful ggplot code -->
-<!-- - _Before Stat_, _After Stat_, _Before Geom_, _After Scale_ -->
-</section>
 <section id="conclusion-ggplot-internals-for-users" class="slide level2">
 <h2>Conclusion: ggplot internals for users</h2>
 <p>Layers have an underlying <strong>dataframe representation</strong>. The internals is <strong>data wrangling</strong> to make them <strong>“drawing-ready”</strong>.</p>
@@ -2092,807 +1940,9 @@ Output
 <ol start="2" type="1">
 <li>Every layer has a <code>stat</code> and a <code>geom</code> - they step in to modify the data, as long as the required columns are present.</li>
 </ol>
-</div>
-</section>
-<section id="reframing-extending-ggplot" class="slide level2">
-<h2>Reframing <strong>extending</strong> ggplot</h2>
-<p>Natural next step - leads u to extensions, if ur further interested.</p>
-<p>What do I want the drawing-ready data to look like?</p>
-<!-- ## 4 snapshots of layer data -->
-<!-- ```{r pipeline} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Before Stat -->
-<!-- ```{r pipeline-before-stat} -->
-<!-- #| code-line-numbers: "2-3" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## After Stat -->
-<!-- ```{r pipeline-after-stat} -->
-<!-- #| code-line-numbers: "2-4" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Before Geom -->
-<!-- ```{r pipeline-before-geom} -->
-<!-- #| code-line-numbers: "2-5" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## After Scale -->
-<!-- ```{r pipeline-after-scale} -->
-<!-- #| code-line-numbers: "2-8" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## `inspect_` wrapper functions -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- inspect_before_stat <- function(plot, i = 1) { -->
-<!--   ggtrace_inspect_args( -->
-<!--     x = plot, method = ggplot2:::Layer$compute_statistic, -->
-<!--     cond = i, error = TRUE -->
-<!--   )$data %>% as_tibble() -->
-<!-- } -->
-<!-- ``` -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- inspect_after_stat <- function(plot, i = 1) { -->
-<!--   ggtrace_inspect_return( -->
-<!--     x = plot, method = ggplot2:::Layer$compute_statistic, -->
-<!--     cond = i, error = TRUE -->
-<!--   ) %>% as_tibble() -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Data snapshots -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_after_scale(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ## Stat and Geom -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- geom_boxplot( ..., stat = "boxplot" ) -->
-<!-- ``` -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- stat_boxplot( ..., geom = "boxplot" ) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- ggplot2::layer( ..., stat = "boxplot", geom = "boxplot" ) -->
-<!-- ``` -->
-<!-- ## Stat and Geom -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- geom_bar( ..., stat = "count" ) -->
-<!-- ``` -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- stat_count( ..., geom = "bar" ) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- ggplot2::layer( ..., stat = "count", geom = "bar" ) -->
-<!-- ``` -->
-<!-- ## `stat = "boxplot"` before-stat -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_boxplot) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_stat( -->
-<!--   ggplot(penguins_sm) + geom_boxplot(aes(fill = species)) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- --- -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- geom_boxplot( ..., stat = "boxplot" ) -->
-<!-- ``` -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- stat_boxplot( ..., geom = "boxplot" ) -->
-<!-- ``` -->
-<!-- ## `stat = "boxplot"` after-stat -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_boxplot) -->
-<!-- ``` -->
-<!-- ## `stat = "boxplot"` before-geom -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_boxplot) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_geom( -->
-<!--   ggplot(penguins_sm) + -->
-<!--     geom_boxplot( -->
-<!--       aes(x = species, y = bill_length_mm), -->
-<!--       stat = "summary" -->
-<!--     ) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ## `stat = "boxplot"` before-geom -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_boxplot) -->
-<!-- ``` -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_geom( -->
-<!--   ggplot(penguins_sm) + -->
-<!--     geom_segment( -->
-<!--       aes(x = species, y = bill_length_mm), -->
-<!--       stat = "boxplot" -->
-<!--     ) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ## `stat = "boxplot"` with `geom = "errorbar"` -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_boxplot) -->
-<!-- ``` -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_geom( -->
-<!--   ggplot(penguins_sm) + -->
-<!--     geom_errorbar( -->
-<!--       aes(x = species, y = bill_length_mm), -->
-<!--       stat = "boxplot" -->
-<!--     ) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- --- -->
-<!-- ```{r} -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_errorbar( -->
-<!--     aes(x = species, y = bill_length_mm), -->
-<!--     stat = "boxplot" -->
-<!--   ) -->
-<!-- ``` -->
-<!-- --- -->
-<!-- ```{r} -->
-<!-- my_barplot -->
-<!-- ``` -->
-<!-- ## `stat = "count"` -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_barplot) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot) -->
-<!-- ``` -->
-<!-- ## `geom = "bar"` -->
-<!-- ```{r} -->
-<!-- my_barplot -->
-<!-- ``` -->
-<!-- ## `y = after_stat(count)` -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_barplot) -->
-<!-- ``` -->
-<!-- ## `y = after_stat(count)` -->
-<!-- ```{r} -->
-<!-- inspect_before_geom( -->
-<!--   ggplot(penguins_sm, aes(x = species, fill = species)) + -->
-<!--     geom_bar(aes(y = after_stat(count))) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_geom( -->
-<!--   ggplot(penguins_sm, aes(x = species, fill = species)) + -->
-<!--     geom_bar(aes(y = NULL)) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- --- -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot) %>%  -->
-<!--   mutate( y = count/sum(count), .before = 1L) -->
-<!-- ``` -->
-<!-- --- -->
-<!-- ```{r} -->
-<!-- ggplot(penguins_sm) +  -->
-<!--   geom_bar( -->
-<!--     aes(x = species, fill = species, -->
-<!--         y = after_stat(count/sum(count))) -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## StatCount + GeomLabel example -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_barplot) -->
-<!-- ``` -->
-<!-- . . . -->
-<!-- <div class="divbr"></div> -->
-<!-- ```{r} -->
-<!-- inspect_before_geom( -->
-<!--   ggplot(penguins_sm) + -->
-<!--     stat_count( -->
-<!--       aes(x = species, fill = species), -->
-<!--       geom = "label" -->
-<!--     ) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ## StatCount + GeomLabel example -->
-<!-- ```{r} -->
-<!-- ggplot(penguins_sm) + -->
-<!--   stat_count( -->
-<!--     aes(x = species, fill = species, -->
-<!--         label = after_stat(count)), -->
-<!--     geom = "label" -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## StatCount + GeomLabel example -->
-<!-- ```{r} -->
-<!-- ggplot(penguins_sm, aes(x = species, fill = species)) + -->
-<!--   geom_bar() + -->
-<!--   stat_count( -->
-<!--     aes(label = after_stat(count)), -->
-<!--     geom = "label" -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## StatCount + GeomLabel example -->
-<!-- ```{r} -->
-<!-- ggplot(penguins_sm, aes(x = species, fill = species)) + -->
-<!--   stat_count(geom = "bar") + -->
-<!--   stat_count( -->
-<!--     aes(label = after_stat(count)), -->
-<!--     geom = "label" -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## `stage()` example -->
-<!-- ```{r} -->
-<!-- my_boxplot +  -->
-<!--   geom_label( -->
-<!--     aes(y = stage(start = bill_length_mm, after_stat = ymin), -->
-<!--         label = after_stat(ymin)), -->
-<!--     stat = "boxplot", size = 6, -->
-<!--     data = . %>% filter(species == "Chinstrap") -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## Fin. -->
-<!-- ## {auto-animate="true"} -->
-<!-- ```{r geom-bar-implicit} -->
-<!-- ggplot(penguins) +  -->
-<!--   geom_bar( -->
-<!--     aes(x = species, -->
-<!--         fill = species), -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## {visibility="uncounted" auto-animate="true"} -->
-<!-- ```{r geom-bar-explicit} -->
-<!-- ggplot(penguins) +  -->
-<!--   geom_bar( -->
-<!--     aes(x = species, -->
-<!--         y = after_stat(count), -->
-<!--         fill = species), -->
-<!--     stat = StatCount -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## {visibility="uncounted" auto-animate="true"} -->
-<!-- ```{r stat-count-explicit} -->
-<!-- ggplot(penguins) +  -->
-<!--   stat_count( -->
-<!--     aes(x = species, -->
-<!--         y = after_stat(count), -->
-<!--         fill = species), -->
-<!--     stat = GeomBar -->
-<!--   ) -->
-<!-- ``` -->
-<!-- ## {background-color="#81388C"} -->
-<!-- .centered-slide-text[reframing ggplot internals] -->
-<!-- ## ggplot internals as data wrangling -->
-<!-- 1) Each layer in a ggplot has an underlying **dataframe representation** in the internals -->
-<!-- 2) Much of the internals is **data wrangling** to makes each layer's data "drawing-ready" -->
-<!-- 3) By consulting the **state of a layer's data** at certain steps in this process, we can write more powerful ggplot code -->
-<!-- ## 1) Layers as dataframes -->
-<!-- ```{r layer_data-boxplot} -->
-<!-- layer_data(plot = my_boxplot, i = 1L) -->
-<!-- ``` -->
-<!-- ## 2) Internals as data wrangling -->
-<!-- ```{r} -->
-<!-- penguins_sm -->
-<!-- ``` -->
-<!-- -- -->
-<!-- ```{r} -->
-<!-- layer_data(plot = my_boxplot, i = 1L) -->
-<!-- ``` -->
-<!-- ## 2) Internals as data wrangling -->
-<!-- ```{r} -->
-<!-- ggplot2:::ggplot_build.ggplot -->
-<!-- ``` -->
-<!-- ## 2) Internals as data wrangling -->
-<!-- ```{r} -->
-<!-- ggbody(ggplot2:::ggplot_build.ggplot) %>%  -->
-<!--   `[`(c(8:9, 11:13, 17:19, 21:22, 26, 29:31)) %>%  -->
-<!--   as.character() %>%  -->
-<!--   paste(collapse = "\n") -->
-<!-- ``` -->
-<!-- ## Input to internals -->
-<!-- ```{r} -->
-<!-- palmerpenguins::penguins -->
-<!-- ``` -->
-<!-- ## Output to internals -->
-<!-- ```{r} -->
-<!-- layer_data(plot = my_boxplot, i = 1L) -->
-<!-- ``` -->
-<!-- ## 3) Stat of layer data -->
-<!-- ```{r pipeline-data-wrangling} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     fun1() %>%  -->
-<!--     fun2() %>%  -->
-<!--     fun3() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## 3) Stat of layer data -->
-<!-- ```{r pipeline-ggproto-methods} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     Object$method() %>%  -->
-<!--     Object$method() %>%  -->
-<!--     Object$method() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## 4 snapshots of layer data -->
-<!-- ```{r pipeline} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Before Stat -->
-<!-- ```{r pipeline-before-stat} -->
-<!-- #| code-line-numbers: "2-3" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## After Stat -->
-<!-- ```{r pipeline-after-stat} -->
-<!-- #| code-line-numbers: "2-4" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Before Geom -->
-<!-- ```{r pipeline-before-geom} -->
-<!-- #| code-line-numbers: "2-5" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## After Scale -->
-<!-- ```{r pipeline-after-scale} -->
-<!-- #| code-line-numbers: "2-8" -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Data snapshots -->
-<!-- ```{r} -->
-<!-- palmerpenguins::penguins -->
-<!-- ``` -->
-<!-- ## Data snapshots -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_boxplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_boxplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_boxplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_after_scale(my_boxplot, i = 1) -->
-<!-- ``` -->
-<!-- ## {} -->
-<!-- ```{r} -->
-<!-- my_barplot <- ggplot(penguins) +  -->
-<!--   geom_bar(aes(x = species, fill = species)) -->
-<!-- my_barplot -->
-<!-- ``` -->
-<!-- ## Data snapshots -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- inspect_after_scale(my_barplot, i = 1) -->
-<!-- ``` -->
-<!-- ## Choice of `Stat*` or `stat_*()` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- geom_blah( -->
-<!--   stat = StatBlah -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- stat_blah(...) -->
-<!-- ``` -->
-<!-- ## Choice of `after_stat()` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- aes( after_stat(blah) ) -->
-<!-- ``` -->
-<!-- ## Choice of `Geom*` or `geom_*()` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- stat_blah( -->
-<!--   geom = GeomBlah -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- geom_blah(...) -->
-<!-- ``` -->
-<!-- ## Choice of `after_scale()` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- aes( after_scale(blah) ) -->
-<!-- ``` -->
-<!-- ## Output to internals -->
-<!-- ```{r} -->
-<!-- layer_data(plot = my_barplot, i = 1L) -->
-<!-- ``` -->
-<!-- ## Inspect functions -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- layer_data(plot = , i =) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- #| eval: false -->
-<!-- inspect_before_stat() -->
-<!-- inspect_after_stat() -->
-<!-- inspect_before_geom() -->
-<!-- inspect_after_scale() -->
-<!-- ``` -->
-<!-- ## . -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_boxplot + scale_y_log10()) -->
-<!-- ``` -->
-<!-- ## . -->
-<!-- ```{r} -->
-<!-- inspect_before_stat( -->
-<!--   ggplot(penguins) + geom_boxplot(aes(fill = species)) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ## . -->
-<!-- ```{r} -->
-<!-- inspect_before_stat( -->
-<!--   ggplot(penguins, aes(x = species)) + -->
-<!--     geom_bar(aes(y = flipper_length_mm)) -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ## . -->
-<!-- ```{r} -->
-<!-- ggplot(penguins, aes(x = species)) + -->
-<!--   geom_bar(aes(y = flipper_length_mm), -->
-<!--            stat = "bin2d", na.rm = TRUE) -->
-<!-- ``` -->
-<!-- ## Penguins -->
-<!-- ```{r penguins} -->
-<!-- penguins %>% head() -->
-<!-- ``` -->
-<!-- ## ggproto scary 1 -->
-<!-- ## ggproto scary 2 -->
-<!-- ## Inside ggplot object -->
-<!-- ```{r inside-ggplot-object} -->
-<!-- str(my_boxplot) -->
-<!-- ``` -->
-<!-- ## ggplot_build -->
-<!-- ```{r ggplot_build} -->
-<!-- ggplot2:::ggplot_build.ggplot -->
-<!-- ``` -->
-<!-- ## drawing-ready data -->
-<!-- ```{r layer_data} -->
-<!-- layer_data(plot = my_boxplot, i = 1) -->
-<!-- ``` -->
-<!-- ## input -->
-<!-- ```{r} -->
-<!-- penguins %>% head() -->
-<!-- ``` -->
-<!-- # data wrangling pipeline -->
-<!-- ```{r pipeline-data-wrangling} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     fun1() %>%  -->
-<!--     fun2() %>%  -->
-<!--     fun3() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- # data wrangling pipeline - ggproto -->
-<!-- ```{r pipeline-ggproto-methods} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     Object$method() %>%  -->
-<!--     Object$method() %>%  -->
-<!--     Object$method() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- # data wrangling pipeline - before-stat -->
-<!-- ```{r pipeline-before-stat} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- # data wrangling pipeline - after-stat -->
-<!-- ```{r pipeline-after-stat} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!-- } -->
-<!-- ``` -->
-<!-- # data wrangling pipeline - before-geom -->
-<!-- ```{r pipeline-before-geom} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- # data wrangling pipeline - after-geom -->
-<!-- ```{r pipeline-after-geom} -->
-<!-- #| eval: false -->
-<!-- internals_lite <- function(data) { -->
-<!--   data %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_statistic() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_1() %>%  -->
-<!--     ... %>%  -->
-<!--     Layer$compute_geom_2() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Inspect functions -->
-<!-- ```{r inspect-snapshop-fns-eager} -->
-<!-- #| eval: false -->
-<!-- inspect_before_stat <- function(p, i = 1) { -->
-<!--   ggtrace_inspect_args(x = p, method = ggplot2:::Layer$compute_statistic, -->
-<!--                        cond = i)$data -->
-<!-- } -->
-<!-- inspect_after_stat <- function(p, i = 1) { -->
-<!--   ggtrace_inspect_return(x = p, method = ggplot2:::Layer$compute_statistic, -->
-<!--                          cond = i) -->
-<!-- } -->
-<!-- inspect_before_geom <- function(p, i = 1) { -->
-<!--   ggtrace_inspect_args(x = p, method = ggplot2:::Layer$compute_geom_1, -->
-<!--                        cond = i)$data -->
-<!-- } -->
-<!-- inspect_after_scale <- function(p, i = 1) { -->
-<!--   ggtrace_inspect_return(x = p, method = ggplot2:::Layer$compute_geom_2, -->
-<!--                          cond = i) -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## Inspect functions -->
-<!-- ```{r inspect-snapshop-fns} -->
-<!-- inspect_before_stat <- function(..., i = 1) { -->
-<!--   ggtrace_inspect_args( -->
-<!--     ..., method = ggplot2:::Layer$compute_statistic, -->
-<!--     cond = i, error = TRUE -->
-<!--   )$data %>% as_tibble() -->
-<!-- } -->
-<!-- inspect_after_stat <- function(..., i = 1) { -->
-<!--   ggtrace_inspect_return( -->
-<!--     ..., method = ggplot2:::Layer$compute_statistic, -->
-<!--     cond = i, error = TRUE -->
-<!--   ) %>% as_tibble() -->
-<!-- } -->
-<!-- inspect_before_geom <- function(..., i = 1) { -->
-<!--   ggtrace_inspect_args( -->
-<!--     ..., method = ggplot2:::Layer$compute_geom_1, -->
-<!--     cond = i, error = TRUE -->
-<!--   )$data %>% as_tibble() -->
-<!-- } -->
-<!-- inspect_after_scale <- function(..., i = 1) { -->
-<!--   ggtrace_inspect_return( -->
-<!--     ..., method = ggplot2:::Layer$compute_geom_2, -->
-<!--     cond = i, error = TRUE -->
-<!--   ) %>% as_tibble() -->
-<!-- } -->
-<!-- ``` -->
-<!-- ## before stat -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_boxplot) -->
-<!-- ``` -->
-<!-- ## after stat -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_boxplot) -->
-<!-- ``` -->
-<!-- ## before geom -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_boxplot) -->
-<!-- ``` -->
-<!-- ## after scale -->
-<!-- ```{r} -->
-<!-- inspect_after_scale(my_boxplot) -->
-<!-- ``` -->
-<!-- ## barplot -->
-<!-- ```{r} -->
-<!-- ggplot(penguins, aes(species)) + -->
-<!--   geom_bar() -->
-<!-- ``` -->
-<!-- ## barplot -->
-<!-- ```{r} -->
-<!-- ggplot(penguins, aes(species, y = after_stat(count))) + -->
-<!--   geom_bar(stat = StatCount) -->
-<!-- ``` -->
-<!-- ## barplot -->
-<!-- ```{r} -->
-<!-- my_barplot <- ggplot(penguins, aes(species, y = after_stat(count))) + -->
-<!--   geom_bar(stat = StatCount) -->
-<!-- ``` -->
-<!-- ## before stat -->
-<!-- ```{r} -->
-<!-- inspect_before_stat(my_barplot) -->
-<!-- ``` -->
-<!-- ## after stat -->
-<!-- ```{r} -->
-<!-- inspect_after_stat(my_barplot) -->
-<!-- ``` -->
-<!-- ## before geom -->
-<!-- ```{r} -->
-<!-- inspect_before_geom(my_barplot) -->
-<!-- ``` -->
-<!-- ## after scale -->
-<!-- ```{r} -->
-<!-- inspect_after_scale(my_barplot) -->
-<!-- ``` -->
-<!-- ## every layer has stat and geom -->
-<!-- ```{r} -->
-<!-- class(geom_boxplot()$stat)[1] -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- class(geom_boxplot()$geom)[1] -->
-<!-- ``` -->
-<!-- ## Stat/Geom validate -->
-<!-- ```{r} -->
-<!-- StatBoxplot$required_aes -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- GeomBoxplot$required_aes -->
-<!-- ``` -->
 <div class="footer footer-default">
 
+</div>
 </div>
 </section>
 

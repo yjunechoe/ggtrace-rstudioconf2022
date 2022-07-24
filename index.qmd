@@ -479,7 +479,7 @@ render_steps_progress <- function(step) {
     style = css(
       display = "flex",
       flexDirection = "row",
-      fontSize = "0.6em",
+      fontSize = "0.5em",
       width = "100%",
       height = "30px",
       bottom = "-41px"
@@ -832,6 +832,8 @@ geom_bar(
 
 ---
 
+:::{style="position:relative;"}
+
 ```{r penguins-show}
 #| eval: false
 ```
@@ -841,15 +843,21 @@ geom_bar(
 penguins_sm %>% print(max = 6)
 ```
 
-<div class="absolute internal-step" style="background-color:#BFBFBF; width:250px; right: 0px; top:0px;">Input</div>
+<div class="absolute internal-step" style="background-color:#BFBFBF; width:200px; right: 0px; top:0px; height:66px; line-height:66px">Input</div>
+
+:::
 
 . . .
+
+:::{style="position:relative;"}
 
 ```{r layer_data-barplot}
 ggplot2::layer_data(plot = my_barplot, i = 1L)
 ```
 
-<div class="absolute internal-step" style="background-color:#BFBFBF; width:250px; right: 0px; top:0px;">Output</div>
+<div class="absolute internal-step" style="background-color:#BFBFBF; width:200px; right: 0px; top:0px; height:66px; line-height:66px">Output</div>
+
+:::
 
 ---
 
@@ -871,7 +879,7 @@ div(lapply(1:6, function(i) {
 }))
 ```
 
-## Before Stat
+## 1) Before Stat
 
 ```{r bar-before-stat}
 #| eval: false
@@ -894,7 +902,7 @@ render_steps_progress(1)
 ```
 
 
-## Before Stat
+## 1) Before Stat
 
 ```{r bar-before-stat-filtered}
 #| eval: false
@@ -924,7 +932,7 @@ ggtrace_inspect_args(
 #| echo: false
 ```
 
-## Before Stat
+## 1) Before Stat
 
 ```{r bar-before-stat}
 #| eval: false
@@ -938,7 +946,7 @@ ggtrace_inspect_args(
 #| echo: false
 ```
 
-## Before Stat
+## 1) Before Stat
 
 ```{r bar-before-stat}
 #| eval: false
@@ -961,7 +969,7 @@ From documentation: [https://ggplot2.tidyverse.org/reference/geom_bar](https://g
 #| echo: false
 ```
 
-## Before Stat
+## 1) Before Stat
 
 ```{r bar-before-stat-overspec-error}
 #| error: true
@@ -974,7 +982,7 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
-## Before Stat
+## 1) Before Stat
 
 ```{r bar-before-stat-overspec}
 #| eval: false
@@ -998,7 +1006,7 @@ ggtrace_inspect_args(error = TRUE,
 #| echo: false
 ```
 
-## After Stat
+## 2) After Stat
 
 ```{r bar-after-stat}
 ggtrace_inspect_return(
@@ -1011,7 +1019,7 @@ ggtrace_inspect_return(
 render_steps_progress(1:2)
 ```
 
-## After Stat
+## 2) After Stat
 
 ```{r bar-explicit-geom-short}
 #| eval: false
@@ -1024,7 +1032,7 @@ geom_bar(aes(x = species, fill = species,
 #| echo: false
 ```
 
-## After Stat
+## 2) After Stat
 
 ```{r bar-explicit-geom-short}
 #| eval: false
@@ -1045,7 +1053,7 @@ ggtrace_inspect_return(
 #| echo: false
 ```
 
-## After Stat
+## 2) After Stat
 
 ```{r bar-aes-tidyeval}
 #| eval: false
@@ -1069,7 +1077,7 @@ ggtrace_inspect_return(
 #| echo: false
 ```
 
-## After Stat
+## 2) After Stat
 
 ```{r bar-props}
 #| fig-align: center
@@ -1083,7 +1091,7 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
-## Before Geom
+## 3) Before Geom
 
 ```{r bar-before-geom}
 ggtrace_inspect_args(
@@ -1096,7 +1104,7 @@ ggtrace_inspect_args(
 render_steps_progress(1:3)
 ```
 
-## Before Geom
+## 3) Before Geom
 
 ```{r bar-before-geom}
 ```
@@ -1114,7 +1122,7 @@ From documentation: [https://ggplot2.tidyverse.org/reference/geom_bar](https://g
 #| echo: false
 ```
 
-## Before Geom
+## 3) Before Geom
 
 ```{r bar-no-y}
 #| attr-source: 'data-hl-loc="[[2.9,18,4.5]]"'
@@ -1128,7 +1136,7 @@ ggtrace_inspect_args(error = TRUE,
 #| echo: false
 ```
 
-## Before Geom
+## 3) Before Geom
 
 ```{r point-count}
 #| fig-align: "center"
@@ -1140,7 +1148,7 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
-## Before Geom
+## 3) Before Geom
 
 ```{r label-count}
 ggtrace_inspect_args(error = TRUE,
@@ -1153,7 +1161,7 @@ ggtrace_inspect_args(error = TRUE,
 #| echo: false
 ```
 
-## Before Geom
+## 3) Before Geom
 
 ```{r label-count-after_stat}
 #| fig-align: "center"
@@ -1169,7 +1177,7 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
-## After Scale
+## 4) After Scale
 
 ```{r bar-after-scale}
 ggtrace_inspect_return(
@@ -1182,7 +1190,7 @@ ggtrace_inspect_return(
 render_steps_progress(1:4)
 ```
 
-## After Scale
+## 4) After Scale
 
 ```{r bar-after-scale-size-fill}
 #| fig-align: "center"
@@ -1260,22 +1268,27 @@ knitr::include_graphics("img/bar-snapshots.gif")
 
 ---
 
-```{r my_boxplot}
+:::{.vcenter}
+```{r my_boxplot-lone}
 my_boxplot
 ```
+:::
 
 ---
 
+:::{.vcenter}
+<div>
 ```{r boxplot-annotation-skeleton}
 #| eval: false
-my_boxplot +
-  ?
+my_boxplot + ?
 ```
 
 ```{r my_boxplot-labelled}
 #| echo: false
 #| fig-align: "center"
 ```
+</div>
+:::
 
 ## Step-by-step
 
@@ -1302,6 +1315,32 @@ stat_boxplot(
   geom = "label"
 )
 ```
+
+## Step-by-step
+
+1) Use a `label` to draw a `boxplot` varible
+
+```{r skeleton-geom-stat}
+#| eval: false
+#| code-line-numbers: true
+geom_label(
+  stat = "boxplot"
+)
+```
+
+<div class="divbr"></div>
+
+```{r skeleton-stat-geom}
+#| eval: false
+#| code-line-numbers: true
+stat_boxplot(
+  geom = "label"
+)
+```
+
+::: {.aside}
+Interchangeable - your choice!
+:::
 
 ## Step-by-step
 
