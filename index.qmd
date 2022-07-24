@@ -43,93 +43,102 @@ library(grid)           # v4.2.0
 library(palmerpenguins) # v0.1.0
 library(htmltools)      # v0.5.2
 theme_set(theme_classic(base_size = 14))
-options("pillar.print_min" = 5)
 ```
 
-```{r penguins-data}
+```{r generate-experiment-data}
 #| echo: false
-penguins_sm <- palmerpenguins::penguins %>% 
-  select(species, bill_length_mm) %>% 
-  filter(!is.na(bill_length_mm))
-
-penguins_sm
-```
-
----
-
-:::{.vcenter}
-```{r my_boxplot}
-#| echo: false
-my_boxplot <- ggplot(penguins_sm) +
-  geom_boxplot(
-    aes(x = species, y = bill_length_mm, fill = species)
-  )
-my_boxplot
-``` 
-:::
-
----
-
-:::{.vcenter}
-```{r penguins-data}
-```
-:::
-
-![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){.absolute bottom=50 right=0 width=500}
-
-```{r shorten-df}
-#| echo: false
-penguins_sm <- as.data.frame(penguins_sm)
+set.seed(2022)
+experiment_data <- tidyr::crossing(
+  subject = 1:60,
+  trial = 1:24,
+  condition = c("A", "B")
+) %>% 
+  arrange(condition) %>% 
+  mutate(response_time = round(
+    c(
+      runif(n()/2, 1982, 3111),
+      scales::oob_squish(abs(rnorm(n()/2, 2000, 500)), c(1221, 3012))
+    )
+  )) %>% 
+  mutate(response_time = replace(response_time, sample(which(condition == "B"), 3), c(3590, 3612, 3963))) %>% 
+  arrange(subject) %>% 
+  slice(-n())
 options("pillar.print_min" = 3)
 ```
 
 ---
 
-```{r my_boxplot}
-#| fig-align: "center"
+::: {.vcenter}
+
+<div>
+```{r experiment-data}
+experiment_data
 ```
 
----
+```{r shorten-df}
+#| echo: false
+experiment_data <- as.data.frame(experiment_data)
+```
+</div>
 
-:::{.vcenter}
+<div class="divbr"></div>
+
+<div class="fragment">
+```{r my_boxplot}
+my_boxplot <- ggplot(experiment_data) +
+  geom_boxplot(
+    aes(x = condition, y = response_time, fill = condition)
+  )
+```
+</div>
+
+:::
+
+## {.nostretch}
+
+```{r my_boxplot-lone}
+my_boxplot
+``` 
+
+## {.nostretch}
+
+::: {.vcenter}
+
 ```{r my_boxplot-arrow}
 #| echo: false
+#| fig-align: "center"
 my_boxplot + 
   geom_segment(
-    aes(x = species,
+    aes(x = condition,
         xend = after_stat(x + .4),
-        y = stage(bill_length_mm, ymin),
-        yend = after_stat(ymin)),
+        y = stage(response_time, ymax),
+        yend = after_stat(ymax)),
     position = position_nudge(x = .05),
     arrow = arrow(ends = "first", length = unit(.5, "cm")),
     color = "#941414", size = 2,
-    stat = StatBoxplot,
-    data = ~ .x %>% filter(species == "Chinstrap")
+    stat = "boxplot",
+    data = ~ .x %>% filter(condition == "B")
   )
 ```
+
 :::
 
----
+## {.nostretch}
 
-:::{.vcenter}
+::: {.vcenter}
 ```{r my_boxplot-labelled}
 #| echo: false
+#| fig-align: "center"
 my_boxplot + 
   geom_label(
-    aes(x = species,
-        y = stage(start = bill_length_mm, after_stat = ymin),
-        label = after_stat(ymin)),
+    aes(x = condition,
+        y = stage(start = response_time, after_stat = ymax),
+        label = after_stat(ymax)),
     stat = "boxplot", size = 5,
-    data = ~ .x %>% filter(species == "Chinstrap")
+    data = ~ .x %>% filter(condition == "B")
   )
 ```
 :::
-
----
-
-```{r my_boxplot-labelled}
-#| fig-align: "center"
-```
 
 ---
 
@@ -138,18 +147,18 @@ my_boxplot +
 ```{r layer1}
 #| eval: false
 geom_boxplot(
-  aes(x = species, y = bill_length_mm, fill = species)
+  aes(x = condition, y = response_time, fill = condition)
 )
 ```
 
 ```{r layer2}
 #| eval: false
 geom_label(
-  aes(x = species,
-      y = stage(start = bill_length_mm, after_stat = ymin),
-      label = after_stat(ymin)),
+  aes(x = condition,
+      y = stage(start = response_time, after_stat = ymax),
+      label = after_stat(ymax)),
   stat = "boxplot", size = 5,
-  data = . %>% filter(species == "Chinstrap")
+  data = . %>% filter(condition == "B")
 )
 ```
 
@@ -320,7 +329,8 @@ Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 
 [ggplot internals _for users_]{.centered-slide-text}
 
-## ggplot internals as data wrangling
+
+## ggplot internals as data wrangling {.nostretch}
 
 . . .
 
@@ -354,14 +364,14 @@ ggplot2::layer_data(plot = my_boxplot, i = 1L)
 
 ## Input
 
-```{r penguins-show}
+```{r experiment-data-show}
 #| eval: false
-penguins_sm
+experiment_data
 ```
 
-```{r penguins-5row}
+```{r experiment-data-5row}
 #| echo: false
-penguins_sm %>% print(max = 10)
+experiment_data %>% print(max = ncol(.) * 5)
 ```
 
 ## Output
@@ -654,17 +664,17 @@ Workflow functions `ggtrace_{action}_{value}()`:
     
 - `method`: The ggproto method
     
-- `cond`: When to interact with the method^[If `cond` is integer *N*, targets the *N*th time `method` is called]
+- `cond`: When to interact with the method
 
 </div>
 
-<p style="margin-top:20px">
-"While rendering `x`, interact with `method` when `cond` is met."
-</p>
+::: {.aside}
+If `cond` is an integer *N*, targets the *N*th time `method` is called.
+:::
 
 ---
 
-## Introducing `{ggtrace}`
+## Introducing `{ggtrace}` {.nostretch}
 
 <p style="margin:30px 0px;">
 Toolkit to **Inspect**, **Capture**, and **Highjack** the internals
@@ -676,14 +686,14 @@ Workflow functions `ggtrace_{action}_{value}()`:
 
 ```{r ggtrace-inspect-fns}
 #| echo: false
-#| out-width: "78.5%"
+#| out-width: "80%"
 knitr::include_graphics("img/ggtrace-inspect-fns.png")
 ```
 
 </div>
 
 <p style="margin-top:20px">
-"While rendering `x`, interact with `method` when `cond` is met"
+"While rendering `x`, inspect `method` when `cond` is met."
 </p>
 
 ---
@@ -737,7 +747,7 @@ ggtrace::ggtrace_inspect_return(
 
 :::
 
-## ggplot internals for users
+## ggplot internals for users {.nostretch}
 
 ![](img/ggtrace_logo.png){.absolute width=450 right=-120}
 
@@ -757,25 +767,41 @@ ggtrace::ggtrace_inspect_return(
 
 ::::
 
+## Walkthrough with a barplot {.nostretch}
+
+```{r penguins-data}
+#| eval: false
+penguins_sm <- palmerpenguins::penguins %>% 
+  select(species, bill_length_mm) %>% 
+  filter(!is.na(bill_length_mm))
+penguins_sm
+```
+
+```{r penguins-data-5row}
+#| echo: false
+penguins_sm <- palmerpenguins::penguins %>% 
+  select(species, bill_length_mm) %>% 
+  filter(!is.na(bill_length_mm))
+penguins_sm %>% 
+  print(n = 5)
+```
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){.absolute bottom=50 right=0 width="500px"}
+
+```{r fmt-penguins-data}
+#| echo: false
+penguins_sm <- as.data.frame(penguins_sm)
+```
+
 ## Walkthrough with a barplot
 
-::: {style="width:75%"}
 ```{r barplot}
-#| eval: false
+#| fig-align: "center"
+#| out-width: "900px"
 my_barplot <- ggplot(penguins_sm) + 
   geom_bar(aes(x = species, fill = species))
 my_barplot
 ```
-:::
-
-```{r barplot}
-#| echo: false
-#| fig-align: "center"
-#| out-width: "900px"
-```
-
-
-![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){.absolute top=90 right=0 width=250}
 
 ## It _always_ happens in steps
 
@@ -808,6 +834,7 @@ geom_bar(
 
 ```{r penguins-show}
 #| eval: false
+penguins_sm
 ```
 
 ```{r penguins-3row}
@@ -1122,6 +1149,19 @@ ggplot(penguins_sm) +
 
 ## 3) Before Geom
 
+```{r label-count-error}
+#| error: true
+#| class-error: "big-chunk-output"
+ggplot(penguins_sm) +
+  geom_label(aes(x = species), stat = "count")
+```
+
+```{r progress-before-geom}
+#| echo: false
+```
+
+## 3) Before Geom
+
 ```{r label-count}
 ggtrace_inspect_args(error = TRUE,
   x = ggplot(penguins_sm) +
@@ -1162,7 +1202,7 @@ ggtrace_inspect_return(
 render_steps_progress(1:4)
 ```
 
-## 4) After Scale
+## 4) After Scale {.nostretch}
 
 ```{r bar-after-scale-size-fill}
 #| fig-align: "center"
@@ -1218,7 +1258,7 @@ knitr::include_graphics("img/bar-snapshots.gif")
 
 **Output** (drawing-ready data)
 
-## ggplot internals for users
+## ggplot internals for users {.nostretch}
 
 ![](img/ggtrace_logo.png){.absolute width=450 right=-120}
 
@@ -1238,16 +1278,15 @@ knitr::include_graphics("img/bar-snapshots.gif")
 
 ::::
 
----
+## {.nostretch}
 
 :::{.vcenter}
 ```{r my_boxplot-lone}
 #| fig-align: "center"
-my_boxplot
 ```
 :::
 
----
+## {.nostretch}
 
 :::{.vcenter}
 <div>
@@ -1297,19 +1336,19 @@ stat_boxplot(
 ```
 
 ::: {.aside}
-Interchangeable - your choice!
+They're interchangeable - it's your choice!
 :::
 
 ## Step-by-step
 
-2) Plot the data of just `Chinstrap` species
+2) Plot just the responses from condition `B`
 
 ```{r skeleton-data}
 #| eval: false
 #| code-line-numbers: "3"
 geom_label(
   stat = "boxplot",
-  data = ~ .x %>% filter(species == "Chinstrap")
+  data = ~ .x %>% filter(condition == "B")
 )
 ```
 
@@ -1322,11 +1361,11 @@ geom_label(
 #| code-line-numbers: "2-5"
 geom_label(
   aes(
-    x = species,
-    y = bill_length_mm
+    x = condition,
+    y = response_time
   ),
   stat = "boxplot",
-  data = ~ .x %>% filter(species == "Chinstrap")
+  data = ~ .x %>% filter(condition == "B")
 )
 ```
 
@@ -1339,12 +1378,12 @@ geom_label(
 #| code-line-numbers: "5"
 geom_label(
   aes(
-    x = species,
-    y = bill_length_mm,
-    label = after_stat(ymin)
+    x = condition,
+    y = response_time,
+    label = after_stat(ymax)
   ),
   stat = "boxplot",
-  data = ~ .x %>% filter(species == "Chinstrap")
+  data = ~ .x %>% filter(condition == "B")
 )
 ```
 
@@ -1354,12 +1393,12 @@ geom_label(
 my_boxplot_annotated <- my_boxplot +
   geom_label(
     aes(
-      x = species,
-      y = bill_length_mm,
-      label = after_stat(ymin)
+      x = condition,
+      y = response_time,
+      label = after_stat(ymax)
     ),
     stat = "boxplot",
-    data = ~ .x %>% filter(species == "Chinstrap")
+  data = ~ .x %>% filter(condition == "B")
   )
 ```
 
@@ -1369,7 +1408,7 @@ my_boxplot_annotated <- my_boxplot +
 
 ```{r no-stage-print}
 #| eval: false
-ggplot_build(my_boxplot_annotated)
+my_boxplot_annotated
 ```
 
 ```{r no-stage-print-build}
@@ -1384,6 +1423,7 @@ ggplot_build(my_boxplot_annotated)
 :::{.vcenter}
 
 ```{r annotation-before-geom}
+#| attr-source: 'data-hl-loc="[[5.8,3,28]]"'
 ggtrace_inspect_args(error = TRUE,
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
@@ -1398,12 +1438,12 @@ ggtrace_inspect_args(error = TRUE,
 my_boxplot_annotated <- my_boxplot +
   geom_label(
     aes(
-      x = species,
-      y = stage(start = bill_length_mm, after_stat = ymin),
-      label = after_stat(ymin)
+      x = condition,
+      y = stage(start = response_time, after_stat = ymax),
+      label = after_stat(ymax)
     ),
-    stat = "boxplot",
-    data = ~ .x %>% filter(species == "Chinstrap")
+    stat = "boxplot", size = 5,
+    data = ~ .x %>% filter(condition == "B")
   )
 ```
 
@@ -1444,12 +1484,14 @@ ggtrace_inspect_args(
 
 :::
 
----
+## {.nostretch}
 
+:::{.vcenter}
 ```{r my-boxplot-annotated-plot}
 #| fig-align: "center"
 my_boxplot_annotated
 ```
+:::
 
 ## Conclusion: ggplot internals for users
 

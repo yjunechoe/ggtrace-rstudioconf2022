@@ -4,6 +4,13 @@
   margin-bottom: 0.5em;
 }
 
+.reveal .slide div.aside {
+  position: absolute;
+  bottom: 20px;
+  font-size: 0.7em;
+  color: #6f6f6f;
+}
+
 .reveal .slide-background-content {
   background-size: contain;
 }
