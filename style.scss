@@ -161,6 +161,10 @@ pre > code.sourceCode > span {
   font-weight: bold;
   color: #B675E0
 }
+.step-arrow {
+  font-size: 1.5em;
+  text-shadow: 0 0 black;
+}
 
 .internal-steps-container {
   display: flex;
@@ -176,4 +180,5 @@ pre > code.sourceCode > span {
   border-radius: 10px;
   text-align: center;
   line-height: 100px;
+  font-family: Consolas;
 }

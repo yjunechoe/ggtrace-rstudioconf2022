@@ -105,13 +105,21 @@ my_boxplot
 
 ![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){.absolute bottom=50 right=0 width=500}
 
----
-
-```{r my_boxplot}
+```{r shorten-df}
+#| echo: false
+penguins_sm <- as.data.frame(penguins_sm)
+options("pillar.print_min" = 3)
 ```
 
 ---
 
+```{r my_boxplot}
+#| fig-align: "center"
+```
+
+---
+
+:::{.vcenter}
 ```{r my_boxplot-arrow}
 #| echo: false
 my_boxplot + 
@@ -127,15 +135,11 @@ my_boxplot +
     data = ~ .x %>% filter(species == "Chinstrap")
   )
 ```
-
-```{r shorten-df}
-#| echo: false
-penguins_sm <- as.data.frame(penguins_sm)
-options("pillar.print_min" = 3)
-```
+:::
 
 ---
 
+:::{.vcenter}
 ```{r my_boxplot-labelled}
 #| echo: false
 my_boxplot + 
@@ -147,6 +151,7 @@ my_boxplot +
     data = ~ .x %>% filter(species == "Chinstrap")
   )
 ```
+:::
 
 ---
 
@@ -412,16 +417,31 @@ geom_label(
 
 ## ggplot internals as data wrangling
 
-<div class="divbr"></div>
+[outline]{.fragment fragment-index=2}
 
-. . .
+:::: {.columns}
+
+::: {.column .fragment fragment-index=2 width="60%"}
+
+1) Reframing of ggplot internals as data wrangling
+
+2) Demo using a simple barplot example
+
+3) Building up the boxplot annotation layer
+
+:::
+
+::: {.column .fragment fragment-index=1 width="40%"}
 
 ```{r}
 #| fig-align: "center"
-#| out-width: "500px"
 #| echo: false
 knitr::include_graphics("img/ggtrace_logo.png")
 ```
+
+:::
+
+::::
 
 ## 1) Layers as dataframes
 
@@ -486,7 +506,7 @@ ggplot_internals <- function(data) {
 <div class="divbr"></div>
 ```{r layer2}
 #| eval: false
-#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,1,8.8,\"#FFB1C0\"],[7.2,1,23.1,\"#FFB1C0\"],[1.45,5.3,4,\"#FFB1C0\"],[2.9,8.6,11.9,\"#FFB1C0\"],[2.9,21,9.5,\"#E1C563\"],[4.3,7.5,8.6,\"#E1C563\"],[0,0,5.6,\"#64DF91\"]]"'
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C0\"],[7.2,4.8,19.3,\"#FFB1C0\"],[1.45,5.3,4,\"#FFB1C0\"],[2.9,8.6,11.9,\"#FFB1C0\"],[2.9,21,9.5,\"#E1C563\"],[4.3,7.5,8.6,\"#E1C563\"],[0,2.8,2.8,\"#64DF91\"],[5.8,10.7,4.5,\"#E0B6FF\"]]"'
 ```
 </div>
 :::
@@ -547,6 +567,73 @@ ggplot_internals <- function(data) {
 
 ::::
 
+```{r arrows, results="asis"}
+#| echo: false
+div(lapply(1:4, function(i) {
+  div(class = c("absolute", "step-arrow"), "⟵",
+      style = paste0("top:", c(200,270,300,450)[i], "px; left:", c(500,500,440,440)[i],
+                     "px; color:", c("#E16A86", "#AA9000", "#00AA5A", "#B675E0")[i], ";"))
+}))
+```
+
+## 👻 ggproto methods 👻
+
+:::: {.columns}
+
+::: {.column width="65%"}
+```{r pipeline-ggproto-methods}
+#| eval: false
+#| attr-source: "style='height:470px'"
+```
+:::
+
+::: {.column width="35%"}
+```{r snapshot-blocks-hl}
+#| echo: false
+#| results: "asis"
+div(class = "internal-steps-container", lapply(1:4, function(i) {
+  div(class = "internal-step",
+      style = paste0("background-color:#", c("BFBFBF", "E4CB73", "BFBFBF", "BFBFBF")[i]),
+      c("Before Stat", "After Stat", "Before Geom", "After Scale")[i])
+}))
+```
+:::
+
+::::
+
+```{r arrows-hl, results="asis"}
+#| echo: false
+div(lapply(1:4, function(i) {
+  div(class = c("absolute", "step-arrow"), "⟵",
+      style = paste0("top:", c(200,270,300,450)[i], "px; left:", c(500,500,440,440)[i],
+                     "px; color:", c("#BFBFBF", "#AA9000", "#BFBFBF", "#BFBFBF")[i], ";"))
+}))
+```
+
+## Introducing `{ggtrace}`
+
+<p style="margin:30px 0px;">
+Toolkit to **Inspect**, **Capture**, and **Highjack** the internals
+</p>
+
+. . .
+
+Workflow functions `ggtrace_{action}_{value}()`:
+
+<div style="margin-left:100px">
+
+- `x`: The ggplot object
+    
+- `method`: The ggproto method
+    
+- `cond`: When to interact with the method^[If `cond` is integer *N*, targets the *N*th time `method` is called]
+
+</div>
+
+<p style="margin-top:20px">
+"While rendering `x`, interact with `method` when `cond` is met"
+</p>
+
 ---
 
 :::::{.vcenter}
@@ -581,14 +668,14 @@ knitr::include_graphics("img/ggtrace-inspect-fns.png")
 <div style="position: relative;">
 
 ```{r ggtrace-inspect-return-after-stat}
-ggtrace_inspect_return(
+ggtrace::ggtrace_inspect_return(
   x = my_boxplot,
   method = ggplot2:::Layer$compute_statistic,
   cond = 1
 )
 ```
 
-<div class="absolute internal-step" style="background-color:#E4CB73; width:200px; right: 0px; top:0px;">After Stat</div>
+<div class="absolute internal-step" style="background-color:#E4CB73; width:250px; right: 0px; top:0px;">After Stat</div>
 
 </div>
 
@@ -615,13 +702,43 @@ inspect_after_scale(plot = , i = 1)
 
 ::::
 
----
+## ggplot internals as data wrangling
+
+**Outline**
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+1) Reframing of ggplot internals as data wrangling
+
+2) Demo using a simple barplot example
+
+3) Building up the boxplot annotation layer
+
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| fig-align: "center"
+#| echo: false
+knitr::include_graphics("img/ggtrace_logo.png")
+```
+
+:::
+
+::::
+
+## Walkthrough with a barplot
 
 ```{r barplot}
 my_barplot <- ggplot(penguins_sm) + 
   geom_bar(aes(x = species, fill = species))
 my_barplot
 ```
+
+![](https://allisonhorst.github.io/palmerpenguins/reference/figures/culmen_depth.png){.absolute bottom=50 right=0 width=300}
 
 ---
 
@@ -662,18 +779,18 @@ geom_bar(
 )
 ```
 
-. . .
+<!-- . . . -->
 
-<div class="divbr"></div>
+<!-- <div class="divbr"></div> -->
 
-```{r bar-explicit-stat}
-#| eval: false
-stat_count(
-  aes(x = species, fill = species,
-      y = after_stat(count)),
-  geom = "bar"
-)
-```
+<!-- ```{r bar-explicit-stat} -->
+<!-- #| eval: false -->
+<!-- stat_count( -->
+<!--   aes(x = species, fill = species, -->
+<!--       y = after_stat(count)), -->
+<!--   geom = "bar" -->
+<!-- ) -->
+<!-- ``` -->
 
 ---
 
@@ -886,7 +1003,7 @@ inspect_after_scale(
 ```{r bar-after-scale-size-fill}
 #| fig-align: "center"
 #| out.width: "550px"
-library(colorspace)
+library(colorspace) # for `darken()` function
 ggplot(penguins_sm) +
   geom_bar(aes(x = species, fill = species,
                color = after_scale(darken(fill, .5))),
@@ -920,22 +1037,54 @@ knitr::include_graphics("img/bar-snapshots.gif")
 
 - [Before Stat]{.my-hl-1} [has `x`, validates `"count"` stat]{.fragment}
 
-- [After Stat]{.my-hl-2} [has `count`, available in `after_stat()`]{.fragment}
+- [After Stat]{.my-hl-2} [has `count`, allows in `y = after_stat(count)`]{.fragment}
 
 - [Before Geom]{.my-hl-3} [has `x` and `y`, validates `"bar"` geom]{.fragment}
 
-- [After Scale]{.my-hl-4} [makes variables available in `after_scale()` (unused)]{.fragment}
+- [After Scale]{.my-hl-4} [allows `after_scale()` mappings (unused)]{.fragment}
 
 **Output** (drawing-ready data)
 
+## ggplot internals as data wrangling
+
+**Outline**
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+1) Reframing of ggplot internals as data wrangling
+
+2) Demo using a simple barplot example
+
+3) Building up the boxplot annotation layer
+
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| fig-align: "center"
+#| echo: false
+knitr::include_graphics("img/ggtrace_logo.png")
+```
+
+:::
+
+::::
+
 ## Moment of truth
 
+
+
 ```{r boxplot-annotation-skeleton}
+#| eval: false
 my_boxplot +
   ?
 ```
 
 ```{r my_boxplot-labelled}
+#| echo: false
 #| fig-align: "center"
 ```
 
@@ -978,7 +1127,7 @@ geom_label(
 
 ## Step-by-step
 
-3) Give the `stat` what it needs to start
+3) Give the `stat` the aesthetics it needs to start
 
 ```{r skeleton-start}
 #| eval: false
@@ -995,7 +1144,7 @@ geom_label(
 
 ## Step-by-step
 
-3) Make sure the `geom` gets what it needs later
+3) Make sure the `geom` gets the aesthetics it needs later
 
 ```{r skeleton-after-stat}
 #| eval: false
@@ -1026,11 +1175,14 @@ my_boxplot_annotated <- my_boxplot +
   )
 ```
 
+. . .
+
 <div class="divbr"></div>
 
 ```{r no-stage-print}
 #| error: true
 #| class-error: "big-chunk-output"
+#| results: "hide"
 my_boxplot_annotated
 ```
 
@@ -1069,42 +1221,49 @@ my_boxplot_annotated
 ```{r annotation-before-geom}
 ```
 
-## It all `stage()`
+## We're always `stage()`-ing
 
-:::{.vcenter}
-
-```{r all-stage}
+```{r stage-implicit}
 #| eval: false
-geom_label(
-  aes(
-    x = stage(start = species),
-    y = stage(start = bill_length_mm, after_stat = ymin),
-    label = stage(start = NULL, after_stat = ymin)
-  ),
-  stat = "boxplot",
-  data = ~ .x %>% filter(species == "Chinstrap")
+aes(
+  x = species,
+  y = stage(start = bill_length_mm, after_stat = ymin),
+  label = after_stat(ymin)
 )
 ```
 
-:::
+<div class="divbr"></div>
 
-## Conclusion (pt.1)
+```{r stage-explicit}
+#| eval: false
+aes(
+  x = stage(start = species),
+  y = stage(start = bill_length_mm, after_stat = ymin),
+  label = stage(start = NULL, after_stat = ymin)
+)
+```
 
-1) Each layer in a ggplot has an underlying **dataframe representation** in the internals
+<!-- ## ggplot internals for users -->
 
-2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready"
+<!-- 1) Each layer in a ggplot has an underlying **dataframe representation** in the internals -->
 
-3) Consulting the intermediate **states** of a layer's data can write more powerful ggplot code
+<!-- 2) Much of what goes on in the internals is **data wrangling** to makes each layer's data "drawing-ready" -->
 
-- _Before Stat_, _After Stat_, _Before Geom_, _After Scale_
+<!-- 3) Consulting the intermediate **states** of a layer's data can write more powerful ggplot code -->
 
-## Conclusion (pt.1)
+<!-- - _Before Stat_, _After Stat_, _Before Geom_, _After Scale_ -->
 
-By aggressively capitalizing on this fact that layers have dataframe representations, we learn that...
+## Conclusion: ggplot internals for users
 
-Every aesthetic mapping is a `mutate()` scheduled (`stage()`-ed) at different points of the data wrangling pipeline.
+Layers have an underlying **dataframe representation**. The internals is **data wrangling** to make them **"drawing-ready"**.
 
-Every layer has a `Stat` and a `Geom`, which transforms the data with their own combo of `group_by()`, `summrize()`, and `mutate()`.
+. . .
+
+1) Every aesthetic mapping is like a `mutate()` scheduled for different `stage()`s of the internal pipeline.
+
+. . .
+
+2) Every layer has a `Stat` and a `Geom` - they steps in to transform the data as long as the required columns are present.
 
 ## Reframing **extending** ggplot
 
