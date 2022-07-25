@@ -35,14 +35,18 @@
 <polygon points='133.44,134.77 133.44,186.55 304.41,186.55 304.41,134.77 133.44,134.77 ' style='stroke-width: 1.60; stroke: #333333; fill: #F8766D;' />
 <line x1='133.44' y1='160.38' x2='304.41' y2='160.38' style='stroke-width: 3.20; stroke: #333333; stroke-linecap: butt;' />
 <circle cx='446.88' cy='59.36' r='2.93' style='stroke-width: 1.06; stroke: #333333; fill: #333333;' />
-<circle cx='446.88' cy='57.25' r='2.93' style='stroke-width: 1.06; stroke: #333333; fill: #333333;' />
+<circle cx='446.88' cy='47.66' r='2.93' style='stroke-width: 1.06; stroke: #333333; fill: #333333;' />
 <circle cx='446.88' cy='23.60' r='2.93' style='stroke-width: 1.06; stroke: #333333; fill: #333333;' />
 <line x1='446.88' y1='175.29' x2='446.88' y2='114.76' style='stroke-width: 1.60; stroke: #333333; stroke-linecap: butt;' />
 <line x1='446.88' y1='243.34' x2='446.88' y2='286.43' style='stroke-width: 1.60; stroke: #333333; stroke-linecap: butt;' />
 <polygon points='361.40,175.29 361.40,243.34 532.36,243.34 532.36,175.29 361.40,175.29 ' style='stroke-width: 1.60; stroke: #333333; fill: #00BFC4;' />
 <line x1='361.40' y1='211.57' x2='532.36' y2='211.57' style='stroke-width: 3.20; stroke: #333333; stroke-linecap: butt;' />
-<line x1='458.28' y1='114.76' x2='549.46' y2='114.76' style='stroke-width: 6.40; stroke: #941414; stroke-linecap: butt;' />
-<polyline points='476.69,104.13 458.28,114.76 476.69,125.39 ' style='stroke-width: 6.40; stroke: #941414; stroke-linecap: butt;' />
+<line x1='458.28' y1='59.36' x2='503.87' y2='59.36' style='stroke-width: 3.20; stroke: #941414; stroke-linecap: butt;' />
+<polyline points='469.32,52.98 458.28,59.36 469.32,65.73 ' style='stroke-width: 3.20; stroke: #941414; stroke-linecap: butt;' />
+<line x1='458.28' y1='47.66' x2='503.87' y2='47.66' style='stroke-width: 3.20; stroke: #941414; stroke-linecap: butt;' />
+<polyline points='469.32,41.28 458.28,47.66 469.32,54.04 ' style='stroke-width: 3.20; stroke: #941414; stroke-linecap: butt;' />
+<line x1='458.28' y1='23.60' x2='503.87' y2='23.60' style='stroke-width: 3.20; stroke: #941414; stroke-linecap: butt;' />
+<polyline points='469.32,17.22 458.28,23.60 469.32,29.98 ' style='stroke-width: 3.20; stroke: #941414; stroke-linecap: butt;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHwzNjAuMDA=)'>
 <polyline points='82.15,299.57 82.15,10.46 ' style='stroke-width: 2.04; stroke-linecap: butt;' />
