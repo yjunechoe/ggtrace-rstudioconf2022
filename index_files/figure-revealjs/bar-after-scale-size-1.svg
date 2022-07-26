@@ -30,9 +30,9 @@
 </defs>
 <g clip-path='url(#cpNzIuODB8NTYwLjg4fDEwLjQ2fDI5OS41Nw==)'>
 <rect x='72.80' y='10.46' width='488.07' height='289.11' style='stroke-width: 2.04; stroke: none; fill: #FFFFFF;' />
-<rect x='95.68' y='23.60' width='137.27' height='262.83' style='stroke-width: 9.60; stroke: #961B00; stroke-linecap: square; stroke-linejoin: miter; fill: #F8766D;' />
-<rect x='248.20' y='168.07' width='137.27' height='118.36' style='stroke-width: 9.60; stroke: #005B17; stroke-linecap: square; stroke-linejoin: miter; fill: #00BA38;' />
-<rect x='400.73' y='72.34' width='137.27' height='214.09' style='stroke-width: 9.60; stroke: #034B93; stroke-linecap: square; stroke-linejoin: miter; fill: #619CFF;' />
+<rect x='95.68' y='23.60' width='137.27' height='262.83' style='stroke-width: 8.00; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #F8766D;' />
+<rect x='248.20' y='168.07' width='137.27' height='118.36' style='stroke-width: 8.00; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #00BA38;' />
+<rect x='400.73' y='72.34' width='137.27' height='214.09' style='stroke-width: 8.00; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #619CFF;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHwzNjAuMDA=)'>
 <polyline points='72.80,299.57 72.80,10.46 ' style='stroke-width: 2.04; stroke-linecap: butt;' />
@@ -55,9 +55,9 @@
 <text transform='translate(25.50,155.02) rotate(-90)' text-anchor='middle' style='font-size: 21.00px; font-family: "Arial";' textLength='51.37px' lengthAdjust='spacingAndGlyphs'>count</text>
 <rect x='581.80' y='90.60' width='127.74' height='128.84' style='stroke-width: 2.04; stroke: none; fill: #FFFFFF;' />
 <text x='592.26' y='118.43' style='font-size: 21.00px; font-family: "Arial";' textLength='71.22px' lengthAdjust='spacingAndGlyphs'>species</text>
-<rect x='595.50' y='134.46' width='19.44' height='19.44' style='stroke-width: 4.88; stroke: #961B00; stroke-linecap: square; stroke-linejoin: miter; fill: #F8766D;' />
-<rect x='595.50' y='160.38' width='19.44' height='19.44' style='stroke-width: 4.88; stroke: #005B17; stroke-linecap: square; stroke-linejoin: miter; fill: #00BA38;' />
-<rect x='595.50' y='186.30' width='19.44' height='19.44' style='stroke-width: 4.88; stroke: #034B93; stroke-linecap: square; stroke-linejoin: miter; fill: #619CFF;' />
+<rect x='595.50' y='134.46' width='19.44' height='19.44' style='stroke-width: 4.88; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #F8766D;' />
+<rect x='595.50' y='160.38' width='19.44' height='19.44' style='stroke-width: 4.88; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #00BA38;' />
+<rect x='595.50' y='186.30' width='19.44' height='19.44' style='stroke-width: 4.88; stroke: #BEBEBE; stroke-linecap: square; stroke-linejoin: miter; fill: #619CFF;' />
 <text x='628.64' y='150.19' style='font-size: 16.80px; font-family: "Arial";' textLength='46.70px' lengthAdjust='spacingAndGlyphs'>Adelie</text>
 <text x='628.64' y='176.11' style='font-size: 16.80px; font-family: "Arial";' textLength='71.91px' lengthAdjust='spacingAndGlyphs'>Chinstrap</text>
 <text x='628.64' y='202.03' style='font-size: 16.80px; font-family: "Arial";' textLength='55.12px' lengthAdjust='spacingAndGlyphs'>Gentoo</text>

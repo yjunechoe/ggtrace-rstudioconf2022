@@ -16,10 +16,10 @@
 }
 
 .reveal .slide ol li {
-  margin-top: 1em !important;
+  margin-top: 0.8em !important;
 }
 .reveal .slide ul li {
-  margin-top: 1em !important;
+  margin-top: 0.8em !important;
 }
 
 .quarto-figure.quarto-figure-center {
@@ -189,4 +189,28 @@ pre > code.sourceCode > span {
   text-align: center;
   line-height: 100px;
   font-family: Consolas;
+}
+
+.col-hl-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.col-hl {
+  position: absolute;
+  display: inline-block;
+  background-color: #ffff000f;
+  outline: 5px solid yellow;
+  outline-offset: -1px;
+  box-shadow: 0px 0px 15px 10px grey;
+}
+
+code span.fu.ggtrace-fn {
+  font-weight: bold;
+  color: #ac0aac;
+}
+
+.self-hl {
+  padding: 3px;
+  background-color: #bc49bc;
+  color: white;
 }

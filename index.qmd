@@ -66,6 +66,10 @@ experiment_data <- tidyr::crossing(
 options("pillar.print_min" = 3)
 ```
 
+## {.nostretch}
+
+![](img/ggplot2_logo.png){.absolute style="width: 500px; top: 50%; left:50%; transform: translate(-50%, -50%);"}
+
 ---
 
 ::: {.vcenter}
@@ -81,8 +85,6 @@ experiment_data <- as.data.frame(experiment_data)
 ```
 </div>
 
-<div class="divbr"></div>
-
 <div class="fragment">
 ```{r my_boxplot}
 my_boxplot <- ggplot(experiment_data) +
@@ -94,7 +96,7 @@ my_boxplot <- ggplot(experiment_data) +
 
 :::
 
-## {.nostretch}
+---
 
 ```{r my_boxplot-lone}
 my_boxplot
@@ -196,7 +198,7 @@ label_grob <- ggtrace_inspect_return(
       aes(x = condition,
           y = stage(start = response_time, after_stat = ymax),
           label = after_stat(ymax)),
-      stat = "boxplot", size = 5,
+      stat = "boxplot", size = 7,
       data = ~ .x %>% filter(condition == "B")
     )
   , Geom$draw_layer, cond = 2
@@ -207,11 +209,24 @@ grid.draw(label_grob)
 ```
 :::
 
-## {.nostretch}
+---
 
 ```{r my_boxplot-labelled}
 #| fig-align: "center"
 ```
+
+---
+
+:::{.vcenter}
+```{r my_boxplot-labelled}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[4.4,6.4,3],[5.8,8.4,5.7],[7.2,2,3.8,\"#fff700\",2.7]]"'
+```
+:::
+
+::: {.aside}
+Note: `stage()` and `after_stat()` are "new" in `{ggplot2} v3.3.0` (March 2020)
+:::
 
 ---
 
@@ -224,6 +239,7 @@ geom_boxplot(
 )
 ```
 
+<div style='opacity: .3;'>
 ```{r layer2}
 #| eval: false
 geom_label(
@@ -234,21 +250,6 @@ geom_label(
   data = . %>% filter(condition == "B")
 )
 ```
-
-:::
-
----
-
-:::{.vcenter}
-
-```{r layer1}
-#| eval: false
-```
-
-<div style='opacity: .3;'>
-```{r layer2}
-#| eval: false
-```
 </div>
 
 :::
@@ -267,10 +268,6 @@ geom_label(
 #| eval: false
 ```
 
-:::
-
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 :::
 
 ---
@@ -290,10 +287,6 @@ Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 
 :::
 
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
-:::
-
 ---
 
 :::{.vcenter}
@@ -309,10 +302,6 @@ Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 #| attr-source: 'data-hl-loc="[[1.45,3.2,7.1],[2.9,3.2,16.7],[2.9,29.9,0.5]]"'
 ```
 
-:::
-
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 :::
 
 ---
@@ -332,10 +321,6 @@ Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 
 :::
 
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
-:::
-
 ---
 
 :::{.vcenter}
@@ -353,8 +338,21 @@ Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 
 :::
 
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
+---
+
+:::{.vcenter}
+
+<div style='opacity: .3;'>
+```{r layer1}
+#| eval: false
+```
+</div>
+
+```{r layer2}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[0,0,5.6],[5.8,10.5,4.7]]"'
+```
+
 :::
 
 ---
@@ -369,36 +367,11 @@ Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
 
 ```{r layer2}
 #| eval: false
-#| attr-source: 'data-hl-loc="[[0,0,5.6]]"'
 ```
 
 :::
 
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
-:::
-
----
-
-:::{.vcenter}
-
-<div style='opacity: .3;'>
-```{r layer1}
-#| eval: false
-```
-</div>
-
-```{r layer2}
-#| eval: false
-```
-
-:::
-
-::: {.aside}
-Note: `stage()` and `after_stat()` were added in `{ggplot2} v3.3.0` (March 2020)
-:::
-
-## {background-color="#81388C"}
+## {background-color="#B69ED3"}
 
 [ggplot internals _for users_]{.centered-slide-text}
 
@@ -452,33 +425,66 @@ experiment_data %>% print(max = ncol(.) * 5)
 ```{r layer_data-boxplot}
 ```
 
-<!-- ## 2) Internals as data wrangling -->
+## Output
 
-<!-- ```{r pipeline-data-wrangling} -->
-<!-- #| eval: false -->
-<!-- ggplot_internals <- function(data) { -->
-<!--   data %>%  -->
-<!--     fun1() %>%  -->
-<!--     fun2() %>%  -->
-<!--     fun3() %>%  -->
-<!--     fun4() %>%  -->
-<!--     fun5() %>%  -->
-<!--     fun6() %>%  -->
-<!--     ... -->
-<!-- } -->
-<!-- ``` -->
+```{r layer_data-boxplot}
+#| attr-output: 'data-col-hl-loc="[[6,\"100%\",\"300%\"]]"'
+```
 
 ---
 
 :::{.vcenter}
-<div>
-<div style="display: flex; flex-direction: row; justify-content: space-around;"><span class="my-hl-1">Before Stat</span><span class="my-hl-2">After Stat</span><span class="my-hl-3">Before Geom</span><span class="my-hl-4">After Scale</span></div>
-<div class="divbr"></div>
 ```{r layer2}
 #| eval: false
-#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C080\"],[7.2,4.8,19.3,\"#FFB1C080\"],[1.45,5.3,4,\"#FFB1C080\"],[2.9,8.6,11.9,\"#FFB1C080\"],[2.9,21,9.5,\"#E1C56380\"],[4.3,7.5,8.6,\"#E1C56380\"],[0,2.8,2.8,\"#64DF9180\"],[5.8,10.7,4.5,\"#E0B6FF80\"]]"'
+#| attr-source: 'style="background-color:white"'
 ```
-</div>
+:::
+
+---
+
+:::{.vcenter}
+```{r layer2}
+#| eval: false
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C080\"],[7.2,4.8,16.2,\"#FFB1C080\"],[1.45,5.3,5.1,\"#FFB1C080\"],[2.9,8.6,11.3,\"#FFB1C080\"]]"'
+```
+:::
+
+---
+
+:::{.vcenter}
+```{r layer2}
+#| eval: false
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C080\"],[7.2,4.8,16.2,\"#FFB1C080\"],[1.45,5.3,5.1,\"#FFB1C080\"],[2.9,8.6,11.3,\"#FFB1C080\"],[2.9,20.7,9.7,\"#E1C56380\"],[4.3,7.5,8.6,\"#E1C56380\"]]"'
+```
+:::
+
+---
+
+:::{.vcenter}
+```{r layer2}
+#| eval: false
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C080\"],[7.2,4.8,16.2,\"#FFB1C080\"],[1.45,5.3,5.1,\"#FFB1C080\"],[2.9,8.6,11.3,\"#FFB1C080\"],[2.9,20.7,9.7,\"#E1C56380\"],[4.3,7.5,8.6,\"#E1C56380\"],[0,2.8,2.8,\"#64DF9180\"]]"'
+```
+:::
+
+---
+
+:::{.vcenter}
+```{r layer2}
+#| eval: false
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C080\"],[7.2,4.8,16.2,\"#FFB1C080\"],[1.45,5.3,5.1,\"#FFB1C080\"],[2.9,8.6,11.3,\"#FFB1C080\"],[2.9,20.7,9.7,\"#E1C56380\"],[4.3,7.5,8.6,\"#E1C56380\"],[0,2.8,2.8,\"#64DF9180\"],[5.8,10.7,4.5,\"#E0B6FF80\"]]"'
+```
+:::
+
+---
+
+<div style="transform: translateY(150px); display: flex; flex-direction: row; justify-content: space-around;"><span class="my-hl-1">Before Stat</span><span class="my-hl-2">After Stat</span><span class="my-hl-3">Before Geom</span><span class="my-hl-4">After Scale</span></div>
+
+:::{.vcenter}
+```{r layer2}
+#| eval: false
+#| attr-source: 'style="background-color:white" data-hl-loc="[[5.8,4.8,5,\"#FFB1C080\"],[7.2,4.8,16.2,\"#FFB1C080\"],[1.45,5.3,5.1,\"#FFB1C080\"],[2.9,8.6,11.3,\"#FFB1C080\"],[2.9,20.7,9.7,\"#E1C56380\"],[4.3,7.5,8.6,\"#E1C56380\"],[0,2.8,2.8,\"#64DF9180\"],[5.8,10.7,4.5,\"#E0B6FF80\"]]"'
+```
 :::
 
 ## Snapshots of layer data
@@ -487,35 +493,34 @@ experiment_data %>% print(max = ncol(.) * 5)
 
 ::: {style="margin-left: 50px;"}
 
-1) [Before Stat]{.my-hl-1} [validates the layer's choice of `stat`]{.fragment}
+1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat`
 
-2) [After Stat]{.my-hl-2} [context for `after_stat()` mappings]{.fragment}
+2) [After Stat]{.my-hl-2} context for `after_stat()` mappings
 
-3) [Before Geom]{.my-hl-3} [validates the layer's choice of `geom`]{.fragment}
+3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom`
 
-4) [After Scale]{.my-hl-4} [context for `after_scale()` mappings]{.fragment}
+4) [After Scale]{.my-hl-4} context for `after_scale()` mappings
 
 :::
 
 **Output** (drawing-ready data)
-
 
 ## 👻 ggproto methods 👻
 
 :::: {.columns}
 
 ::: {.column width="65%"}
-```{r pipeline-ggproto-methods-blank}
+```{r pipeline-ggproto-methods-skeleton}
 #| eval: false
 #| attr-source: "style='height:470px'"
 ggplot_internals <- function(data) {
   data %>% 
-    ... %>% 
-    Layer$compute_statistic() %>% 
-    ... %>% 
-    Layer$compute_geom_1() %>% 
-    ... %>% 
-    Layer$compute_geom_2() %>% 
+    ggproto$method() %>% 
+    ggproto$method() %>% 
+    ggproto$method() %>% 
+    ggproto$method() %>% 
+    ggproto$method() %>% 
+    ggproto$method() %>% 
     ...
 }
 ```
@@ -578,7 +583,7 @@ render_steps(0)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
 ## 👻 ggproto methods 👻
@@ -613,7 +618,7 @@ render_steps(1)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
 ## 👻 ggproto methods 👻
@@ -648,7 +653,7 @@ render_steps(1:2)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
 ## 👻 ggproto methods 👻
@@ -658,7 +663,7 @@ These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
 ::: {.column width="65%"}
 ```{r pipeline-ggproto-methods-before-geom}
 #| eval: false
-#| attr-source: "style='height:470px' data-hl-loc='[[4.4,2,13.7,\"#FFB1C060\",0.25],[5.05,2,13.7,\"#E4CB7360\",0.25],[7.2,2,12,\"#64DF9160\"]]'"
+#| attr-source: "style='height:470px' data-hl-loc='[[4.4,2,13.7,\"#FFB1C060\",0.25],[5.05,2,13.7,\"#E4CB7360\",0.25],[7.2,2,12,\"#64DF9160\",0.3]]'"
 ggplot_internals <- function(data) {
   data %>% 
     ... %>% 
@@ -683,7 +688,7 @@ render_steps(1:3)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
 ## 👻 ggproto methods 👻
@@ -693,7 +698,7 @@ These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
 ::: {.column width="65%"}
 ```{r pipeline-ggproto-methods-after-scale}
 #| eval: false
-#| attr-source: "style='height:470px' data-hl-loc='[[4.4,2,13.7,\"#FFB1C060\",0.25],[5.05,2,13.7,\"#E4CB7360\",0.25],[7.2,2,12,\"#64DF9160\"],[10.1,2,12,\"#E0B6FF60\"]]'"
+#| attr-source: "style='height:470px' data-hl-loc='[[4.4,2,13.7,\"#FFB1C060\",0.25],[5.05,2,13.7,\"#E4CB7360\",0.25],[7.2,2,12,\"#64DF9160\",0.3],[10.9,2,12,\"#E0B6FF60\",0.3]]'"
 ggplot_internals <- function(data) {
   data %>% 
     ... %>% 
@@ -718,20 +723,85 @@ render_steps(1:4)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
+## 👻 ggproto methods 👻
+
+```{r layer-compute-statistic}
+#| eval: false
+ggplot2:::Layer$compute_statistic
+```
+
+```{verbatim}
+#| attr-source: "style='font-size: 0.6em; line-height: 1.5; padding: 20px;'"
+#| class-source: ""
+<ggproto method>
+  <Wrapper function>
+    function (...) f(..., self = self)
+
+  <Inner function (f)>
+    function (self, data, layout) {
+      if (empty(data)) return(new_data_frame())
+      self$computed_stat_params <- self$stat$setup_params(data, self$stat_params)
+      data <- self$stat$setup_data(data, self$computed_stat_params)
+      self$stat$compute_layer(data, self$computed_stat_params, layout)
+    }
+```
+
+## 👻 ggproto methods 👻
+
+```{r layer-compute-statistic}
+#| eval: false
+```
+
+```{verbatim}
+#| attr-source: "style='font-size: 0.6em; line-height: 1.5; padding: 20px;'"
+#| class-source: "ggproto-method-self-hl"
+<ggproto method>
+  <Wrapper function>
+    function (...) f(..., self = self)
+
+  <Inner function (f)>
+    function (self, data, layout) {
+      if (empty(data)) return(new_data_frame())
+      self$computed_stat_params <- self$stat$setup_params(data, self$stat_params)
+      data <- self$stat$setup_data(data, self$computed_stat_params)
+      self$stat$compute_layer(data, self$computed_stat_params, layout)
+    }
+```
+
+
+## 👻 ggproto methods 👻
+
+```{r layer-compute-statistic}
+#| eval: false
+```
+
+<pre style="font-size:0.9em; line-height:1; padding-left:20px;">
+<code>
+├───Layer$compute_statistic()
+│   │
+│   ├───StatBoxplot$setup_params()
+│   │
+│   ├───StatBoxplot$setup_data()
+│   │
+│   └───Stat$compute_layer()
+│       │
+│       └───Stat$compute_panel()
+│           │
+│           └───StatBoxplot$compute_group()
+</code>
+</pre>
+
+
 ## Introducing `{ggtrace}`
 
 <p style="margin:30px 0px;">
 Toolkit to **Inspect**, **Capture**, and **Highjack** the internals
 </p>
 
-## Introducing `{ggtrace}`
-
-<p style="margin:30px 0px;">
-Toolkit to **Inspect**, **Capture**, and **Highjack** the internals
-</p>
+. . .
 
 Workflow functions `ggtrace_{action}_{value}()`:
 
@@ -805,7 +875,7 @@ render_steps(1)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
 ---
@@ -877,7 +947,7 @@ render_steps(2)
 ::::
 
 ::: {.aside}
-These ggproto methods are called in `ggplot2:::ggplot_build.ggplot()`
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
 ---
@@ -950,7 +1020,7 @@ penguins_sm %>%
 penguins_sm <- as.data.frame(penguins_sm)
 ```
 
-## Walkthrough with a barplot
+---
 
 ```{r barplot}
 #| fig-align: "center"
@@ -969,9 +1039,7 @@ my_barplot
 geom_bar(aes(x = species, fill = species))
 ```
 
-. . .
-
-<div class="divbr"></div>
+<p style="text-align: center; font-size: 3em; line-height: 0.8em;">=</p>
 
 ```{r bar-explicit-geom-long}
 #| eval: false
@@ -1057,12 +1125,26 @@ ggtrace_inspect_args(
 render_steps_progress(1)
 ```
 
+## 1) Before Stat
+
+```{r bar-before-stat}
+#| eval: false
+```
+
+```{r bar-before-stat-3row}
+#| echo: false
+#| attr-output: 'data-col-hl-loc="[[1,\"800%\",\"400%\"]]"'
+```
+
+```{r progress-before-stat}
+#| echo: false
+```
+
 
 ## 1) Before Stat
 
 ```{r bar-before-stat-filtered}
 #| eval: false
-#| attr-source: 'data-hl-loc="[[5.8,5.2,23.2]]"'
 ggtrace_inspect_args(
   x = ggplot(penguins_sm) +
         geom_bar(
@@ -1177,6 +1259,16 @@ render_steps_progress(1:2)
 
 ## 2) After Stat
 
+```{r bar-after-stat}
+#| attr-output: 'data-col-hl-loc="[[1,\"200%\",\"400%\"]]"'
+```
+
+```{r progress-after-stat}
+#| echo: false
+```
+
+## 2) After Stat
+
 ```{r bar-explicit-geom-short}
 #| eval: false
 geom_bar(aes(x = species, fill = species,
@@ -1199,6 +1291,7 @@ geom_bar(aes(x = species, fill = species,
 
 ```{r bar-after_stat-post-mutate}
 #| attr-source: 'data-hl-loc="[[4.4,4.8,5]]"'
+#| attr-output: 'data-col-hl-loc="[[1,\"100%\",\"400%\"]]"'
 ggtrace_inspect_return(
   x = my_barplot,
   method = ggplot2:::Layer$compute_statistic) %>% 
@@ -1209,48 +1302,10 @@ ggtrace_inspect_return(
 #| echo: false
 ```
 
-## 2) After Stat
-
-```{r bar-aes-tidyeval}
-#| eval: false
-#| attr-source: 'data-hl-loc="[[1.45,6.8,18.4]]"'
-geom_bar(aes(x = species, fill = species,
-             y = after_stat( count/sum(count) )),
-         stat = "count")
-```
-
-<div class="divbr"></div>
-
-```{r bar-after_stat-tidyeval}
-#| attr-source: 'data-hl-loc="[[4.4,4.8,10.8]]"'
-ggtrace_inspect_return(
-  x = my_barplot,
-  method = ggplot2:::Layer$compute_statistic) %>% 
-  mutate(y = count/sum(count), .before = 1L)
-```
-
-```{r progress-after-stat}
-#| echo: false
-```
-
-## 2) After Stat
-
-```{r bar-props}
-#| fig-align: center
-#| attr-source: 'data-hl-loc="[[2.9,7.8,18.4]]"'
-ggplot(penguins_sm) +
-  geom_bar(aes(x = species, fill = species,
-               y = after_stat( count/sum(count) )),
-           stat = "count")
-```
-
-```{r progress-after-stat}
-#| echo: false
-```
-
 ## 3) Before Geom
 
 ```{r bar-before-geom}
+#| attr-output: 'data-col-hl-loc="[[1,\"100%\",\"400%\"]]"'
 ggtrace_inspect_args(
   x = my_barplot,
   method = ggplot2:::Layer$compute_geom_1)$data
@@ -1293,49 +1348,94 @@ ggtrace_inspect_args(error = TRUE,
 #| echo: false
 ```
 
-## 3) Before Geom
+<!-- ## 3) Before Geom -->
 
-```{r label-count-error}
-#| error: true
-#| class-error: "big-chunk-output"
-ggplot(penguins_sm) +
-  geom_label(aes(x = species, y = after_stat(count)),
-             stat = "count")
-```
+<!-- ```{r label-count-error} -->
+<!-- #| error: true -->
+<!-- #| class-error: "big-chunk-output" -->
+<!-- ggplot(penguins_sm) + -->
+<!--   geom_label(aes(x = species, y = after_stat(count)), -->
+<!--              stat = "count", size = 5) -->
+<!-- ``` -->
 
-```{r progress-before-geom}
-#| echo: false
-```
+<!-- ```{r progress-before-geom} -->
+<!-- #| echo: false -->
+<!-- ``` -->
 
-## 3) Before Geom
+<!-- ## 3) Before Geom -->
 
-```{r label-count-after_stat}
-#| fig-align: "center"
-#| attr-source: 'data-hl-loc="[[2.9,11,13.6]]"'
-ggplot(penguins_sm) +
-  geom_label(aes(x = species, y = after_stat(count),
-                 label = after_stat(count)),
-             stat = "count", size = 5)
-```
+<!-- ```{r label-count-before-geom} -->
+<!-- ggtrace_inspect_args(error = TRUE, -->
+<!--   x = ggplot(penguins_sm) + -->
+<!--         geom_label(aes(x = species, y = after_stat(count)), -->
+<!--                    stat = "count", size = 5), -->
+<!--   method = ggplot2:::Layer$compute_geom_1)$data -->
+<!-- ``` -->
 
-```{r progress-before-geom}
-#| echo: false
-```
+<!-- ```{r progress-before-geom} -->
+<!-- #| echo: false -->
+<!-- ``` -->
 
-## 3) Before Geom
+<!-- ## 3) Before Geom -->
 
-```{r bar-label-count}
-#| fig-align: "center"
-ggplot(penguins_sm, aes(x = species)) +
-  geom_bar() +
-  geom_label(aes(y = after_stat(count),
-                 label = after_stat(count)),
-            stat = "count", size = 5)
-```
+<!-- ```{r label-count-before-geom-mutate} -->
+<!-- #| eval: false -->
+<!-- ggtrace_inspect_args(error = TRUE, -->
+<!--   x = ggplot(penguins_sm) + -->
+<!--         geom_label(aes(x = species, y = after_stat(count)), -->
+<!--                    stat = "count", size = 5), -->
+<!--   method = ggplot2:::Layer$compute_geom_1)$data %>%  -->
+<!--   mutate(label = count, .before = 1L) -->
+<!-- ``` -->
 
-```{r progress-before-geom}
-#| echo: false
-```
+<!-- ```{r label-count-before-geom-mutate-no-msg} -->
+<!-- #| include: false -->
+<!-- label_count_error_before_geom <- ggtrace_inspect_args(error = TRUE, -->
+<!--   x = ggplot(penguins_sm) + -->
+<!--         geom_label(aes(x = species, y = after_stat(count)), -->
+<!--                    stat = "count", size = 5), -->
+<!--   method = ggplot2:::Layer$compute_geom_1)$data -->
+<!-- ``` -->
+
+<!-- ```{r label-count-before-geom-mutate-show} -->
+<!-- #| echo: false -->
+<!-- label_count_error_before_geom %>%  -->
+<!--   mutate(label = count, .before = 1L) -->
+<!-- ``` -->
+
+<!-- ```{r progress-before-geom} -->
+<!-- #| echo: false -->
+<!-- ``` -->
+
+<!-- ## 3) Before Geom -->
+
+<!-- ```{r label-count-after_stat} -->
+<!-- #| fig-align: "center" -->
+<!-- #| attr-source: 'data-hl-loc="[[2.9,9,13.6]]"' -->
+<!-- ggplot(penguins_sm) + -->
+<!--   geom_label(aes(x = species, y = after_stat(count), -->
+<!--                  label = after_stat(count)), -->
+<!--              stat = "count", size = 5) -->
+<!-- ``` -->
+
+<!-- ```{r progress-before-geom} -->
+<!-- #| echo: false -->
+<!-- ``` -->
+
+<!-- ## 3) Before Geom -->
+
+<!-- ```{r bar-label-count} -->
+<!-- #| fig-align: "center" -->
+<!-- ggplot(penguins_sm, aes(x = species)) + -->
+<!--   geom_bar() + -->
+<!--   geom_label(aes(y = after_stat(count), -->
+<!--                  label = after_stat(count)), -->
+<!--             stat = "count", size = 5) -->
+<!-- ``` -->
+
+<!-- ```{r progress-before-geom} -->
+<!-- #| echo: false -->
+<!-- ``` -->
 
 ## 4) After Scale
 
@@ -1350,22 +1450,47 @@ ggtrace_inspect_return(
 render_steps_progress(1:4)
 ```
 
-## 4) After Scale {.nostretch}
+::: {.aside}
+In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
+:::
 
-```{r bar-after-scale-size-fill}
-#| fig-align: "center"
-#| out.width: "550px"
-#| attr-source: 'data-hl-loc="[[4.4,8,20.9]]"'
-library(colorspace) # for the `darken()` function
-ggplot(penguins_sm) +
-  geom_bar(aes(x = species, fill = species,
-               color = after_scale( darken(fill, .5) )),
-           size = 2)
+## 4) After Scale
+
+```{r bar-after-scale}
+#| attr-output: 'data-col-hl-loc="[[1,\"100%\",\"400%\"]]"'
 ```
 
-::: aside
-In `{ggplot2}` _v3.4.0_, `size` for lines will be renamed to `linewidth`
+```{r progress-after-scale}
+#| echo: false
+```
+
+::: {.aside}
+In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
 :::
+
+## 4) After Scale
+
+```{r bar-after-scale}
+#| attr-output: 'data-col-hl-loc="[[13,\"400%\",\"400%\"]]"'
+```
+
+```{r progress-after-scale}
+#| echo: false
+```
+
+::: {.aside}
+In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
+:::
+
+## 4) After Scale {.nostretch}
+
+```{r bar-after-scale-plot}
+#| fig-align: "center"
+#| out.width: "750px"
+ggplot(penguins_sm) +
+  geom_bar(aes(x = species, fill = species),
+           color = "grey")
+```
 
 ```{r progress-after-scale}
 #| echo: false
@@ -1373,24 +1498,40 @@ In `{ggplot2}` _v3.4.0_, `size` for lines will be renamed to `linewidth`
 
 ## 4) After Scale {.nostretch}
 
-```{r bar-after-scale-size-fill}
+```{r bar-after-scale-size}
 #| fig-align: "center"
 #| out.width: "550px"
-#| attr-source: 'data-hl-loc="[[4.4,8,20.9]]"'
-library(colorspace) # for the `darken()` function
+#| attr-source: 'data-hl-loc="[[2.9,8,16.6]]"'
 ggplot(penguins_sm) +
   geom_bar(aes(x = species, fill = species,
-               color = after_scale( darken(fill, .5) ),
-               size = after_scale( size * 4 )))
+               size = after_scale( size * 5 )),
+           color = "grey")
 ```
 
-::: aside
-In `{ggplot2}` _v3.4.0_, `size` for lines will be renamed to `linewidth`
+::: {.aside}
+Note: `after_scale()` is "new" in `{ggplot2} v3.3.0` (March 2020)
 :::
 
 ```{r progress-after-scale}
 #| echo: false
 ```
+
+<!-- ## 4) After Scale {.nostretch} -->
+
+<!-- ```{r bar-after-scale-size-fill} -->
+<!-- #| fig-align: "center" -->
+<!-- #| out.width: "550px" -->
+<!-- #| attr-source: 'data-hl-loc="[[5.8,8,20.9]]"' -->
+<!-- library(colorspace) # for the `darken()` function -->
+<!-- ggplot(penguins_sm) + -->
+<!--   geom_bar(aes(x = species, fill = species, -->
+<!--                size = after_scale( size * 5 ), -->
+<!--                color = after_scale( darken(fill, .4) ))) -->
+<!-- ``` -->
+
+<!-- ```{r progress-after-scale} -->
+<!-- #| echo: false -->
+<!-- ``` -->
 
 ---
 
@@ -1407,10 +1548,6 @@ my_barplot
 #| out-extra: "style='box-shadow: 0px 0px 10px 5px grey'"
 #| echo: false
 knitr::include_graphics("img/bar-snapshots.gif")
-```
-
-```{r progress-after-scale}
-#| echo: false
 ```
 
 ## Snapshots of `my_barplot`'s bar layer
@@ -1591,18 +1728,22 @@ my_boxplot_annotated
 ggplot_build(my_boxplot_annotated)
 ```
 
----
-
-:::{.vcenter}
+## Debugging with `{ggtrace}`
 
 ```{r annotation-before-geom}
-#| attr-source: 'data-hl-loc="[[2.9,22.7,4.6]]"'
 ggtrace_inspect_args(error = TRUE,
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
 ```
 
-:::
+## Debugging with `{ggtrace}`
+
+```{r annotation-before-geom-y}
+#| attr-output: 'data-col-hl-loc="[[2,\"620%\",\"200%\"]]"'
+ggtrace_inspect_args(error = TRUE,
+  x = my_boxplot_annotated,
+  method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
+```
 
 ## Multiple mappings with `stage()`
 
@@ -1633,6 +1774,7 @@ ggtrace_inspect_args(
 
 ```{r annotation-before-stat-success-3row}
 #| echo: false
+#| attr-output: 'data-col-hl-loc="[[2,\"100%\",\"400%\"]]"'
 ggtrace_inspect_args(
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_statistic, cond = 2)$data %>% 
@@ -1643,11 +1785,10 @@ ggtrace_inspect_args(
 
 :::
 
-. . .
-
 ::: {style="position:relative"}
 
 ```{r annotation-before-geom-success}
+#| attr-output: 'data-col-hl-loc="[[1,\"100%\",\"200%\"]]"'
 ggtrace_inspect_args(
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
@@ -1666,20 +1807,45 @@ my_boxplot_annotated
 ```
 :::
 
-## Conclusion: ggplot internals for users
+## ggplot internals for users
 
-Layers have an underlying **dataframe representation**. The internals is **data wrangling** to make them **"drawing-ready"**.
+`{ggtrace}` helps us learn the internals as users:
+
+1) Layers have an underlying **dataframe representation**
+
+2) Internals is **data wrangling** to make them **"drawing-ready"**
 
 . . .
+
+::: {style="border:3px solid yellowgreen; border-radius: 30px; padding-left: 25px; background-color: #9acd3230;"}
+
+- Aesthetic mapping are like `mutate()` calls, scheduled to apply to the data at different `stage()`'s of the pipeline.
+
+- Every layer has a `stat` and a `geom` - they step in to modify the data, as long as the required columns are present.
+
+:::
+
+## Thank you!
 
 <div class="divbr"></div>
 
-Using `{ggtrace}` to crack open the internals, we saw:
+```{r ggtrace-install}
+#| eval: false
+remotes::install_github("yjunechoe/ggtrace") # v5.1
+```
 
-. . .
+<div style="font-size: 0.8em; margin-top: 15px">
 
-1) Aesthetic mapping are like `mutate()` calls, scheduled to apply to the data at different `stage()`'s of the pipeline.
+- Github: [https://github.com/yjunechoe/ggtrace](https://github.com/yjunechoe/ggtrace)
 
-. . .
+- Package website: [https://yjunechoe.github.io/ggtrace](https://yjunechoe.github.io/ggtrace)
 
-2) Every layer has a `stat` and a `geom` - they step in to modify the data, as long as the required columns are present.
+- Talk at useR!: [https://github.com/yjunechoe/ggtrace-user2022](https://github.com/yjunechoe/ggtrace-user2022)
+
+More on ggplot internals:
+
+- [https://ggplot2-book.org/internals.html](https://ggplot2-book.org/internals.html)
+
+- [https://ggplot2.tidyverse.org/reference/ggplot2-ggproto.html](https://ggplot2.tidyverse.org/reference/ggplot2-ggproto.html)
+
+</div>

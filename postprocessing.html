@@ -23,4 +23,35 @@ $("[data-hl-loc]").each((i,v) => {
         )
     })
 })
+
+// highlight for output
+$("[data-col-hl-loc]").each((i,v) => {
+  const hlSpecs = $(v).data("col-hl-loc")
+  const code = $(v).find("code").get()[0]
+  code.innerHTML = code.textContent.split("\n").map(l => {
+    if (/^  /.test(l)) {
+      return("  " + l.substring(2).replace(/(\s*\w+)/ig, "<i class='col-hl-wrapper'>$1</i>"))
+    } else {
+      return (l)
+    }
+  }).join("\n")
+  hlSpecs.forEach(o => {
+    $(code)
+      .find("i:nth-child(" + o[0] + ")")
+      .prepend(`<div class="col-hl" style="width: ${o[1]}; height: ${o[2]}; ${o[0] != '1' ? 'transform: translateX(0.3em);': ''}"></div>`)
+  })
+})
+
+// bold ggtrace functions
+$("span.fu")
+    .filter(function() {
+        return(this.textContent.match(/ggtrace/i))
+    })
+    .addClass("ggtrace-fn")
+
+// highlight `self` in ggproto method
+$(".ggproto-method-self-hl")
+  .html(
+    $(".ggproto-method-self-hl").html().replace(/self/ig, "<i class='self-hl'>self</i>")
+  )
 </script>
