@@ -14,11 +14,11 @@ format:
   revealjs:
     # include-in-header: "meta.html"
     include-after-body: "postprocessing.html"
-    # logo: "img/userlogo.png"
+    logo: "img/slides-qr-code.png"
     # footer: "https://yjunechoe.github.io/ggtrace-user2022"
     theme: [default, style.scss]
     code-line-numbers: false
-    slide-number: true
+    slide-number: false
     execute:
       echo: true
     knitr:
@@ -225,7 +225,7 @@ grid.draw(label_grob)
 :::
 
 ::: {.aside}
-Note: `stage()` and `after_stat()` are "new" in `{ggplot2} v3.3.0` (March 2020)
+`stage()` and `after_stat()` are "new" in `{ggplot2} v3.3.0` (March 2020)
 :::
 
 ---
@@ -591,6 +591,39 @@ This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::: {.columns}
 
 ::: {.column width="65%"}
+```{r pipeline-ggproto-methods-all}
+#| eval: false
+ggplot_internals <- function(data) {
+  data %>% 
+    ... %>% 
+    Layer$compute_statistic() %>% 
+    ... %>% 
+    Layer$compute_geom_1() %>% 
+    ... %>% 
+    Layer$compute_geom_2() %>% 
+    ...
+}
+```
+:::
+
+::: {.column width="35%"}
+```{r snapshot-blocks-blank}
+#| echo: false
+#| results: "asis"
+```
+:::
+
+::::
+
+::: {.aside}
+This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
+:::
+
+## 👻 ggproto methods 👻
+
+:::: {.columns}
+
+::: {.column width="65%"}
 ```{r pipeline-ggproto-methods-before-stat}
 #| eval: false
 #| attr-source: "style='height:470px' data-hl-loc='[[4.4,2,13.7,\"#FFB1C060\",0.25]]'"
@@ -696,19 +729,9 @@ This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::: {.columns}
 
 ::: {.column width="65%"}
-```{r pipeline-ggproto-methods-after-scale}
+```{r pipeline-ggproto-methods-all}
 #| eval: false
 #| attr-source: "style='height:470px' data-hl-loc='[[4.4,2,13.7,\"#FFB1C060\",0.25],[5.05,2,13.7,\"#E4CB7360\",0.25],[7.2,2,12,\"#64DF9160\",0.3],[10.9,2,12,\"#E0B6FF60\",0.3]]'"
-ggplot_internals <- function(data) {
-  data %>% 
-    ... %>% 
-    Layer$compute_statistic() %>% 
-    ... %>% 
-    Layer$compute_geom_1() %>% 
-    ... %>% 
-    Layer$compute_geom_2() %>% 
-    ...
-}
 ```
 :::
 
@@ -1145,6 +1168,7 @@ render_steps_progress(1)
 
 ```{r bar-before-stat-filtered}
 #| eval: false
+#| attr-source: 'data-hl-loc="[[5.8,5.2,23.2]]"'
 ggtrace_inspect_args(
   x = ggplot(penguins_sm) +
         geom_bar(
@@ -1451,7 +1475,7 @@ render_steps_progress(1:4)
 ```
 
 ::: {.aside}
-In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
+In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
 :::
 
 ## 4) After Scale
@@ -1509,7 +1533,7 @@ ggplot(penguins_sm) +
 ```
 
 ::: {.aside}
-Note: `after_scale()` is "new" in `{ggplot2} v3.3.0` (March 2020)
+`after_scale()` is "new" in `{ggplot2} v3.3.0` (March 2020)
 :::
 
 ```{r progress-after-scale}
@@ -1825,6 +1849,43 @@ my_boxplot_annotated
 
 :::
 
+## `Capture` workflow
+
+<div style="width:110%; margin-left:-5%; margin-top: -20px;">
+```{r ggtrace-capture}
+stat_transform_layer2 <- ggtrace_capture_fn(
+  my_boxplot_annotated, ggplot2:::Layer$compute_statistic, cond = 2)
+```
+</div>
+
+::: {.fragment style="margin-top:10px;"}
+
+```{r ggtrace-captured-formals}
+#| eval: false
+formals(stat_transform_layer2)$data
+```
+
+```{r ggtrace-captured-formals-3row}
+#| echo: false
+formals(stat_transform_layer2)$data %>% 
+  print(max = ncol(.) * 2)
+```
+
+```{r ggtrace-captured}
+stat_transform_layer2()
+```
+
+:::
+
+## `Highjack` workflow
+
+```{r ggtrace-highjack}
+#| fig-align: center
+ggtrace_highjack_return(
+  my_boxplot, ggplot2:::Layer$compute_statistic,
+  value = quote( returnValue() %>% mutate(outliers = NULL) ))
+```
+
 ## Thank you!
 
 <div class="divbr"></div>
@@ -1836,11 +1897,11 @@ remotes::install_github("yjunechoe/ggtrace") # v5.1
 
 <div style="font-size: 0.8em; margin-top: 15px">
 
-- Github: [https://github.com/yjunechoe/ggtrace](https://github.com/yjunechoe/ggtrace)
+- Talk materials: [https://github.com/yjunechoe/ggtrace-rstudioconf2022](https://github.com/yjunechoe/ggtrace-rstudioconf2022)
 
 - Package website: [https://yjunechoe.github.io/ggtrace](https://yjunechoe.github.io/ggtrace)
 
-- Talk at useR!: [https://github.com/yjunechoe/ggtrace-user2022](https://github.com/yjunechoe/ggtrace-user2022)
+- Talk at useR!2022: [https://github.com/yjunechoe/ggtrace-user2022](https://github.com/yjunechoe/ggtrace-user2022)
 
 More on ggplot internals:
 
