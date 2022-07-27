@@ -487,23 +487,23 @@ experiment_data %>% print(max = ncol(.) * 5)
 ```
 :::
 
-## Snapshots of layer data
+<!-- ## Snapshots of layer data -->
 
-**Input** (user-supplied data)
+<!-- **Input** (user-supplied data) -->
 
-::: {style="margin-left: 50px;"}
+<!-- ::: {style="margin-left: 50px;"} -->
 
-1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat`
+<!-- 1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat` -->
 
-2) [After Stat]{.my-hl-2} context for `after_stat()` mappings
+<!-- 2) [After Stat]{.my-hl-2} context for `after_stat()` mappings -->
 
-3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom`
+<!-- 3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom` -->
 
-4) [After Scale]{.my-hl-4} context for `after_scale()` mappings
+<!-- 4) [After Scale]{.my-hl-4} context for `after_scale()` mappings -->
 
-:::
+<!-- ::: -->
 
-**Output** (drawing-ready data)
+<!-- **Output** (drawing-ready data) -->
 
 ## 👻 ggproto methods 👻
 
@@ -1304,6 +1304,10 @@ geom_bar(aes(x = species, fill = species,
 #| echo: false
 ```
 
+::: {.aside}
+`after_stat(vars)` supercedes `stat(var)` and `..var..` syntax
+:::
+
 ## 2) After Stat
 
 ```{r bar-explicit-geom-short}
@@ -1357,6 +1361,10 @@ From documentation: [https://ggplot2.tidyverse.org/reference/geom_bar](https://g
 ```{r progress-before-geom}
 #| echo: false
 ```
+
+## {.nostretch}
+
+![](img/after-stat-anim.gif){.absolute style="width: 1000px; top: 50%; left:50%; transform: translate(-50%, -50%);"}
 
 ## 3) Before Geom
 
@@ -1489,7 +1497,7 @@ In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
 ```
 
 ::: {.aside}
-In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
+In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
 :::
 
 ## 4) After Scale
@@ -1503,7 +1511,7 @@ In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
 ```
 
 ::: {.aside}
-In `{ggplot2}` _v3.4.0_, `size` aesthetic for lines are renamed to `linewidth`
+In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
 :::
 
 ## 4) After Scale {.nostretch}

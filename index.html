@@ -913,19 +913,15 @@ University of Pennsylvania
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-</section>
-<section id="snapshots-of-layer-data" class="slide level2">
-<h2>Snapshots of layer data</h2>
-<p><strong>Input</strong> (user-supplied data)</p>
-<div style="margin-left: 50px;">
-<ol type="1">
-<li><p><span class="my-hl-1">Before Stat</span> validates the layer’s choice of <code>stat</code></p></li>
-<li><p><span class="my-hl-2">After Stat</span> context for <code>after_stat()</code> mappings</p></li>
-<li><p><span class="my-hl-3">Before Geom</span> validates the layer’s choice of <code>geom</code></p></li>
-<li><p><span class="my-hl-4">After Scale</span> context for <code>after_scale()</code> mappings</p></li>
-</ol>
-</div>
-<p><strong>Output</strong> (drawing-ready data)</p>
+<!-- ## Snapshots of layer data -->
+<!-- **Input** (user-supplied data) -->
+<!-- ::: {style="margin-left: 50px;"} -->
+<!-- 1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat` -->
+<!-- 2) [After Stat]{.my-hl-2} context for `after_stat()` mappings -->
+<!-- 3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom` -->
+<!-- 4) [After Scale]{.my-hl-4} context for `after_scale()` mappings -->
+<!-- ::: -->
+<!-- **Output** (drawing-ready data) -->
 </section>
 <section id="ggproto-methods" class="slide level2">
 <h2>👻 ggproto methods 👻</h2>
@@ -1707,6 +1703,9 @@ Output
 </div>
 </div>
 </div>
+<div class="aside">
+<p><code>after_stat(vars)</code> supercedes <code>stat(var)</code> and <code>..var..</code> syntax</p>
+</div>
 </section>
 <section id="after-stat-3" class="slide level2">
 <h2>2) After Stat</h2>
@@ -1794,6 +1793,10 @@ Output
 </div>
 </div>
 </div>
+</section>
+<section id="section-7" class="slide level2 nostretch">
+<h2></h2>
+<p><img data-src="img/after-stat-anim.gif" class="absolute" style="width: 1000px; top: 50%; left:50%; transform: translate(-50%, -50%);"></p>
 </section>
 <section id="before-geom-2" class="slide level2">
 <h2>3) Before Geom</h2>
@@ -1955,7 +1958,7 @@ Output
 </div>
 </div>
 <div class="aside">
-<p>In <code>{ggplot2}</code> <em>v3.4.0</em>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
+<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
 </div>
 </section>
 <section id="after-scale-2" class="slide level2">
@@ -1986,7 +1989,7 @@ Output
 </div>
 </div>
 <div class="aside">
-<p>In <code>{ggplot2}</code> <em>v3.4.0</em>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
+<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
 </div>
 </section>
 <section id="after-scale-3" class="slide level2 nostretch">
@@ -2104,7 +2107,7 @@ Output
 </div>
 </div>
 </section>
-<section id="section-7" class="slide level2 nostretch">
+<section id="section-8" class="slide level2 nostretch">
 <h2></h2>
 <div class="vcenter">
 <div class="cell" data-layout-align="center">
@@ -2119,7 +2122,7 @@ Output
 </div>
 </div>
 </section>
-<section id="section-8" class="slide level2 nostretch">
+<section id="section-9" class="slide level2 nostretch">
 <h2></h2>
 <div class="vcenter">
 <div>
@@ -2336,7 +2339,7 @@ Before Geom
 </div>
 </div>
 </section>
-<section id="section-9" class="slide level2 nostretch">
+<section id="section-10" class="slide level2 nostretch">
 <h2></h2>
 <div class="vcenter">
 <div class="cell" data-layout-align="center">
