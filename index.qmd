@@ -70,11 +70,14 @@ options("pillar.print_min" = 3)
 
 ![](img/ggplot2_logo.png){.absolute style="width: 500px; top: 50%; left:50%; transform: translate(-50%, -50%);"}
 
+
 ---
 
-::: {.vcenter}
+::::: {.vcenter}
 
-<div>
+:::: {.columns}
+
+::: {.column width="60%"}
 ```{r experiment-data}
 experiment_data
 ```
@@ -83,18 +86,25 @@ experiment_data
 #| echo: false
 experiment_data <- as.data.frame(experiment_data)
 ```
-</div>
+:::
 
-<div class="fragment">
+::: {.column width="40%"}
+![](img/button-press.png){style="margin-left:15%;"}
+:::
+
+::::
+
+::: {.fragment}
 ```{r my_boxplot}
 my_boxplot <- ggplot(experiment_data) +
   geom_boxplot(
     aes(x = condition, y = response_time, fill = condition)
   )
 ```
-</div>
-
 :::
+
+:::::
+
 
 ---
 
@@ -141,6 +151,7 @@ my_boxplot +
   )
 ```
 :::
+
 
 
 ## {.nostretch}
@@ -371,6 +382,7 @@ geom_label(
 
 :::
 
+
 ## {background-color="#B69ED3"}
 
 [ggplot internals _for users_]{.centered-slide-text}
@@ -420,16 +432,19 @@ experiment_data
 experiment_data %>% print(max = ncol(.) * 5)
 ```
 
+
 ## Output
 
 ```{r layer_data-boxplot}
 ```
+
 
 ## Output
 
 ```{r layer_data-boxplot}
 #| attr-output: 'data-col-hl-loc="[[6,\"100%\",\"300%\"]]"'
 ```
+
 
 ---
 
@@ -439,6 +454,7 @@ experiment_data %>% print(max = ncol(.) * 5)
 #| attr-source: 'style="background-color:white"'
 ```
 :::
+
 
 ---
 
@@ -476,6 +492,7 @@ experiment_data %>% print(max = ncol(.) * 5)
 ```
 :::
 
+
 ---
 
 <div style="transform: translateY(150px); display: flex; flex-direction: row; justify-content: space-around;"><span class="my-hl-1">Before Stat</span><span class="my-hl-2">After Stat</span><span class="my-hl-3">Before Geom</span><span class="my-hl-4">After Scale</span></div>
@@ -504,6 +521,7 @@ experiment_data %>% print(max = ncol(.) * 5)
 :::
 
 **Output** (drawing-ready data)
+
 
 ## 👻 ggproto methods 👻
 
@@ -586,6 +604,7 @@ render_steps(0)
 This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
+
 ## 👻 ggproto methods 👻
 
 :::: {.columns}
@@ -618,6 +637,7 @@ ggplot_internals <- function(data) {
 ::: {.aside}
 This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
+
 
 ## 👻 ggproto methods 👻
 
@@ -654,6 +674,7 @@ render_steps(1)
 This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
+
 ## 👻 ggproto methods 👻
 
 :::: {.columns}
@@ -688,6 +709,7 @@ render_steps(1:2)
 ::: {.aside}
 This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
+
 
 ## 👻 ggproto methods 👻
 
@@ -749,6 +771,7 @@ render_steps(1:4)
 This is a pseudo-code abstraction of `ggplot2:::ggplot_build.ggplot()`
 :::
 
+
 ## 👻 ggproto methods 👻
 
 ```{r layer-compute-statistic}
@@ -771,6 +794,7 @@ ggplot2:::Layer$compute_statistic
       self$stat$compute_layer(data, self$computed_stat_params, layout)
     }
 ```
+
 
 ## 👻 ggproto methods 👻
 
@@ -936,6 +960,7 @@ ggtrace::ggtrace_inspect_args(
 Default value of `cond` is `1`, so it can be omitted here
 :::
 
+
 ---
 
 ## 👻 ggproto methods 👻
@@ -1062,6 +1087,8 @@ my_barplot
 geom_bar(aes(x = species, fill = species))
 ```
 
+. . .
+
 <p style="text-align: center; font-size: 3em; line-height: 0.8em;">=</p>
 
 ```{r bar-explicit-geom-long}
@@ -1074,6 +1101,7 @@ geom_bar(
   stat = "count"
 )
 ```
+
 
 ---
 
@@ -1105,6 +1133,7 @@ ggplot2::layer_data(plot = my_barplot, i = 1L)
 
 :::
 
+
 ---
 
 ```{r internal-steps-cards}
@@ -1124,6 +1153,7 @@ div(lapply(1:6, function(i) {
   )
 }))
 ```
+
 
 ## 1) Before Stat
 
@@ -1146,6 +1176,7 @@ ggtrace_inspect_args(
 #| echo: false
 render_steps_progress(1)
 ```
+
 
 ## 1) Before Stat
 
@@ -1193,6 +1224,7 @@ ggtrace_inspect_args(
 #| echo: false
 ```
 
+
 ## 1) Before Stat
 
 ```{r bar-before-stat}
@@ -1206,6 +1238,7 @@ ggtrace_inspect_args(
 ```{r progress-before-stat}
 #| echo: false
 ```
+
 
 ## 1) Before Stat
 
@@ -1246,6 +1279,7 @@ ggplot(penguins_sm) +
 ::: {.aside}
 Error messages will be much nicer in `{ggplot2}` `v3.4.0`, with `{cli}` integration
 :::
+
 
 ## 1) Before Stat
 
@@ -1294,6 +1328,7 @@ render_steps_progress(1:2)
 #| echo: false
 ```
 
+
 ## 2) After Stat
 
 ```{r bar-explicit-geom-short}
@@ -1321,7 +1356,7 @@ geom_bar(aes(x = species, fill = species,
 <div class="divbr"></div>
 
 ```{r bar-after_stat-post-mutate}
-#| attr-source: 'data-hl-loc="[[4.4,4.8,5]]"'
+#| attr-source: 'data-hl-loc="[[2.9,4.8,5]]"'
 #| attr-output: 'data-col-hl-loc="[[1,\"100%\",\"400%\"]]"'
 ggtrace_inspect_return(
   my_barplot, ggplot2:::Layer$compute_statistic) %>% 
@@ -1349,7 +1384,7 @@ geom_bar(aes(x = species, fill = species,
 <div class="divbr"></div>
 
 ```{r bar-after_stat-tidyeval}
-#| attr-source: 'data-hl-loc="[[4.4,4.8,10.8]]"'
+#| attr-source: 'data-hl-loc="[[2.9,4.8,10.8]]"'
 ggtrace_inspect_return(
   my_barplot, ggplot2:::Layer$compute_statistic) %>% 
   mutate(y = count/sum(count), .before = 1L)
@@ -1410,9 +1445,6 @@ From documentation: [https://ggplot2.tidyverse.org/reference/geom_bar](https://g
 #| echo: false
 ```
 
-## {.nostretch}
-
-![](img/after-stat-anim.gif){.absolute style="width: 1000px; top: 50%; left:50%; transform: translate(-50%, -50%);"}
 
 ## 3) Before Geom
 
@@ -1427,6 +1459,12 @@ ggtrace_inspect_args(error = TRUE,
 ```{r progress-before-geom}
 #| echo: false
 ```
+
+
+## {.nostretch}
+
+![](img/after-stat-anim.gif){.absolute style="width: 1000px; top: 50%; left:50%; transform: translate(-50%, -50%);"}
+
 
 ## 4) After Scale
 
@@ -1445,6 +1483,7 @@ render_steps_progress(1:4)
 In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidth`
 :::
 
+
 ## 4) After Scale
 
 ```{r bar-after-scale}
@@ -1459,6 +1498,7 @@ In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidt
 In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidth`
 :::
 
+
 ## 4) After Scale
 
 ```{r bar-after-scale}
@@ -1472,6 +1512,7 @@ In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidt
 ::: {.aside}
 In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidth`
 :::
+
 
 ## 4) After Scale {.nostretch}
 
@@ -1507,6 +1548,25 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
+
+## 4) After Scale {.nostretch}
+
+```{r bar-after-scale-size-fill}
+#| fig-align: "center"
+#| out.width: "550px"
+#| attr-source: 'data-hl-loc="[[4.4,8,20.9]]"'
+library(colorspace) # for the `darken()` function
+ggplot(penguins_sm) +
+  geom_bar(aes(x = species, fill = species,
+               color = after_scale( darken(fill, .5) ),
+               size = after_scale( size * 5 )))
+```
+
+```{r progress-after-scale}
+#| echo: false
+```
+
+
 ---
 
 ```{r barplot-lone}
@@ -1523,6 +1583,7 @@ my_barplot
 #| echo: false
 knitr::include_graphics("img/bar-snapshots.gif")
 ```
+
 
 ## Snapshots of `my_barplot`'s bar layer
 
@@ -1541,6 +1602,7 @@ knitr::include_graphics("img/bar-snapshots.gif")
 :::
 
 **Output** (drawing-ready data)
+
 
 ## ggplot internals for users {.nostretch}
 
@@ -1586,6 +1648,7 @@ my_boxplot + ?
 </div>
 :::
 
+
 ## Step-by-step
 
 1) Use a `label` to draw a `boxplot` varible
@@ -1599,6 +1662,7 @@ geom_label(
   stat = "boxplot"
 )
 ```
+
 
 ## Step-by-step
 
@@ -1636,6 +1700,7 @@ geom_label(
 )
 ```
 
+
 ## Step-by-step
 
 3) Give the `stat` the aesthetics it needs to start
@@ -1652,6 +1717,7 @@ geom_label(
   data = ~ .x %>% filter(condition == "B")
 )
 ```
+
 
 ## Step-by-step
 
@@ -1670,6 +1736,7 @@ geom_label(
   data = ~ .x %>% filter(condition == "B")
 )
 ```
+
 
 ---
 
@@ -1702,6 +1769,7 @@ my_boxplot_annotated
 ggplot_build(my_boxplot_annotated)
 ```
 
+
 ## Debugging with `{ggtrace}`
 
 ```{r annotation-before-geom}
@@ -1709,6 +1777,7 @@ ggtrace_inspect_args(error = TRUE,
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
 ```
+
 
 ## Debugging with `{ggtrace}`
 
@@ -1718,6 +1787,7 @@ ggtrace_inspect_args(error = TRUE,
   x = my_boxplot_annotated,
   method = ggplot2:::Layer$compute_geom_1, cond = 2)$data
 ```
+
 
 ## Multiple mappings with `stage()`
 
@@ -1734,6 +1804,7 @@ my_boxplot_annotated <- my_boxplot +
     data = ~ .x %>% filter(condition == "B")
   )
 ```
+
 
 ---
 
@@ -1827,14 +1898,16 @@ stat_transform_layer2()
 
 :::
 
+
 ## `Highjack` workflow
 
 ```{r ggtrace-highjack}
 #| fig-align: center
 ggtrace_highjack_return(
-  my_boxplot, ggplot2:::Layer$compute_statistic,
+  my_boxplot, ggplot2:::Layer$compute_statistic, cond = 1,
   value = quote( returnValue() %>% mutate(outliers = NULL) ))
 ```
+
 
 ## Thank you!
 
