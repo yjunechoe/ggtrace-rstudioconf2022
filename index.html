@@ -913,15 +913,19 @@ University of Pennsylvania
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<!-- ## Snapshots of layer data -->
-<!-- **Input** (user-supplied data) -->
-<!-- ::: {style="margin-left: 50px;"} -->
-<!-- 1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat` -->
-<!-- 2) [After Stat]{.my-hl-2} context for `after_stat()` mappings -->
-<!-- 3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom` -->
-<!-- 4) [After Scale]{.my-hl-4} context for `after_scale()` mappings -->
-<!-- ::: -->
-<!-- **Output** (drawing-ready data) -->
+</section>
+<section id="snapshots-of-layer-data" class="slide level2">
+<h2>Snapshots of layer data</h2>
+<p><strong>Input</strong> (user-supplied data)</p>
+<div style="margin-left: 50px;">
+<ol type="1">
+<li><p><span class="my-hl-1">Before Stat</span> validates the layer’s choice of <code>stat</code></p></li>
+<li><p><span class="my-hl-2">After Stat</span> context for <code>after_stat()</code> mappings</p></li>
+<li><p><span class="my-hl-3">Before Geom</span> validates the layer’s choice of <code>geom</code></p></li>
+<li><p><span class="my-hl-4">After Scale</span> context for <code>after_scale()</code> mappings</p></li>
+</ol>
+</div>
+<p><strong>Output</strong> (drawing-ready data)</p>
 </section>
 <section id="ggproto-methods" class="slide level2">
 <h2>👻 ggproto methods 👻</h2>
@@ -1256,7 +1260,7 @@ Before Stat
 </div>
 </div>
 <div class="aside">
-<p>Default value of <code>cond</code> is <code>1</code> - it can be omitted here</p>
+<p>Default value of <code>cond</code> is <code>1</code>, so it can be omitted here</p>
 </div>
 </section>
 <section id="ggproto-methods-10" class="slide level2">
@@ -1315,7 +1319,7 @@ After Stat
 </div>
 </div>
 <div class="aside">
-<p>Default value of <code>cond</code> is <code>1</code> - it can be omitted here</p>
+<p>Default value of <code>cond</code> is <code>1</code>, so it can be omitted here</p>
 </div>
 </section>
 <section id="ggplot-internals-for-users" class="slide level2 nostretch">
@@ -1606,6 +1610,9 @@ Output
 </div>
 </div>
 </div>
+<div class="aside">
+<p>Error messages will be much nicer in <code>{ggplot2}</code> <code>v3.4.0</code>, with <code>{cli}</code> integration</p>
+</div>
 </section>
 <section id="before-stat-6" class="slide level2">
 <h2>1) Before Stat</h2>
@@ -1719,9 +1726,8 @@ Output
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb83" data-hl-loc="[[4.4,4.8,5]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
-<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic) <span class="sc">%&gt;%</span> </span>
-<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> count, <span class="at">.before =</span> 1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  my_barplot, ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic) <span class="sc">%&gt;%</span> </span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> count, <span class="at">.before =</span> 1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output" data-col-hl-loc="[[1,&quot;100%&quot;,&quot;400%&quot;]]"><code>    y count prop x width flipped_aes      fill PANEL group
 1 151   151    1 1   0.9       FALSE    Adelie     1     1
@@ -1739,13 +1745,71 @@ Output
 </div>
 </div>
 </div>
+<div class="aside">
+<p>FYI - <code>mutate(..., .before = 1L)</code> moves new colums to the front</p>
+</div>
+</section>
+<section id="after-stat-4" class="slide level2">
+<h2>2) After Stat</h2>
+<div class="cell">
+<div class="sourceCode" id="cb85" data-hl-loc="[[1.45,6.8,18.4]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> species,</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">after_stat</span>( count<span class="sc">/</span><span class="fu">sum</span>(count) )),</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">stat =</span> <span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="divbr">
+
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb86" data-hl-loc="[[4.4,4.8,10.8]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>  my_barplot, ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic) <span class="sc">%&gt;%</span> </span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> count<span class="sc">/</span><span class="fu">sum</span>(count), <span class="at">.before =</span> 1L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre class="big-chunk-output"><code>          y count prop x width flipped_aes      fill PANEL group
+1 0.4415205   151    1 1   0.9       FALSE    Adelie     1     1
+2 0.1988304    68    1 2   0.9       FALSE Chinstrap     1     2
+3 0.3596491   123    1 3   0.9       FALSE    Gentoo     1     3</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.5em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
+</div>
+</div>
+</div>
+<div class="aside">
+<p>FYI - <code>mutate(..., .before = 1L)</code> moves new colums to the front</p>
+</div>
+</section>
+<section id="after-stat-5" class="slide level2">
+<h2>2) After Stat</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb88" data-hl-loc="[[2.9,7.8,18.4]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> species,</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> <span class="fu">after_stat</span>( count<span class="sc">/</span><span class="fu">sum</span>(count) )),</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">stat =</span> <span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/bar-props-1.svg" width="960" class="r-stretch quarto-figure-center"><div class="cell">
+<div class="cell-output-display">
+<div class="absolute internal-steps-container" style="display:flex;flex-direction:row;font-size:0.5em;width:100%;height:30px;bottom:-41px;">
+<div class="internal-step" style="background-color:#FFB1C0;line-height:30px;width:200px;height:30px;">Before Stat</div>
+<div class="internal-step" style="background-color:#E4CB73;line-height:30px;width:200px;height:30px;">After Stat</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">Before Geom</div>
+<div class="internal-step" style="background-color:#BFBFBF;line-height:30px;width:200px;height:30px;">After Scale</div>
+</div>
+</div>
+</div>
 </section>
 <section id="before-geom" class="slide level2">
 <h2>3) Before Geom</h2>
 <div class="cell">
-<div class="sourceCode" id="cb85"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
-<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
-<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output" data-col-hl-loc="[[1,&quot;100%&quot;,&quot;400%&quot;]]"><code>    y count prop x width flipped_aes      fill PANEL group
 1 151   151    1 1   0.9       FALSE    Adelie     1     1
@@ -1767,9 +1831,9 @@ Output
 <section id="before-geom-1" class="slide level2">
 <h2>3) Before Geom</h2>
 <div class="cell">
-<div class="sourceCode" id="cb87"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
-<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output"><code>    y count prop x width flipped_aes      fill PANEL group
 1 151   151    1 1   0.9       FALSE    Adelie     1     1
@@ -1801,10 +1865,10 @@ Output
 <section id="before-geom-2" class="slide level2">
 <h2>3) Before Geom</h2>
 <div class="cell">
-<div class="sourceCode" id="cb89" data-hl-loc="[[2.9,18,4.5]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
-<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> <span class="cn">NULL</span>)),</span>
-<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb93" data-hl-loc="[[2.9,18,4.5]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> <span class="cn">NULL</span>)),</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output"><code>Error in `check_required_aesthetics()`:
 ! geom_bar requires the following missing aesthetics: y</code></pre>
@@ -1826,85 +1890,13 @@ Output
 </div>
 </div>
 </div>
-<!-- ## 3) Before Geom -->
-<!-- ```{r label-count-error} -->
-<!-- #| error: true -->
-<!-- #| class-error: "big-chunk-output" -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_label(aes(x = species, y = after_stat(count)), -->
-<!--              stat = "count", size = 5) -->
-<!-- ``` -->
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-<!-- ## 3) Before Geom -->
-<!-- ```{r label-count-before-geom} -->
-<!-- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_label(aes(x = species, y = after_stat(count)), -->
-<!--                    stat = "count", size = 5), -->
-<!--   method = ggplot2:::Layer$compute_geom_1)$data -->
-<!-- ``` -->
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-<!-- ## 3) Before Geom -->
-<!-- ```{r label-count-before-geom-mutate} -->
-<!-- #| eval: false -->
-<!-- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_label(aes(x = species, y = after_stat(count)), -->
-<!--                    stat = "count", size = 5), -->
-<!--   method = ggplot2:::Layer$compute_geom_1)$data %>%  -->
-<!--   mutate(label = count, .before = 1L) -->
-<!-- ``` -->
-<!-- ```{r label-count-before-geom-mutate-no-msg} -->
-<!-- #| include: false -->
-<!-- label_count_error_before_geom <- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_label(aes(x = species, y = after_stat(count)), -->
-<!--                    stat = "count", size = 5), -->
-<!--   method = ggplot2:::Layer$compute_geom_1)$data -->
-<!-- ``` -->
-<!-- ```{r label-count-before-geom-mutate-show} -->
-<!-- #| echo: false -->
-<!-- label_count_error_before_geom %>%  -->
-<!--   mutate(label = count, .before = 1L) -->
-<!-- ``` -->
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-<!-- ## 3) Before Geom -->
-<!-- ```{r label-count-after_stat} -->
-<!-- #| fig-align: "center" -->
-<!-- #| attr-source: 'data-hl-loc="[[2.9,9,13.6]]"' -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_label(aes(x = species, y = after_stat(count), -->
-<!--                  label = after_stat(count)), -->
-<!--              stat = "count", size = 5) -->
-<!-- ``` -->
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-<!-- ## 3) Before Geom -->
-<!-- ```{r bar-label-count} -->
-<!-- #| fig-align: "center" -->
-<!-- ggplot(penguins_sm, aes(x = species)) + -->
-<!--   geom_bar() + -->
-<!--   geom_label(aes(y = after_stat(count), -->
-<!--                  label = after_stat(count)), -->
-<!--             stat = "count", size = 5) -->
-<!-- ``` -->
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
 </section>
 <section id="after-scale" class="slide level2">
 <h2>4) After Scale</h2>
 <div class="cell">
-<div class="sourceCode" id="cb92"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
-<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output"><code>     fill   y count prop x flipped_aes PANEL group ymin ymax xmin
 1 #F8766D 151   151    1 1       FALSE     1     1    0  151 0.55
@@ -1927,15 +1919,15 @@ Output
 </div>
 </div>
 <div class="aside">
-<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
+<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines will be renamed to <code>linewidth</code></p>
 </div>
 </section>
 <section id="after-scale-1" class="slide level2">
 <h2>4) After Scale</h2>
 <div class="cell">
-<div class="sourceCode" id="cb94"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
-<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
-<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output" data-col-hl-loc="[[1,&quot;100%&quot;,&quot;400%&quot;]]"><code>     fill   y count prop x flipped_aes PANEL group ymin ymax xmin
 1 #F8766D 151   151    1 1       FALSE     1     1    0  151 0.55
@@ -1958,15 +1950,15 @@ Output
 </div>
 </div>
 <div class="aside">
-<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
+<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines will be renamed to <code>linewidth</code></p>
 </div>
 </section>
 <section id="after-scale-2" class="slide level2">
 <h2>4) After Scale</h2>
 <div class="cell">
-<div class="sourceCode" id="cb96"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
-<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
-<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_return</span>(</span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_barplot,</span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output" data-col-hl-loc="[[13,&quot;400%&quot;,&quot;400%&quot;]]"><code>     fill   y count prop x flipped_aes PANEL group ymin ymax xmin
 1 #F8766D 151   151    1 1       FALSE     1     1    0  151 0.55
@@ -1989,15 +1981,15 @@ Output
 </div>
 </div>
 <div class="aside">
-<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines are renamed to <code>linewidth</code></p>
+<p>In <code>{ggplot2}</code> <code>v3.4.0</code>, <code>size</code> aesthetic for lines will be renamed to <code>linewidth</code></p>
 </div>
 </section>
 <section id="after-scale-3" class="slide level2 nostretch">
 <h2>4) After Scale</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb98"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
-<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> species),</span>
-<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> species),</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -2020,10 +2012,10 @@ Output
 <section id="after-scale-4" class="slide level2 nostretch">
 <h2>4) After Scale</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb99" data-hl-loc="[[2.9,8,16.6]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
-<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> species,</span>
-<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="fu">after_scale</span>( size <span class="sc">*</span> <span class="dv">5</span> )),</span>
-<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb103" data-hl-loc="[[2.9,8,16.6]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins_sm) <span class="sc">+</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> species,</span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="fu">after_scale</span>( size <span class="sc">*</span> <span class="dv">5</span> )),</span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -2045,20 +2037,6 @@ Output
 </div>
 </div>
 </div>
-<!-- ## 4) After Scale {.nostretch} -->
-<!-- ```{r bar-after-scale-size-fill} -->
-<!-- #| fig-align: "center" -->
-<!-- #| out.width: "550px" -->
-<!-- #| attr-source: 'data-hl-loc="[[5.8,8,20.9]]"' -->
-<!-- library(colorspace) # for the `darken()` function -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_bar(aes(x = species, fill = species, -->
-<!--                size = after_scale( size * 5 ), -->
-<!--                color = after_scale( darken(fill, .4) ))) -->
-<!-- ``` -->
-<!-- ```{r progress-after-scale} -->
-<!-- #| echo: false -->
-<!-- ``` -->
 </section>
 <section class="slide level2">
 
@@ -2086,10 +2064,10 @@ Output
 <p><strong>Input</strong> (user-supplied data)</p>
 <div style="margin-left: 50px;">
 <ol type="1">
-<li><p><span class="my-hl-1">Before Stat</span> <span class="fragment">has <code>x</code>, allows <code>"count"</code> stat</span></p></li>
-<li><p><span class="my-hl-2">After Stat</span> <span class="fragment">has <code>count</code>, allows <code>y = after_stat(count)</code></span></p></li>
-<li><p><span class="my-hl-3">Before Geom</span> <span class="fragment">has <code>x</code> and <code>y</code>, allows <code>"bar"</code> geom</span></p></li>
-<li><p><span class="my-hl-4">After Scale</span> <span class="fragment">allows <code>after_scale()</code> mappings (<em>unused</em>)</span></p></li>
+<li><p><span class="my-hl-1">Before Stat</span> has <code>x</code>, allows <code>"count"</code> stat</p></li>
+<li><p><span class="my-hl-2">After Stat</span> has <code>count</code>, allows <code>y = after_stat(count)</code></p></li>
+<li><p><span class="my-hl-3">Before Geom</span> has <code>x</code> and <code>y</code>, allows <code>"bar"</code> geom</p></li>
+<li><p><span class="my-hl-4">After Scale</span> allows <code>after_scale()</code> mappings (<em>unused</em>)</p></li>
 </ol>
 </div>
 <p><strong>Output</strong> (drawing-ready data)</p>
@@ -2111,7 +2089,7 @@ Output
 <h2></h2>
 <div class="vcenter">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb100"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>my_boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>my_boxplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -2127,7 +2105,7 @@ Output
 <div class="vcenter">
 <div>
 <div class="cell">
-<div class="sourceCode" id="cb101"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>my_boxplot <span class="sc">+</span> ?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>my_boxplot <span class="sc">+</span> ?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -2148,9 +2126,9 @@ Output
 </ol>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode" id="cb102" data-code-line-numbers="TRUE"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb102-2"><a href="#cb102-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span></span>
-<span id="cb102-3"><a href="#cb102-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb106" data-code-line-numbers="TRUE"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb106-2"><a href="#cb106-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span></span>
+<span id="cb106-3"><a href="#cb106-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -2160,20 +2138,20 @@ Output
 <li>Use a <code>label</code> to draw a <code>boxplot</code> varible</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb103" data-code-line-numbers="TRUE"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb103-2"><a href="#cb103-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span></span>
-<span id="cb103-3"><a href="#cb103-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb107" data-code-line-numbers="TRUE"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb107-2"><a href="#cb107-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span></span>
+<span id="cb107-3"><a href="#cb107-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="divbr">
 
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb104" data-code-line-numbers="TRUE"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a><span class="fu">stat_boxplot</span>(</span>
-<span id="cb104-2"><a href="#cb104-2"></a>  <span class="at">geom =</span> <span class="st">"label"</span></span>
-<span id="cb104-3"><a href="#cb104-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb108" data-code-line-numbers="TRUE"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a><span class="fu">stat_boxplot</span>(</span>
+<span id="cb108-2"><a href="#cb108-2"></a>  <span class="at">geom =</span> <span class="st">"label"</span></span>
+<span id="cb108-3"><a href="#cb108-3"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="aside">
-<p>They’re interchangeable - it’s your choice!</p>
+<p>They’re interchangeable - your choice of emphasis!</p>
 </div>
 </section>
 <section id="step-by-step-2" class="slide level2">
@@ -2182,10 +2160,10 @@ Output
 <li>Plot just the responses from <strong>condition B</strong></li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb105" data-code-line-numbers="3"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb105-2"><a href="#cb105-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb105-3"><a href="#cb105-3"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
-<span id="cb105-4"><a href="#cb105-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb109" data-code-line-numbers="3"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb109-2"><a href="#cb109-2"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb109-3"><a href="#cb109-3"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
+<span id="cb109-4"><a href="#cb109-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="step-by-step-3" class="slide level2">
@@ -2194,14 +2172,14 @@ Output
 <li>Give the <code>stat</code> the aesthetics it needs to start</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb106" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb106-2"><a href="#cb106-2"></a>  <span class="fu">aes</span>(</span>
-<span id="cb106-3"><a href="#cb106-3"></a>    <span class="at">x =</span> condition,</span>
-<span id="cb106-4"><a href="#cb106-4"></a>    <span class="at">y =</span> response_time</span>
-<span id="cb106-5"><a href="#cb106-5"></a>  ),</span>
-<span id="cb106-6"><a href="#cb106-6"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb106-7"><a href="#cb106-7"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
-<span id="cb106-8"><a href="#cb106-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb110" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb110-2"><a href="#cb110-2"></a>  <span class="fu">aes</span>(</span>
+<span id="cb110-3"><a href="#cb110-3"></a>    <span class="at">x =</span> condition,</span>
+<span id="cb110-4"><a href="#cb110-4"></a>    <span class="at">y =</span> response_time</span>
+<span id="cb110-5"><a href="#cb110-5"></a>  ),</span>
+<span id="cb110-6"><a href="#cb110-6"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb110-7"><a href="#cb110-7"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
+<span id="cb110-8"><a href="#cb110-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="step-by-step-4" class="slide level2">
@@ -2210,37 +2188,37 @@ Output
 <li>Make sure the <code>geom</code> gets the aesthetics it needs later</li>
 </ol>
 <div class="cell">
-<div class="sourceCode" id="cb107" data-code-line-numbers="5"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a><span class="fu">geom_label</span>(</span>
-<span id="cb107-2"><a href="#cb107-2"></a>  <span class="fu">aes</span>(</span>
-<span id="cb107-3"><a href="#cb107-3"></a>    <span class="at">x =</span> condition,</span>
-<span id="cb107-4"><a href="#cb107-4"></a>    <span class="at">y =</span> response_time,</span>
-<span id="cb107-5"><a href="#cb107-5"></a>    <span class="at">label =</span> <span class="fu">after_stat</span>(ymax)</span>
-<span id="cb107-6"><a href="#cb107-6"></a>  ),</span>
-<span id="cb107-7"><a href="#cb107-7"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb107-8"><a href="#cb107-8"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
-<span id="cb107-9"><a href="#cb107-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb111" data-code-line-numbers="5"><pre class="sourceCode numberSource r big-code-chunk cell-code number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a><span class="fu">geom_label</span>(</span>
+<span id="cb111-2"><a href="#cb111-2"></a>  <span class="fu">aes</span>(</span>
+<span id="cb111-3"><a href="#cb111-3"></a>    <span class="at">x =</span> condition,</span>
+<span id="cb111-4"><a href="#cb111-4"></a>    <span class="at">y =</span> response_time,</span>
+<span id="cb111-5"><a href="#cb111-5"></a>    <span class="at">label =</span> <span class="fu">after_stat</span>(ymax)</span>
+<span id="cb111-6"><a href="#cb111-6"></a>  ),</span>
+<span id="cb111-7"><a href="#cb111-7"></a>  <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb111-8"><a href="#cb111-8"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
+<span id="cb111-9"><a href="#cb111-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode" id="cb108"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
-<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
-<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> condition,</span>
-<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> response_time,</span>
-<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymax)</span>
-<span id="cb108-7"><a href="#cb108-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb108-8"><a href="#cb108-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
-<span id="cb108-9"><a href="#cb108-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
-<span id="cb108-10"><a href="#cb108-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> condition,</span>
+<span id="cb112-5"><a href="#cb112-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> response_time,</span>
+<span id="cb112-6"><a href="#cb112-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymax)</span>
+<span id="cb112-7"><a href="#cb112-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb112-8"><a href="#cb112-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>,</span>
+<span id="cb112-9"><a href="#cb112-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
+<span id="cb112-10"><a href="#cb112-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="divbr">
 
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb109"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-error">
@@ -2253,9 +2231,9 @@ Output
 <section id="debugging-with-ggtrace" class="slide level2">
 <h2>Debugging with <code>{ggtrace}</code></h2>
 <div class="cell">
-<div class="sourceCode" id="cb111"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output"><code>Error in `check_required_aesthetics()`:
 ! geom_label requires the following missing aesthetics: y</code></pre>
@@ -2271,9 +2249,9 @@ Output
 <section id="debugging-with-ggtrace-1" class="slide level2">
 <h2>Debugging with <code>{ggtrace}</code></h2>
 <div class="cell">
-<div class="sourceCode" id="cb114"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(<span class="at">error =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output" data-col-hl-loc="[[2,&quot;620%&quot;,&quot;200%&quot;]]"><code>Error in `check_required_aesthetics()`:
 ! geom_label requires the following missing aesthetics: y</code></pre>
@@ -2289,25 +2267,25 @@ Output
 <section id="multiple-mappings-with-stage" class="slide level2">
 <h2>Multiple mappings with <code>stage()</code></h2>
 <div class="cell">
-<div class="sourceCode" id="cb117" data-hl-loc="[[5.8,3,27.5]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
-<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
-<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> condition,</span>
-<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> response_time, <span class="at">after_stat =</span> ymax),</span>
-<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymax)</span>
-<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb117-8"><a href="#cb117-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>, <span class="at">size =</span> <span class="dv">5</span>,</span>
-<span id="cb117-9"><a href="#cb117-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
-<span id="cb117-10"><a href="#cb117-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb121" data-hl-loc="[[5.8,3,27.5]]"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated <span class="ot">&lt;-</span> my_boxplot <span class="sc">+</span></span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(</span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> condition,</span>
+<span id="cb121-5"><a href="#cb121-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">stage</span>(<span class="at">start =</span> response_time, <span class="at">after_stat =</span> ymax),</span>
+<span id="cb121-6"><a href="#cb121-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">after_stat</span>(ymax)</span>
+<span id="cb121-7"><a href="#cb121-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb121-8"><a href="#cb121-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"boxplot"</span>, <span class="at">size =</span> <span class="dv">5</span>,</span>
+<span id="cb121-9"><a href="#cb121-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="sc">~</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(condition <span class="sc">==</span> <span class="st">"B"</span>)</span>
+<span id="cb121-10"><a href="#cb121-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div style="position:relative">
 <div class="cell">
-<div class="sourceCode" id="cb118"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
-<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
+<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-stdout">
@@ -2324,9 +2302,9 @@ Before Stat
 </div>
 <div style="position:relative">
 <div class="cell">
-<div class="sourceCode" id="cb120"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
-<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
-<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_inspect_args</span>(</span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> my_boxplot_annotated,</span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_geom_1, <span class="at">cond =</span> <span class="dv">2</span>)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output" data-col-hl-loc="[[1,&quot;100%&quot;,&quot;200%&quot;]]"><code>     y label ymin  lower middle  upper ymax         outliers
 1 3012  3012 1221 1670.5   2002 2380.5 3012 3590, 3712, 3963
@@ -2343,7 +2321,7 @@ Before Geom
 <h2></h2>
 <div class="vcenter">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb122"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>my_boxplot_annotated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -2374,13 +2352,13 @@ Before Geom
 <h2><code>Capture</code> workflow</h2>
 <div style="width:110%; margin-left:-5%; margin-top: -20px;">
 <div class="cell">
-<div class="sourceCode" id="cb123"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>stat_transform_layer2 <span class="ot">&lt;-</span> <span class="fu">ggtrace_capture_fn</span>(</span>
-<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>  my_boxplot_annotated, ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic, <span class="at">cond =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>stat_transform_layer2 <span class="ot">&lt;-</span> <span class="fu">ggtrace_capture_fn</span>(</span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a>  my_boxplot_annotated, ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic, <span class="at">cond =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment" style="margin-top:10px;">
 <div class="cell">
-<div class="sourceCode" id="cb124"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">formals</span>(stat_transform_layer2)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">formals</span>(stat_transform_layer2)<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-stdout">
@@ -2391,7 +2369,7 @@ Before Geom
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb126"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stat_transform_layer2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stat_transform_layer2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre class="big-chunk-output"><code>  ymin  lower middle  upper ymax         outliers notchupper
 1 1221 1670.5   2002 2380.5 3012 3590, 3712, 3963   2031.572
@@ -2404,9 +2382,9 @@ Before Geom
 <section id="highjack-workflow" class="slide level2">
 <h2><code>Highjack</code> workflow</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb128"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_highjack_return</span>(</span>
-<span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a>  my_boxplot, ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic,</span>
-<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">quote</span>( <span class="fu">returnValue</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">outliers =</span> <span class="cn">NULL</span>) ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggtrace_highjack_return</span>(</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>  my_boxplot, ggplot2<span class="sc">:::</span>Layer<span class="sc">$</span>compute_statistic,</span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">quote</span>( <span class="fu">returnValue</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">outliers =</span> <span class="cn">NULL</span>) ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/ggtrace-highjack-1.svg" width="960" class="r-stretch quarto-figure-center"></section>
@@ -2416,7 +2394,7 @@ Before Geom
 
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb129"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"yjunechoe/ggtrace"</span>) <span class="co"># v5.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r big-code-chunk cell-code code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"yjunechoe/ggtrace"</span>) <span class="co"># v5.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="font-size: 0.8em; margin-top: 15px">
 <ul>

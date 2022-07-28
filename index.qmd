@@ -487,23 +487,23 @@ experiment_data %>% print(max = ncol(.) * 5)
 ```
 :::
 
-<!-- ## Snapshots of layer data -->
+## Snapshots of layer data
 
-<!-- **Input** (user-supplied data) -->
+**Input** (user-supplied data)
 
-<!-- ::: {style="margin-left: 50px;"} -->
+::: {style="margin-left: 50px;"}
 
-<!-- 1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat` -->
+1) [Before Stat]{.my-hl-1} validates the layer's choice of `stat`
 
-<!-- 2) [After Stat]{.my-hl-2} context for `after_stat()` mappings -->
+2) [After Stat]{.my-hl-2} context for `after_stat()` mappings
 
-<!-- 3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom` -->
+3) [Before Geom]{.my-hl-3} validates the layer's choice of `geom`
 
-<!-- 4) [After Scale]{.my-hl-4} context for `after_scale()` mappings -->
+4) [After Scale]{.my-hl-4} context for `after_scale()` mappings
 
-<!-- ::: -->
+:::
 
-<!-- **Output** (drawing-ready data) -->
+**Output** (drawing-ready data)
 
 ## 👻 ggproto methods 👻
 
@@ -933,7 +933,7 @@ ggtrace::ggtrace_inspect_args(
 :::
 
 ::: {.aside}
-Default value of `cond` is `1` - it can be omitted here
+Default value of `cond` is `1`, so it can be omitted here
 :::
 
 ---
@@ -994,7 +994,7 @@ ggtrace::ggtrace_inspect_return(
 :::
 
 ::: {.aside}
-Default value of `cond` is `1` - it can be omitted here
+Default value of `cond` is `1`, so it can be omitted here
 :::
 
 ## ggplot internals for users {.nostretch}
@@ -1074,7 +1074,6 @@ geom_bar(
   stat = "count"
 )
 ```
-
 
 ---
 
@@ -1244,6 +1243,10 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
+::: {.aside}
+Error messages will be much nicer in `{ggplot2}` `v3.4.0`, with `{cli}` integration
+:::
+
 ## 1) Before Stat
 
 ```{r bar-before-stat-overspec}
@@ -1321,9 +1324,54 @@ geom_bar(aes(x = species, fill = species,
 #| attr-source: 'data-hl-loc="[[4.4,4.8,5]]"'
 #| attr-output: 'data-col-hl-loc="[[1,\"100%\",\"400%\"]]"'
 ggtrace_inspect_return(
-  x = my_barplot,
-  method = ggplot2:::Layer$compute_statistic) %>% 
+  my_barplot, ggplot2:::Layer$compute_statistic) %>% 
   mutate(y = count, .before = 1L)
+```
+
+```{r progress-after-stat}
+#| echo: false
+```
+
+::: {.aside}
+FYI - `mutate(..., .before = 1L)` moves new colums to the front
+:::
+
+## 2) After Stat
+
+```{r bar-aes-tidyeval}
+#| eval: false
+#| attr-source: 'data-hl-loc="[[1.45,6.8,18.4]]"'
+geom_bar(aes(x = species, fill = species,
+             y = after_stat( count/sum(count) )),
+         stat = "count")
+```
+
+<div class="divbr"></div>
+
+```{r bar-after_stat-tidyeval}
+#| attr-source: 'data-hl-loc="[[4.4,4.8,10.8]]"'
+ggtrace_inspect_return(
+  my_barplot, ggplot2:::Layer$compute_statistic) %>% 
+  mutate(y = count/sum(count), .before = 1L)
+```
+
+```{r progress-after-stat}
+#| echo: false
+```
+
+::: {.aside}
+FYI - `mutate(..., .before = 1L)` moves new colums to the front
+:::
+
+## 2) After Stat
+
+```{r bar-props}
+#| fig-align: center
+#| attr-source: 'data-hl-loc="[[2.9,7.8,18.4]]"'
+ggplot(penguins_sm) +
+  geom_bar(aes(x = species, fill = species,
+               y = after_stat( count/sum(count) )),
+           stat = "count")
 ```
 
 ```{r progress-after-stat}
@@ -1380,95 +1428,6 @@ ggtrace_inspect_args(error = TRUE,
 #| echo: false
 ```
 
-<!-- ## 3) Before Geom -->
-
-<!-- ```{r label-count-error} -->
-<!-- #| error: true -->
-<!-- #| class-error: "big-chunk-output" -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_label(aes(x = species, y = after_stat(count)), -->
-<!--              stat = "count", size = 5) -->
-<!-- ``` -->
-
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-
-<!-- ## 3) Before Geom -->
-
-<!-- ```{r label-count-before-geom} -->
-<!-- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_label(aes(x = species, y = after_stat(count)), -->
-<!--                    stat = "count", size = 5), -->
-<!--   method = ggplot2:::Layer$compute_geom_1)$data -->
-<!-- ``` -->
-
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-
-<!-- ## 3) Before Geom -->
-
-<!-- ```{r label-count-before-geom-mutate} -->
-<!-- #| eval: false -->
-<!-- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_label(aes(x = species, y = after_stat(count)), -->
-<!--                    stat = "count", size = 5), -->
-<!--   method = ggplot2:::Layer$compute_geom_1)$data %>%  -->
-<!--   mutate(label = count, .before = 1L) -->
-<!-- ``` -->
-
-<!-- ```{r label-count-before-geom-mutate-no-msg} -->
-<!-- #| include: false -->
-<!-- label_count_error_before_geom <- ggtrace_inspect_args(error = TRUE, -->
-<!--   x = ggplot(penguins_sm) + -->
-<!--         geom_label(aes(x = species, y = after_stat(count)), -->
-<!--                    stat = "count", size = 5), -->
-<!--   method = ggplot2:::Layer$compute_geom_1)$data -->
-<!-- ``` -->
-
-<!-- ```{r label-count-before-geom-mutate-show} -->
-<!-- #| echo: false -->
-<!-- label_count_error_before_geom %>%  -->
-<!--   mutate(label = count, .before = 1L) -->
-<!-- ``` -->
-
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-
-<!-- ## 3) Before Geom -->
-
-<!-- ```{r label-count-after_stat} -->
-<!-- #| fig-align: "center" -->
-<!-- #| attr-source: 'data-hl-loc="[[2.9,9,13.6]]"' -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_label(aes(x = species, y = after_stat(count), -->
-<!--                  label = after_stat(count)), -->
-<!--              stat = "count", size = 5) -->
-<!-- ``` -->
-
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-
-<!-- ## 3) Before Geom -->
-
-<!-- ```{r bar-label-count} -->
-<!-- #| fig-align: "center" -->
-<!-- ggplot(penguins_sm, aes(x = species)) + -->
-<!--   geom_bar() + -->
-<!--   geom_label(aes(y = after_stat(count), -->
-<!--                  label = after_stat(count)), -->
-<!--             stat = "count", size = 5) -->
-<!-- ``` -->
-
-<!-- ```{r progress-before-geom} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-
 ## 4) After Scale
 
 ```{r bar-after-scale}
@@ -1483,7 +1442,7 @@ render_steps_progress(1:4)
 ```
 
 ::: {.aside}
-In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
+In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidth`
 :::
 
 ## 4) After Scale
@@ -1497,7 +1456,7 @@ In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
 ```
 
 ::: {.aside}
-In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
+In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidth`
 :::
 
 ## 4) After Scale
@@ -1511,7 +1470,7 @@ In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
 ```
 
 ::: {.aside}
-In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines are renamed to `linewidth`
+In `{ggplot2}` `v3.4.0`, `size` aesthetic for lines will be renamed to `linewidth`
 :::
 
 ## 4) After Scale {.nostretch}
@@ -1548,23 +1507,6 @@ ggplot(penguins_sm) +
 #| echo: false
 ```
 
-<!-- ## 4) After Scale {.nostretch} -->
-
-<!-- ```{r bar-after-scale-size-fill} -->
-<!-- #| fig-align: "center" -->
-<!-- #| out.width: "550px" -->
-<!-- #| attr-source: 'data-hl-loc="[[5.8,8,20.9]]"' -->
-<!-- library(colorspace) # for the `darken()` function -->
-<!-- ggplot(penguins_sm) + -->
-<!--   geom_bar(aes(x = species, fill = species, -->
-<!--                size = after_scale( size * 5 ), -->
-<!--                color = after_scale( darken(fill, .4) ))) -->
-<!-- ``` -->
-
-<!-- ```{r progress-after-scale} -->
-<!-- #| echo: false -->
-<!-- ``` -->
-
 ---
 
 ```{r barplot-lone}
@@ -1588,13 +1530,13 @@ knitr::include_graphics("img/bar-snapshots.gif")
 
 ::: {style="margin-left: 50px;"}
 
-1) [Before Stat]{.my-hl-1} [has `x`, allows `"count"` stat]{.fragment}
+1) [Before Stat]{.my-hl-1} has `x`, allows `"count"` stat
 
-2) [After Stat]{.my-hl-2} [has `count`, allows `y = after_stat(count)`]{.fragment}
+2) [After Stat]{.my-hl-2} has `count`, allows `y = after_stat(count)`
 
-3) [Before Geom]{.my-hl-3} [has `x` and `y`, allows `"bar"` geom]{.fragment}
+3) [Before Geom]{.my-hl-3} has `x` and `y`, allows `"bar"` geom
 
-4) [After Scale]{.my-hl-4} [allows `after_scale()` mappings (_unused_)]{.fragment}
+4) [After Scale]{.my-hl-4} allows `after_scale()` mappings (_unused_)
 
 :::
 
@@ -1678,7 +1620,7 @@ stat_boxplot(
 ```
 
 ::: {.aside}
-They're interchangeable - it's your choice!
+They're interchangeable - your choice of emphasis!
 :::
 
 ## Step-by-step
