@@ -4,9 +4,9 @@ Slides for [rstudio::conf 2022](https://rstudioconf2022.sched.com/) talk "Cracki
 
 Links to talk materials:
 
-- Talk recording: TBD
+- [Talk recording](https://www.rstudio.com/conference/2022/talks/cracking-open-ggplot-internals-ggtrace/)
 
-- Slides (best viewed on laptop): [https://www.rstudio.com/conference/2022/talks/cracking-open-ggplot-internals-ggtrace/](https://www.rstudio.com/conference/2022/talks/cracking-open-ggplot-internals-ggtrace/)
+- Slides (best viewed on laptop): [https://yjunechoe.github.io/ggtrace-rstudioconf2022/](https://yjunechoe.github.io/ggtrace-rstudioconf2022/)
 
 - Package website: [https://yjunechoe.github.io/ggtrace/](https://yjunechoe.github.io/ggtrace/)
 
